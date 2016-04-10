@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using Sparkles;
 using Gtk;
 
 #if HAVE_APP_INDICATOR
@@ -31,6 +32,8 @@ namespace SparkleShare {
 
         public StatusIconController Controller = new StatusIconController ();
 
+        Gtk.StatusIcon status_icon;
+
         Menu menu;
         MenuItem recent_events_item;
         MenuItem quit_item;
@@ -39,34 +42,34 @@ namespace SparkleShare {
 
         #if HAVE_APP_INDICATOR
         Indicator indicator;
-        #else
-        Gtk.StatusIcon status_icon;
         #endif
 
 
         public StatusIcon ()
         {
-            #if HAVE_APP_INDICATOR
-            this.indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus);
-            this.indicator.IconName = "process-syncing-idle";
-            this.indicator.Status   = (int) IndicatorStatus.Active;
-            #else
-			this.status_icon          = new Gtk.StatusIcon ();
-            this.status_icon.IconName = "org.sparkleshare.SparkleShare";
+            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                #if HAVE_APP_INDICATOR
+                indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus) {
+                    IconName = "process-syncing-idle",
+                    Status   = (int) IndicatorStatus.Active
+                };
+                #endif
 
-            this.status_icon.Activate  += ShowMenu; // Primary mouse button click
-            this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
-            #endif
+            } else {
+                this.status_icon = new Gtk.StatusIcon { IconName = "org.sparkleshare.SparkleShare" };
+                this.status_icon.Activate  += ShowMenu; // Primary mouse button click
+                this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
+            }
 
             CreateMenu ();
 
             Controller.UpdateIconEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                    #if HAVE_APP_INDICATOR
-                    string icon_name = "process-syncing-idle";
-                    #else
                     string icon_name = "org.sparkleshare.SparkleShare";
-                    #endif
+
+                    if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                        icon_name = "process-syncing-idle";
+                    }
 
                     if (state == IconState.SyncingUp)
                         icon_name = "process-syncing-up";
@@ -77,15 +80,18 @@ namespace SparkleShare {
                     else if (state == IconState.Error)
                         icon_name = "process-syncing-error";
 
-                    #if HAVE_APP_INDICATOR
-                    this.indicator.IconName = icon_name;
+                    if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                        #if HAVE_APP_INDICATOR
+                        indicator.IconName = icon_name;
 
-                    // Force update of the status icon
-                    this.indicator.Status = (int) IndicatorStatus.Attention;
-                    this.indicator.Status = (int) IndicatorStatus.Active;
-                    #else
-                    this.status_icon.IconName = icon_name;
-                    #endif
+                        // Force update of the status icon
+                        indicator.Status = (int) IndicatorStatus.Attention;
+                        indicator.Status = (int) IndicatorStatus.Active;
+                        #endif
+
+                    } else {
+                        this.status_icon.IconName = icon_name;
+                    }
                 });
             };
 
@@ -205,26 +211,6 @@ namespace SparkleShare {
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Add Hosted Project…");
 
-            #if HAVE_APP_INDICATOR
-            MenuItem notify_item;
-                                                             
-            if (SparkleShare.Controller.NotificationsEnabled)
-                notify_item = new MenuItem ("Turn Notifications Off");
-            else
-                notify_item = new MenuItem ("Turn Notifications On");
-
-            notify_item.Activated += delegate {
-                SparkleShare.Controller.ToggleNotifications ();
-
-				Application.Invoke (delegate {				
-				    if (SparkleShare.Controller.NotificationsEnabled)
-                    	(notify_item.Child as Label).Text = "Turn Notifications Off";
-                	else
-                    	(notify_item.Child as Label).Text = "Turn Notifications On";
-				});
-            };
-            #endif
-
             MenuItem link_code_item = new MenuItem ("Client ID");
             
             if (Controller.LinkCodeItemEnabled) {
@@ -251,10 +237,30 @@ namespace SparkleShare {
             folder_item.Submenu = new Menu ();
 			(folder_item.Submenu as Menu).Add (this.recent_events_item);
             (folder_item.Submenu as Menu).Add (add_item);
-            #if HAVE_APP_INDICATOR
-            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-            (folder_item.Submenu as Menu).Add (notify_item);
-            #endif
+
+            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                MenuItem notify_item;
+
+                if (SparkleShare.Controller.NotificationsEnabled)
+                    notify_item = new MenuItem ("Turn Notifications Off");
+                else
+                    notify_item = new MenuItem ("Turn Notifications On");
+
+                notify_item.Activated += delegate {
+                    SparkleShare.Controller.ToggleNotifications ();
+
+                    Application.Invoke (delegate {              
+                        if (SparkleShare.Controller.NotificationsEnabled)
+                            (notify_item.Child as Label).Text = "Turn Notifications Off";
+                        else
+                            (notify_item.Child as Label).Text = "Turn Notifications On";
+                    });
+                };
+
+                (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+                (folder_item.Submenu as Menu).Add (notify_item);
+            }
+
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (link_code_item);
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
@@ -264,26 +270,26 @@ namespace SparkleShare {
             this.menu.Add (this.quit_item);
             this.menu.ShowAll ();
 
-            #if HAVE_APP_INDICATOR
-            this.indicator.Menu = this.menu;
-            #endif
+            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                #if HAVE_APP_INDICATOR
+                indicator.Menu = this.menu;
+                #endif
+            }
         }
 		
 
-        #if !HAVE_APP_INDICATOR
         // Makes the menu visible
-        private void ShowMenu (object o, EventArgs args)
+        void ShowMenu (object o, EventArgs args)
         {
             this.menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
         }
 
 
         // Makes sure the menu pops up in the right position
-        private void SetPosition (Menu menu, out int x, out int y, out bool push_in)
+        void SetPosition (Menu menu, out int x, out int y, out bool push_in)
         {
             Gtk.StatusIcon.PositionMenu (menu, out x, out y, out push_in, this.status_icon.Handle);
         }
-        #endif
     }
 
     
