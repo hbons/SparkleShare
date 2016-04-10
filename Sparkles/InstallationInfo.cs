@@ -17,11 +17,46 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace Sparkles {
     
+    public enum OS
+    {
+        Mac,
+        Windows,
+        Ubuntu,
+        GNOME
+    }
+
+
     public partial class InstallationInfo {
+
+        static OS operating_system = OS.Windows;
+
+        public static OS OperatingSystem {
+            get {
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    return operating_system;
+
+                var uname = new Command ("uname", "-a");
+                string output = uname.StartAndReadStandardOutput ();
+
+                // Environment.OSVersion.Platform.PlatformID.MacOSX is broken in Mono
+                // for historical reasons, so check manually
+                if (output.StartsWith ("Darwin", StringComparison.InvariantCulture)) {
+                    operating_system = OS.Mac;
+
+                } else if (output.Contains ("Ubuntu")) {
+                    operating_system = OS.Ubuntu;
+
+                } else {
+                    operating_system = OS.GNOME;
+                }
+
+                return operating_system;
+            }
+        }
+
 
         public static string Version {
             get {
@@ -29,32 +64,5 @@ namespace Sparkles {
                 return version.Substring (0, version.Length - 2);
             }
         }
-
-
-        // This fixes the PlatformID enumeration for MacOSX in Environment.OSVersion.Platform,
-        // which is intentionally broken in Mono for historical reasons
-        public static PlatformID Platform {
-            get {
-                IntPtr buf = IntPtr.Zero;
-
-                try {
-                    buf = Marshal.AllocHGlobal (8192);
-
-                    if (uname (buf) == 0 && Marshal.PtrToStringAnsi (buf) == "Darwin")
-                        return PlatformID.MacOSX;
-
-                } catch {
-                } finally {
-                    if (buf != IntPtr.Zero)
-                        Marshal.FreeHGlobal (buf);
-                }
-
-                return Environment.OSVersion.Platform;
-            }
-        }
-
-
-        [DllImport ("libc")]
-        static extern int uname (IntPtr buf);
     }
 }

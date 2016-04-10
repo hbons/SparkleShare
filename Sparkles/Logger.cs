@@ -65,7 +65,7 @@ namespace Sparkles {
         {
             string home_path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 
-            if (InstallationInfo.Platform == PlatformID.Win32NT)
+            if (InstallationInfo.OperatingSystem == OS.Windows)
                 home_path = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
 
             string crash_report_file_path = Path.Combine (home_path, "SparkleShare", "crash_report.txt");

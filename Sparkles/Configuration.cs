@@ -35,7 +35,7 @@ namespace Sparkles {
 
         public string HomePath {
             get {
-                if (InstallationInfo.Platform == PlatformID.Win32NT)
+                if (InstallationInfo.OperatingSystem == OS.Windows)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
                 
                 return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
@@ -113,12 +113,11 @@ namespace Sparkles {
         {
             string user_name = Environment.UserName;
 
-            if (InstallationInfo.Platform == PlatformID.Unix ||
-                InstallationInfo.Platform == PlatformID.MacOSX) {
-
+            if (InstallationInfo.OperatingSystem != OS.Windows) {
                 if (string.IsNullOrEmpty (user_name))
                     user_name = "Unknown";
                 else
+                    // On Unix systems the user name may have commas appended
                     user_name = user_name.TrimEnd (',');
             }
 
