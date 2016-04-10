@@ -252,7 +252,7 @@ namespace Sparkles.Git {
                 "push.default matching"
             };
 
-            if (InstallationInfo.Platform == PlatformID.Win32NT)
+            if (InstallationInfo.OperatingSystem == OS.Windows)
                 settings [0] = "core.autocrlf true";
 
             foreach (string setting in settings) {
