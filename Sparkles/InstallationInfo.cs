@@ -20,8 +20,8 @@ using System.Reflection;
 
 namespace Sparkles {
     
-    public enum OS
-    {
+    public enum OS {
+        Unknown,
         Mac,
         Windows,
         Ubuntu,
@@ -31,14 +31,19 @@ namespace Sparkles {
 
     public partial class InstallationInfo {
 
-        static OS operating_system = OS.Windows;
+        static OS operating_system = OS.Unknown;
 
         public static OS OperatingSystem {
             get {
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                if (operating_system != OS.Unknown)
                     return operating_system;
 
-                var uname = new Command ("uname", "-a");
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                    operating_system = OS.Windows;
+                    return operating_system;
+                }
+
+                var uname = new Command ("uname", "-a", false);
                 string output = uname.StartAndReadStandardOutput ();
 
                 // Environment.OSVersion.Platform.PlatformID.MacOSX is broken in Mono
