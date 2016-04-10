@@ -197,7 +197,7 @@ namespace SparkleShare {
         {
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
 
-            if (InstallationInfo.Platform == PlatformID.Unix)
+            if (InstallationInfo.OperatingSystem != OS.Windows && InstallationInfo.OperatingSystem != OS.Mac)
                 app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
 
             string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
@@ -216,8 +216,9 @@ namespace SparkleShare {
         {
             Logger.LogInfo ("Environment", "SparkleShare " + InstallationInfo.Version);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
-            Logger.LogInfo ("Environment", InstallationInfo.Platform + " (" + Environment.OSVersion + ")");
-            
+            Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
+            // todo tostring with nice os version names
+
             Preset.PresetsPath = PresetsPath;
             InstallProtocolHandler ();
             
