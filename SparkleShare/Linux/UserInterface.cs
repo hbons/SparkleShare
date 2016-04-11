@@ -62,7 +62,7 @@ namespace SparkleShare {
 
         public void Run ()
         {   
-            (application as GLib.Application).Run (0, null);
+            (application as GLib.Application).Run ("org.sparkleshare.SparkleShare", new string [0]);
         }
 
 
