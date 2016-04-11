@@ -16,6 +16,8 @@
 
 
 using System;
+
+using Sparkles;
 using Gtk;
 
 namespace SparkleShare {
@@ -101,6 +103,9 @@ namespace SparkleShare {
                 Text = "version " + Controller.RunningVersion,
                 Xalign = 0, Xpad = 0
             };
+
+            if (InstallationInfo.Directory.Equals ("/app"))
+                version.Text += " (xdg-app)";
 
             version.StyleContext.AddProvider (label_css_provider, 800);
 
