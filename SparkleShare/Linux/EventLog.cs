@@ -38,7 +38,7 @@ namespace SparkleShare {
         private Spinner spinner;
 //      private WebView web_view;
 
-        private int pos_x, pos_y;
+        int pos_x, pos_y;
 
 
         public EventLog () : base ("Recent Changes")
@@ -48,13 +48,14 @@ namespace SparkleShare {
             TypeHint = Gdk.WindowTypeHint.Dialog;
             IconName = "org.sparkleshare.SparkleShare";
 
-            Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
             SetSizeRequest (480, 640);
-			Resize (480, (int)(monitor_0_rect.Height * 0.8));
 
-            this.pos_x = (int) (monitor_0_rect.Width * 0.61);
-            this.pos_y = (int) (monitor_0_rect.Height * 0.5 - (AllocatedHeight * 0.5));
-            
+            Gdk.Rectangle monitor_0_rect = Gdk.Screen.Default.GetMonitorGeometry (0);
+            pos_x = (int) (monitor_0_rect.Width * 0.61);
+            pos_y = (int) (monitor_0_rect.Height * 0.5 - (HeightRequest * 0.5));
+
+            Resize (480, (int) (monitor_0_rect.Height * 0.8));
+
             this.size_label    = new Label () { Xalign = 0, Markup = "<b>Size:</b> …" };
             this.history_label = new Label () { Xalign = 0, Markup = "<b>History:</b> …" };
 
@@ -110,7 +111,7 @@ namespace SparkleShare {
 
             Controller.ShowWindowEvent += delegate {
                 Application.Invoke (delegate {
-                    Move (this.pos_x, this.pos_y);
+                    Move (pos_x, pos_y);
                     ShowAll ();
                     Present ();
                 });
