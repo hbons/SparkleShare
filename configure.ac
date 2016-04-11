@@ -131,7 +131,7 @@ echo "
 SparkleShare ${VERSION}
 
 Configuration:
-       Prefix : ${prefix}
+       Prefix: ${prefix}
 
 "
 
