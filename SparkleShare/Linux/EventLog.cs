@@ -19,7 +19,7 @@ using System;
 using IO = System.IO;
 
 using Gtk;
-// using WebKit;
+using WebKit2;
 
 namespace SparkleShare {
 
@@ -36,7 +36,7 @@ namespace SparkleShare {
         private ScrolledWindow scrolled_window;
         private VBox spinner_wrapper;
         private Spinner spinner;
-//      private WebView web_view;
+        private WebView web_view;
 
         int pos_x, pos_y;
 
@@ -75,9 +75,9 @@ namespace SparkleShare {
             css_provider.LoadFromData ("GtkEventBox { background-color: #ffffff; }");
             this.content_wrapper.StyleContext.AddProvider (css_provider, 800);
 
-//          this.web_view = new WebView () { Editable = false };
-//          this.web_view.Settings.EnablePresets = false;
-//          this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.web_view = new WebView () { Editable = false };
+            this.web_view.Settings.EnablePresets = false;
+            this.web_view.NavigationRequested += WebViewNavigationRequested;
 
             this.scrolled_window.Add (new Button ("WebView"));
             
@@ -272,21 +272,21 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
-//          this.scrolled_window.Remove (this.web_view);
-//          this.web_view.Dispose ();
+            this.scrolled_window.Remove (this.web_view);
+            this.web_view.Dispose ();
 
-//          this.web_view = new WebView () { Editable = false };
-//          this.web_view.LoadString (html, "text/html", "UTF-8", "file://");
-//          this.web_view.NavigationRequested += WebViewNavigationRequested;
-//          this.scrolled_window.Add (this.web_view);
+            this.web_view = new WebView () { Editable = false };
+            this.web_view.LoadString (html, "text/html", "UTF-8", "file://");
+            //this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
-            this.content_wrapper.Add (this.scrolled_window);
+            //this.content_wrapper.Add (this.scrolled_window);
             this.scrolled_window.ShowAll ();
         }
 
-/*
-        private void WebViewNavigationRequested (object o, WebKit.NavigationRequestedArgs args) {
+        /*
+        private void WebViewNavigationRequested (object o, WebKit2.NavigationRequestedArgs args) {
             Controller.LinkClicked (args.Request.Uri);
 
             // Don't follow HREFs (as this would cause a page refresh)

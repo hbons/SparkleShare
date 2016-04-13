@@ -65,12 +65,12 @@ if test "$OSNAME" = "Linux" ; then
 	SPARKLESHARE_CHECK_GTK_SHARP
 	PKG_CHECK_MODULES(NOTIFY_SHARP, notify-sharp-3.0)
 
-#	dnl check for webkitgtk-sharp
-#	PKG_CHECK_MODULES(WEBKITGTK_SHARP, webkitgtk-sharp-3.0, have_webkitgtk_sharp=yes, have_webkitgtk_sharp=no)
-#	if test "x$have_webkitgtk_sharp" = "xno" ; then
-#		AC_ERROR("webkitgtk-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
-#	fi
-#	AC_SUBST(WEBKITGTK_SHARP_LIBS)
+	dnl check for webkit2-sharp
+	PKG_CHECK_MODULES(WEBKIT2_SHARP, webkit2-sharp-4.0, have_webkit2_sharp=yes, have_webkit2_sharp=no)
+	if test "x$have_webkit2_sharp" = "xno" ; then
+		AC_ERROR("webkit2-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+	fi
+	AC_SUBST(WEBKIT2_SHARP_LIBS)
 
 	APPINDICATOR_REQUIRED=0.1
 
