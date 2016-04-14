@@ -41,7 +41,6 @@
     <Reference Include="glib-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="gtk-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="pango-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="soup-sharp, Version=2.42.2.0, Culture=neutral, PublicKeyToken=91c4c95333b14883" />
     <Reference Include="notify-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
     <Reference Include="webkit2-sharp, Version=2.10.9.0, Culture=neutral, PublicKeyToken=bac11f94b446c2eb" />
   </ItemGroup>
