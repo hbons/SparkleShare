@@ -104,7 +104,7 @@ namespace SparkleShare {
                 Xalign = 0, Xpad = 0
             };
 
-            if (InstallationInfo.Directory.Equals ("/app"))
+            if (InstallationInfo.Directory.StartsWith ("/app", StringComparison.InvariantCulture))
                 version.Text += " (xdg-app)";
 
             version.StyleContext.AddProvider (label_css_provider, 800);
