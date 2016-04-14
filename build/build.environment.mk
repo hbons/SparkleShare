@@ -1,7 +1,7 @@
 # Initializers
 MONO_BASE_PATH = 
 
-# Install Paths
+# Install paths
 DEFAULT_INSTALL_DIR = $(pkglibdir)
 DIR_BIN = $(top_builddir)/bin
 
