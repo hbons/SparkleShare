@@ -76,10 +76,10 @@ namespace SparkleShare {
             this.content_wrapper.StyleContext.AddProvider (css_provider, 800);
 
             this.web_view = new WebView () { Editable = false };
-            this.web_view.Settings.EnablePresets = false;
-            this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.web_view.Settings.EnablePlugins = false;
 
-            this.scrolled_window.Add (new Button ("WebView"));
+            //this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.scrolled_window.Add (this.web_view);
             
             this.spinner_wrapper = new VBox (false, 0);
             this.spinner_wrapper.PackStart (new Label(""), true, true, 0);
@@ -272,16 +272,26 @@ namespace SparkleShare {
 			html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
                     
             this.spinner.Stop ();
-            this.scrolled_window.Remove (this.web_view);
+            this.scrolled_window.Remove (this.scrolled_window.Child);
             this.web_view.Dispose ();
 
             this.web_view = new WebView () { Editable = false };
-            this.web_view.LoadString (html, "text/html", "UTF-8", "file://");
+            this.web_view.LoadHtml (html, "file:///");
+         
+
+
+            web_view.DecidePolicy += delegate(object o, DecidePolicyArgs args) {
+                Console.WriteLine (":::: " + (args.Decision as NavigationPolicyDecision).NavigationAction.Request.Uri);
+              //  if (args.Decision. == PolicyDecisionType.NavigationAction) {
+                   
+              //  }
+            };
+
             //this.web_view.NavigationRequested += WebViewNavigationRequested;
             this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
-            //this.content_wrapper.Add (this.scrolled_window);
+            this.content_wrapper.Add (this.scrolled_window);
             this.scrolled_window.ShowAll ();
         }
 
