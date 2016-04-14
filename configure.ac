@@ -12,7 +12,7 @@ AC_SUBST([ASM_VERSION], [sparkleshare_version])
 dnl pkg-config
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test "x$PKG_CONFIG" = "xno"; then
-        AC_MSG_ERROR([You need to install pkg-config])
+        AC_MSG_ERROR([pkg-config is not installed])
 fi
 
 AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
@@ -60,6 +60,8 @@ AC_ARG_ENABLE(appindicator,
 	[enable_appindicator=$enableval],
 	[enable_appindicator="auto"])
 
+GUISUBDIRS=
+
 OSNAME=`uname -s`
 if test "$OSNAME" = "Linux" ; then
 	SPARKLESHARE_CHECK_GTK_SHARP
@@ -68,40 +70,35 @@ if test "$OSNAME" = "Linux" ; then
 	dnl check for webkit2-sharp
 	PKG_CHECK_MODULES(WEBKIT2_SHARP, webkit2-sharp-4.0, have_webkit2_sharp=yes, have_webkit2_sharp=no)
 	if test "x$have_webkit2_sharp" = "xno" ; then
-		AC_ERROR("webkit2-sharp is a required dependency: you need to install the appropriate devel package before you can compile")
+		AC_MSG_ERROR([webkit2-sharp-4.0 is not installed])
+	        AC_SUBST(WEBKIT2_SHARP_LIBS)
 	fi
-	AC_SUBST(WEBKIT2_SHARP_LIBS)
 
 	APPINDICATOR_REQUIRED=0.1
 
 	if test x$enable_appindicator = xauto ; then
-			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],
-							 enable_appindicator="yes",
-							 enable_appindicator="no")
+		PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],
+			enable_appindicator="yes", enable_appindicator="no")
 	fi
 
 	if test x$enable_appindicator = xyes ; then
-			PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
-							 AC_MSG_ERROR([appindicator3-sharp-0.1 is not installed]))
-			PKG_CHECK_MODULES(APP_INDICATOR,
-							appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED)
-			AC_SUBST(APP_INDICATOR_CFLAGS)
-			AC_SUBST(APP_INDICATOR_LIBS)
-			AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
+		PKG_CHECK_EXISTS([appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED],,
+			AC_MSG_ERROR([appindicator3-sharp-0.1 is not installed]))
+
+		PKG_CHECK_MODULES(APP_INDICATOR, appindicator3-sharp-0.1 >= $APPINDICATOR_REQUIRED)
+		AC_SUBST(APP_INDICATOR_CFLAGS)
+		AC_SUBST(APP_INDICATOR_LIBS)
+		AC_DEFINE(HAVE_APP_INDICATOR, 1, [Have AppIndicator])
 	fi
 
 	GUISUBDIRS=SparkleShare
-else
-	GUISUBDIRS=
 fi
 
 AM_CONDITIONAL(HAVE_APP_INDICATOR, test x"$enable_appindicator" = xyes)
 AM_CONDITIONAL(BUILD_XDG_APP, test x"$prefix" = "/app")
 
 AC_SUBST([GUISUBDIRS])
-
 SHAMROCK_CHECK_NUNIT
-
 SHAVE_INIT([build/m4/shave], [enable])
 
 AC_OUTPUT([
