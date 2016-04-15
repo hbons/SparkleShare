@@ -208,19 +208,19 @@ namespace SparkleShare {
         }
 
 
-        public void LinkClicked (string url)
+        public void LinkClicked (string href)
         {
-            if (url.StartsWith ("about:") || string.IsNullOrEmpty (url))
+            if (href.StartsWith ("about:") || string.IsNullOrEmpty (href))
                 return;
 				
-            url = url.Replace ("%20", " ");
+            href = href.Replace ("%20", " ");
             
-            if (url.StartsWith ("http")) {
-                SparkleShare.Controller.OpenWebsite (url);
+            if (href.StartsWith ("http")) {
+                SparkleShare.Controller.OpenWebsite (href);
             
-            } else if (url.StartsWith ("restore://") && this.restore_revision_info == null) {
+            } else if (href.StartsWith ("restore://") && this.restore_revision_info == null) {
                 Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)");
-                Match match = regex.Match (url);
+                Match match = regex.Match (href);
                 
                 if (match.Success) {
                     string author_name = match.Groups [3].Value;
@@ -241,21 +241,21 @@ namespace SparkleShare {
                     ShowSaveDialogEvent (file_name, target_folder_path);
                 }
                 
-            } else if (url.StartsWith ("back://")) {
+            } else if (href.StartsWith ("back://")) {
                 this.history_view_active = false;
                 SelectedFolder           = this.selected_folder; // TODO: Return to the same position on the page
 
                 UpdateChooserEnablementEvent (true);
 
-            } else if (url.StartsWith ("history://")) {
+            } else if (href.StartsWith ("history://")) {
                 this.history_view_active = true;
 
                 ContentLoadingEvent ();
                 UpdateSizeInfoEvent ("…", "…");
                 UpdateChooserEnablementEvent (false);
 
-                string folder    = url.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
-                string file_path = url.Replace ("history://" + folder + "/", "");
+                string folder    = href.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
+                string file_path = href.Replace ("history://" + folder + "/", "");
 
                 byte [] file_path_bytes = Encoding.Default.GetBytes (file_path);
                 file_path               = Encoding.UTF8.GetString (file_path_bytes);
@@ -281,7 +281,10 @@ namespace SparkleShare {
                 }
 
             } else {
-                SparkleShare.Controller.OpenFile (url);
+                if (href.StartsWith ("file:///"))
+                    href = href.Substring (7);
+                
+                SparkleShare.Controller.OpenFile (href);
             }   
         }
 
