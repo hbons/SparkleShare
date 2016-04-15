@@ -353,12 +353,7 @@ namespace SparkleShare {
             this.web_view.PolicyDelegate = new SparkleWebPolicyDelegate ();
             ContentView.AddSubview (this.web_view);
 
-            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += delegate (string href) {
-                if (href.StartsWith ("file:///"))
-                    href = href.Substring (7);
-
-                Controller.LinkClicked (href);
-            };
+            (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += Controller.LinkClicked;
 
             this.progress_indicator.Hidden = true;
         }
