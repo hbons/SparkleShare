@@ -29,10 +29,7 @@ namespace SparkleShare {
 
         private Label size_label;
         private Label history_label;
-        private ComboBox combo_box;
         private EventBox content_wrapper;
-        private HBox combo_box_wrapper;
-        private HBox layout_horizontal;
         private ScrolledWindow scrolled_window;
         private VBox spinner_wrapper;
         private Spinner spinner;
@@ -75,10 +72,7 @@ namespace SparkleShare {
             css_provider.LoadFromData ("GtkEventBox { background-color: #ffffff; }");
             this.content_wrapper.StyleContext.AddProvider (css_provider, 800);
 
-            this.web_view = new WebView () { Editable = false };
-            this.web_view.Settings.EnablePlugins = false;
-
-            //this.web_view.NavigationRequested += WebViewNavigationRequested;
+            this.web_view = CreateWebView ();
             this.scrolled_window.Add (this.web_view);
             
             this.spinner_wrapper = new VBox (false, 0);
@@ -90,11 +84,6 @@ namespace SparkleShare {
 
             this.content_wrapper.Add (this.spinner_wrapper);
 
-            this.layout_horizontal = new HBox (false, 0);
-            this.layout_horizontal.PackStart (layout_sizes, true, true, 12);
-
-            layout_vertical.PackStart (this.layout_horizontal, false, false, 0);
-            layout_vertical.PackStart (new HSeparator (), false, false, 0);
             layout_vertical.PackStart (this.content_wrapper, true, true, 0);
 
             Add (layout_vertical);
@@ -135,14 +124,6 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.UpdateChooserEvent += delegate (string [] folders) {
-                Application.Invoke (delegate { UpdateChooser (folders); });
-            };
-			
-            Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
-                Application.Invoke (delegate { this.combo_box.Sensitive = enabled; });
-            };
-
             Controller.UpdateContentEvent += delegate (string html) {
                  Application.Invoke (delegate { UpdateContent (html); });
             };
@@ -176,67 +157,6 @@ namespace SparkleShare {
                     Controller.WindowClosed ();
                 }
             };
-        }
-        
-        
-        public void UpdateChooser (string [] folders)
-        {
-            if (folders == null)
-                folders = Controller.Folders;
-
-            if (this.combo_box_wrapper != null && this.combo_box_wrapper.Parent != null) {
-                this.layout_horizontal.Remove (this.combo_box_wrapper);
-                this.combo_box_wrapper.Remove (this.combo_box);
-            }
-
-            this.combo_box_wrapper = new HBox (false, 0);
-            this.combo_box = new ComboBox ();
-
-            CellRendererText cell = new CellRendererText();
-            this.combo_box.PackStart (cell, false);
-            this.combo_box.AddAttribute (cell, "text", 0);
-
-            ListStore store = new ListStore (typeof (string));
-
-            store.AppendValues ("Summary");
-            store.AppendValues ("---");
-            
-            this.combo_box.Model  = store;
-            this.combo_box.Active = 0;
-            
-            int row = 2;
-            foreach (string folder in folders) {
-                store.AppendValues (folder);
-                
-                if (folder.Equals (Controller.SelectedFolder))
-                    this.combo_box.Active = row;
-
-                row++;
-            }
-
-            this.combo_box.RowSeparatorFunc = delegate (ITreeModel model, TreeIter iter) {
-                string item = (string) this.combo_box.Model.GetValue (iter, 0);
-                return (item == "---");
-            };
-
-            this.combo_box.Changed += delegate {
-                TreeIter iter;
-                this.combo_box.GetActiveIter (out iter);
-                string selection = (string) this.combo_box.Model.GetValue (iter, 0);
-                TreePath path    = this.combo_box.Model.GetPath (iter);
-
-                if (path.Indices [0] == 0)
-                    Controller.SelectedFolder = null;
-                else
-                    Controller.SelectedFolder = selection;
-            };
-
-            this.combo_box_wrapper.Add (this.combo_box);
-            this.combo_box.GrabFocus ();
-
-            this.layout_horizontal.BorderWidth = 6;
-            this.layout_horizontal.PackStart (this.combo_box_wrapper, false, false, 0);
-            this.layout_horizontal.ShowAll ();
         }
 
 
@@ -275,34 +195,53 @@ namespace SparkleShare {
             this.scrolled_window.Remove (this.scrolled_window.Child);
             this.web_view.Dispose ();
 
-            this.web_view = new WebView () { Editable = false };
+            this.web_view = CreateWebView ();
             this.web_view.LoadHtml (html, "file:///");
          
-
-
-            web_view.DecidePolicy += delegate(object o, DecidePolicyArgs args) {
-                Console.WriteLine (":::: " + (args.Decision as NavigationPolicyDecision).NavigationAction.Request.Uri);
-              //  if (args.Decision. == PolicyDecisionType.NavigationAction) {
-                   
-              //  }
-            };
-
-            //this.web_view.NavigationRequested += WebViewNavigationRequested;
             this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
             this.scrolled_window.ShowAll ();
         }
+            
 
-        /*
-        private void WebViewNavigationRequested (object o, WebKit2.NavigationRequestedArgs args) {
-            Controller.LinkClicked (args.Request.Uri);
+        WebView CreateWebView ()
+        {
+            var web_view = new SparkleWebView { Editable = false };
+            web_view.Settings.EnablePlugins = false;
 
-            // Don't follow HREFs (as this would cause a page refresh)
-            if (!args.Request.Uri.Equals ("file:"))
-                args.RetVal = 1;
-        }*/
+            web_view.LinkClicked += Controller.LinkClicked;
+           
+            return web_view;
+        }
+
+
+        class SparkleWebView : WebView {
+
+            public event LinkClickedHandler LinkClicked = delegate { };
+            public delegate void LinkClickedHandler (string href);
+
+
+            protected override bool OnDecidePolicy (PolicyDecision decision, PolicyDecisionType decision_type)
+            {
+                if (decision_type != PolicyDecisionType.NavigationAction) {
+                    decision.Use ();
+                    return false;
+                }
+
+                string uri = (decision as NavigationPolicyDecision).Request.Uri;
+
+                if (uri.Equals ("file:///")) {
+                    decision.Use ();
+                    return false;
+                }
+                
+                LinkClicked (uri);
+                decision.Ignore ();
+
+                return true;
+            }
+        }
     }
 }
-
