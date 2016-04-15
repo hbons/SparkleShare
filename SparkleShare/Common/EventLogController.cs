@@ -210,7 +210,7 @@ namespace SparkleShare {
 
         public void LinkClicked (string href)
         {
-            if (href.StartsWith ("about:") || string.IsNullOrEmpty (href))
+            if (string.IsNullOrEmpty (href) || href.StartsWith ("about:"))
                 return;
 				
             href = href.Replace ("%20", " ");
