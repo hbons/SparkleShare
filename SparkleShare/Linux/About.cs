@@ -38,7 +38,7 @@ namespace SparkleShare {
             WindowPosition = WindowPosition.CenterAlways;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
-            SetSizeRequest (600, 260);
+            SetSizeRequest (640, 260);
 
 
             DeleteEvent += delegate (object o, DeleteEventArgs args) {
@@ -126,6 +126,11 @@ namespace SparkleShare {
                 Sensitive = false,
                 WrapMode = WrapMode.Word
             };
+
+            var text_view_css_provider = new CssProvider ();
+            text_view_css_provider.LoadFromData ("GtkTextView { color: #fff; font-size: 10px; background-color: rgba(0, 0, 0, 0); }");
+
+            license.StyleContext.AddProvider (text_view_css_provider, 800);
 
             TextBuffer license_buffer = license.Buffer;
 
