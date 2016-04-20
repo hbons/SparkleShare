@@ -116,7 +116,7 @@ namespace SparkleShare {
             updates.StyleContext.AddProvider (label_highlight_css_provider, 800);
 
             var copyright = new Label {
-                Markup = string.Format ("Copyright © 2010–{0} Hylke Bons and others.", DateTime.Now.Year),
+                Markup = string.Format ("Copyright © 2010–{0} Hylke Bons and others", DateTime.Now.Year),
                 Xalign = 0, Xpad = 0
             };
 
@@ -130,7 +130,7 @@ namespace SparkleShare {
             TextBuffer license_buffer = license.Buffer;
 
             license_buffer.Text = "SparkleShare is Open Source and you’re free to use, change, " +
-                "and share it under the GNU GPLv3.";
+                "and share it under the GNU GPLv3";
 
             version.StyleContext.AddProvider (label_css_provider, 800);
 

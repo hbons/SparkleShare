@@ -65,15 +65,16 @@ namespace SparkleShare {
             var uri = new Uri ("http://www.sparkleshare.org/version");
 
             try {
-                string latest_version = web_client.DownloadString (uri).Trim ();
+                string latest_version = web_client.DownloadString (uri);
+                latest_version = latest_version.Trim ();
             
                 if (new Version (latest_version) > new Version (RunningVersion))
-                    UpdateLabelEvent ("A newer version (" + latest_version + ") is available!");
+                    UpdateLabelEvent ("An update (version " + latest_version + ") is available!");
                 else
-                    UpdateLabelEvent ("You are running the latest version.");
+                    UpdateLabelEvent ("✓ You are running the latest version");
 
             } catch {
-                UpdateLabelEvent ("Version check failed.");
+                UpdateLabelEvent ("Couldn’t check for updates\t");
             }
         }
     }

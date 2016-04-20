@@ -101,10 +101,10 @@ namespace SparkleShare {
             };
 
             this.credits_text_field = new SparkleLabel (
-                @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others." +
+                @"Copyright © 2010–" + DateTime.Now.Year + " Hylke Bons and others" +
                 "\n\n" + 
                 "SparkleShare is Open Source. You are free to use, modify, and redistribute it " +
-                "under the GNU GPLv3.", NSTextAlignment.Left) {
+                "under the GNU GPLv3", NSTextAlignment.Left) {
                 
                 DrawsBackground = false,
                 Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
