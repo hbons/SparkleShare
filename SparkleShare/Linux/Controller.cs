@@ -32,6 +32,7 @@ namespace SparkleShare {
         {
         }
 
+
         public override bool CreateSparkleShareFolder ()
         {
             if (Directory.Exists (Configuration.DefaultConfiguration.FoldersPath))
@@ -46,10 +47,10 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            var command = new Command ("gvfs-set-attribute", Configuration.DefaultConfiguration.FoldersPath + " " +
+            var gvfs_set_attribute = new Command ("gvfs-set-attribute", Configuration.DefaultConfiguration.FoldersPath + " " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
-            command.StartAndWaitForExit ();
+            gvfs_set_attribute.StartAndWaitForExit ();
         }
 
 

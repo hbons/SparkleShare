@@ -58,7 +58,7 @@ namespace SparkleShare {
 
         void CheckForNewVersion ()
         {
-            UpdateLabelEvent ("Checking for updates...");
+            UpdateLabelEvent ("Checking for updates…");
             Thread.Sleep (500);
 
             var web_client = new WebClient ();
