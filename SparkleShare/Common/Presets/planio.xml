@@ -3,7 +3,7 @@
   <preset>
     <info>
         <name>Planio</name>
-        <description>500MB of unlimited free hosted Git repos and project management</description>
+        <description>Online project management</description>
         <icon>planio.png</icon>
         <backend>Git</backend>
         <fingerprint>38:29:13:0f:7c:74:67:22:c5:a6:a6:95:b4:b8:e0:ef:3d:e0:9e:87:02:58:ff:37:2c:8b:34:5a:ed:73:5d:81</fingerprint>
