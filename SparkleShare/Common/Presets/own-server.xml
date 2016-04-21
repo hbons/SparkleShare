@@ -2,7 +2,7 @@
 <sparkleshare>
   <preset>
     <info>
-        <name>On my own server</name>
+        <name>Own server</name>
         <description>Everything under my control</description>
         <icon>own-server.png</icon>
         <backend>Git</backend>
