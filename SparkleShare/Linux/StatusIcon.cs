@@ -143,7 +143,7 @@ namespace SparkleShare {
                     SparkleMenuItem item = new SparkleMenuItem (project.Name);
 
                     Gdk.Pixbuf folder_icon;
-                    folder_icon = IconTheme.Default.LoadIcon ("folder", 16, IconLookupFlags.GenericFallback);
+                    folder_icon = UserInterfaceHelpers.GetIcon ("folders", 16);
 
                     item.Submenu = new Menu ();
 
@@ -187,7 +187,7 @@ namespace SparkleShare {
                         if (Controller.Projects [i].HasError) {
                             folder_icon = IconTheme.Default.LoadIcon ("dialog-warning", 16, IconLookupFlags.GenericFallback);
                             
-                            MenuItem try_again_item = new MenuItem ("Try Again");
+                            MenuItem try_again_item = new MenuItem ("Retry Sync");
                             try_again_item.Activated += Controller.TryAgainDelegate (project.Name);
                             (item.Submenu as Menu).Add (try_again_item);
 
@@ -206,13 +206,13 @@ namespace SparkleShare {
                 };
             }
 
-			this.recent_events_item = new MenuItem ("Recent Changes…");
+			this.recent_events_item = new MenuItem ("History…");
 			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Sync Remote Project…");
 
-            MenuItem link_code_item = new MenuItem ("Client ID");
-            
+            MenuItem link_code_item = new MenuItem ("Computer ID");
+
             if (Controller.LinkCodeItemEnabled) {
                 link_code_item.Submenu = new Menu ();
                 
@@ -265,6 +265,7 @@ namespace SparkleShare {
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (about_item);
 
+            this.menu.Add (new SeparatorMenuItem ());
             this.menu.Add (add_item);
             this.menu.Add (new SeparatorMenuItem ());            
             this.menu.Add (this.quit_item);
