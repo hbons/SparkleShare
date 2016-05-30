@@ -89,11 +89,14 @@ namespace Sparkles.Git {
         {
             this.auth_info = auth_info;
 
-            var git = new GitCommand (LocalPath, "config core.ignorecase false");
-            git.StartAndWaitForExit ();
+            if (RemoteUrl.Host == "github.com") // TODO
+                StorageType = RepositoryStorageType.LargeFiles;
 
-            git = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
-            git.StartAndWaitForExit ();
+            var git_config = new GitCommand (LocalPath, "config core.ignorecase false");
+            git_config.StartAndWaitForExit ();
+
+            git_config = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
+            git_config.StartAndWaitForExit ();
 
             string password_file_path = Path.Combine (LocalPath, ".git", "password");
 
@@ -198,7 +201,7 @@ namespace Sparkles.Git {
                         Logger.LogInfo ("Git", Name + " | Remote " + remote_revision + " is already in our history");
                         return false;
                     }
-                } 
+                }
 
                 Logger.LogInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
                 return false;
@@ -221,14 +224,27 @@ namespace Sparkles.Git {
             if (message != null)
                 Commit (message);
 
-            var git = new GitCommand (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
-            git.StartInfo.RedirectStandardError = true;
-            git.Start ();
+            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
+
+            // We start "git lfs push" manually, so remove the
+            // hook automatically created by the clean/smudge filters
+            if (File.Exists (pre_push_hook_path))
+                File.Delete (pre_push_hook_path);
+
+            if (StorageType == RepositoryStorageType.LargeFiles) {
+                // TODO: Progress reporting, error handling
+                var git_lfs_push = new GitCommand (LocalPath, "lfs push origin " + branch, auth_info);
+                git_lfs_push.StartAndWaitForExit ();
+            }
+
+            var git_push = new GitCommand (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
+            git_push.StartInfo.RedirectStandardError = true;
+            git_push.Start ();
 
             double percentage = 1.0;
 
-            while (!git.StandardError.EndOfStream) {
-                string line   = git.StandardError.ReadLine ();
+            while (!git_push.StandardError.EndOfStream) {
+                string line   = git_push.StandardError.ReadLine ();
                 Match match   = this.progress_regex.Match (line);
                 double speed  = 0.0;
                 double number = 0.0;
@@ -279,10 +295,10 @@ namespace Sparkles.Git {
                 }
             }
 
-            git.WaitForExit ();
+            git_push.WaitForExit ();
             UpdateSizes ();
 
-            if (git.ExitCode == 0)
+            if (git_push.ExitCode == 0)
                 return true;
 
             Error = ErrorStatus.HostUnreachable;
@@ -292,6 +308,11 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
+            if (StorageType == RepositoryStorageType.LargeFiles) {
+                var git_lfs_pull = new GitCommand (LocalPath, "lfs pull", auth_info);
+                git_lfs_pull.StartAndWaitForExit ();
+            }
+
             var git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
 
             git.StartInfo.RedirectStandardError = true;

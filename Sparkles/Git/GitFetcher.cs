@@ -184,6 +184,7 @@ namespace Sparkles.Git {
             InstallExcludeRules ();
             InstallAttributeRules ();
             InstallGitLFS ();
+            EnableGitLFS (); // TODO
 
             return true;
         }
@@ -360,8 +361,18 @@ namespace Sparkles.Git {
 
         void InstallGitLFS ()
         {
-            var git_lfs = new GitCommand (TargetFolder, "lfs install --local");
-            git_lfs.StartAndWaitForExit ();
+            var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
+            var git_config_clean = new GitCommand (TargetFolder, "config filter.lfs.clean 'git-lfs clean %f'");
+
+            string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
+            string smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
+
+            var git_config_smudge = new GitCommand (TargetFolder,
+                "config filter.lfs.smudge \"" + smudge_command + "\"");
+            
+            git_config_required.StartAndWaitForExit ();
+            git_config_clean.StartAndWaitForExit ();
+            git_config_smudge.StartAndWaitForExit ();
         }
 
 
