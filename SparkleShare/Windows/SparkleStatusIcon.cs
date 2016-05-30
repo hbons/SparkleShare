@@ -284,7 +284,7 @@ namespace SparkleShare {
                             };
 
                             SparkleMenuItem try_again_item = new SparkleMenuItem {
-                                Header = "Try Again"
+                                Header = "Retry Sync"
                             };
                             try_again_item.Click += (sender, e) => Controller.TryAgainDelegate(project.Name)(sender, e);
                             subfolder_item.Items.Add(try_again_item);
