@@ -89,9 +89,6 @@ namespace Sparkles.Git {
         {
             this.auth_info = auth_info;
 
-            if (RemoteUrl.Host == "github.com") // TODO
-                StorageType = RepositoryStorageType.LargeFiles;
-
             var git_config = new GitCommand (LocalPath, "config core.ignorecase false");
             git_config.StartAndWaitForExit ();
 
@@ -231,7 +228,7 @@ namespace Sparkles.Git {
             if (File.Exists (pre_push_hook_path))
                 File.Delete (pre_push_hook_path);
 
-            if (StorageType == RepositoryStorageType.LargeFiles) {
+            if (StorageType == StorageType.Media) {
                 // TODO: Progress reporting, error handling
                 var git_lfs_push = new GitCommand (LocalPath, "lfs push origin " + branch, auth_info);
                 git_lfs_push.StartAndWaitForExit ();
@@ -308,7 +305,7 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
-            if (StorageType == RepositoryStorageType.LargeFiles) {
+            if (StorageType == StorageType.Media) {
                 var git_lfs_pull = new GitCommand (LocalPath, "lfs pull", auth_info);
                 git_lfs_pull.StartAndWaitForExit ();
             }

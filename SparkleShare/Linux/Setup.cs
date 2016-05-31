@@ -468,6 +468,62 @@ namespace SparkleShare {
                 Add (points);
             }
 
+            if (type == PageType.StorageSetup) {
+                Header = "Set up storage type";
+                Description = "What type of storage would you like to use?";
+
+                VBox layout_vertical = new VBox (false, 0);
+
+                var css_provider = new CssProvider ();
+
+                css_provider.LoadFromData ("GtkRadioButton {" +
+                    "font-weight: bold;" +
+                    "}");
+
+                RadioButton radio_plain = new RadioButton (null, "Plain Storage") { Active = true };
+                Label label_plain = new Label ("Nothing fancy.") { Xalign = 0 };
+
+                RadioButton radio_large_files = new RadioButton (radio_plain, "Media Storage");
+                Label label_large_files = new Label ("Trade off versioning for space; don't keep a history locally.") { Xalign = 0 };
+
+                RadioButton radio_encrypted = new RadioButton (radio_plain, "Encrypted Storage");
+                Label label_encrypted = new Label ("Trade off efficiency for privacy; encrypt files before storing them.") { Xalign = 0 };
+
+
+                radio_plain.StyleContext.AddProvider (css_provider, 800);
+                radio_large_files.StyleContext.AddProvider (css_provider, 800);
+                radio_encrypted.StyleContext.AddProvider (css_provider, 800);
+
+                layout_vertical.PackStart (radio_plain, false, false, 6);
+                layout_vertical.PackStart (label_plain, false, false, 0);
+                layout_vertical.PackStart (radio_large_files, false, false, 6);
+                layout_vertical.PackStart (label_large_files, false, false, 0);
+                layout_vertical.PackStart (radio_encrypted, false, false, 6);
+                layout_vertical.PackStart (label_encrypted, false, false, 0);
+
+                Add (layout_vertical);
+
+                Button cancel_button = new Button ("Cancel");
+                Button continue_button = new Button ("Continue");
+
+                continue_button.Clicked += delegate {
+                    if (radio_large_files.Active) {
+                        Controller.StoragePageCompleted (StorageType.Media);
+                        return;
+                    }
+
+                    if (radio_encrypted.Active) {
+                        Controller.StoragePageCompleted (StorageType.Media);
+                        return;
+                    }
+
+                    Controller.StoragePageCompleted (StorageType.Plain);
+                };
+
+                AddButton (cancel_button);
+                AddButton (continue_button);
+            }
+
             if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {
                 if (type == PageType.CryptoSetup) {
                     Header      = "Set up file encryption";

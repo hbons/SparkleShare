@@ -24,11 +24,29 @@ using Timers = System.Timers;
 
 namespace Sparkles {
 
-    public enum RepositoryStorageType {
+    public enum StorageType {
+        Unknown,
         Plain,
-        Encrypted,
-        LargeFiles,
-        LargeFilesEncrypted
+        Media,
+        Encrypted
+    }
+
+
+    public class StorageTypeInfo {
+
+        public readonly StorageType Type;
+
+        public readonly string Name;
+        public readonly string Description;
+
+
+        public StorageTypeInfo (StorageType storage_type, string name, string description)
+        {
+            Type = storage_type;
+
+            Name = name;
+            Description = description;
+        }
     }
 
     public enum SyncStatus {
@@ -69,7 +87,7 @@ namespace Sparkles {
         public abstract List<ChangeSet> GetChangeSets ();
         public abstract List<ChangeSet> GetChangeSets (string path);
 
-        protected RepositoryStorageType StorageType = RepositoryStorageType.Plain;
+        protected StorageType StorageType = StorageType.Plain;
 
         public static bool UseCustomWatcher = false;
 

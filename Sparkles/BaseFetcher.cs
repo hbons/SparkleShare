@@ -51,6 +51,8 @@ namespace Sparkles {
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
 
+        protected readonly List<StorageTypeInfo> AvailableStorageTypes = new List<StorageTypeInfo> ();
+
         public double ProgressPercentage { get; private set; }
         public double ProgressSpeed { get; private set; }
 
@@ -109,6 +111,9 @@ namespace Sparkles {
 
         protected BaseFetcher (SparkleFetcherInfo info)
         {
+            AvailableStorageTypes.Add (
+                new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy."));
+
             OriginalFetcherInfo = info;
             RequiredFingerprint = info.Fingerprint;
             FetchPriorHistory   = info.FetchPriorHistory;
