@@ -46,6 +46,10 @@ namespace Sparkles.Git {
 
         public GitFetcher (SparkleFetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info)
         {
+            AvailableStorageTypes.Add (
+                new StorageTypeInfo (StorageType.Encrypted, "Encrypted Storage",
+                    "Trade off efficiency for privacy; encrypt files before storing them."));
+
             this.auth_info = auth_info;
             var uri_builder = new UriBuilder (RemoteUrl);
 
@@ -54,6 +58,10 @@ namespace Sparkles.Git {
 
             if (RemoteUrl.Host.Equals ("github.com") ||
                 RemoteUrl.Host.Equals ("gitlab.com")) {
+
+                AvailableStorageTypes.Add (
+                    new StorageTypeInfo (StorageType.Media, "Media Storage",
+                        "Trade off versioning for space; don't keep a history locally."));
 
                 uri_builder.Scheme   = "ssh";
                 uri_builder.UserName = "git";

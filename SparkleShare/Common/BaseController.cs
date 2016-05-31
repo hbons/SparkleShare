@@ -582,6 +582,13 @@ namespace SparkleShare {
             }
             
             this.fetcher.Finished += delegate (bool repo_is_encrypted, bool repo_is_empty, string [] warnings) {
+
+                if (repo_is_empty) {
+                    ShowSetupWindow (PageType.StorageSetup);
+                }
+
+                return; // TODO
+
                 if (repo_is_encrypted && repo_is_empty) {
                     ShowSetupWindowEvent (PageType.CryptoSetup);
                     
@@ -620,10 +627,24 @@ namespace SparkleShare {
         {
             return this.fetcher.IsFetchedRepoPasswordCorrect (password);
         }
-        
-        
-        public void FinishFetcher (string password)
+
+
+        public void FinishFetcher (StorageType storage_type)
         {
+            if (storage_type == StorageType.Media) {
+                FinishFetcher (); // TODO: enable large files
+                return;
+            }
+
+            FinishFetcher ();
+        }
+        
+        
+        public void FinishFetcher (StorageType storage_type, string password)
+        {
+            if (storage_type != StorageType.Encrypted)
+                return;
+
             this.fetcher.EnableFetchedRepoCrypto (password);
             FinishFetcher ();
         }

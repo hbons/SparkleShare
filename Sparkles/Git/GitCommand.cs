@@ -25,7 +25,6 @@ namespace Sparkles.Git {
 
 
         static string git_path;
-        static string git_lfs_path;
 
         public static string GitPath {
             get {
@@ -40,19 +39,6 @@ namespace Sparkles.Git {
             }
         }
 
-        public static string GitLFSPath {
-            get {
-                if (git_lfs_path == null)
-                    git_lfs_path = LocateCommand ("git-lfs");
-
-                return git_lfs_path;
-            }
-
-            set {
-                git_lfs_path = value;
-            }
-        }
-
 
         public static string GitVersion {
             get {
@@ -64,12 +50,13 @@ namespace Sparkles.Git {
             }
         }
 
+
         public static string GitLFSVersion {
             get {
-                if (GitLFSPath == null)
-                    GitLFSPath = LocateCommand ("git-lfs");
+                if (GitPath == null)
+                    GitPath = LocateCommand ("git");
 
-                string git_lfs_version = new Command (GitLFSPath, "version").StartAndReadStandardOutput ();
+                string git_lfs_version = new Command (GitPath, "lfs version").StartAndReadStandardOutput ();
                 return git_lfs_version.Replace ("git-lfs/", "").Split (' ') [0];
             }
         }
@@ -95,8 +82,6 @@ namespace Sparkles.Git {
             if (ExecPath == null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
 
-            Console.WriteLine (GIT_SSH_COMMAND);
-
 			SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
             SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
 			SetEnvironmentVariable ("LANG", "en_US");
@@ -108,8 +93,9 @@ namespace Sparkles.Git {
             return SSHPath + " " +
                 "-i " + auth_info.PrivateKeyFilePath.Replace (" ", "\\ ") + " " +
                 "-o UserKnownHostsFile=" + auth_info.KnownHostsFilePath.Replace (" ", "\\ ") + " " +
-                "-o PasswordAuthentication=no " +
-                "-F /dev/null"; // Ignore the environment's SSH config file
+                "-o IdentitiesOnly=yes" + " " + // Don't fall back to other keys on the system
+                "-o PasswordAuthentication=no" + " " + // Don't hang on possible password prompts
+                "-F /dev/null"; // Ignore the system's SSH config file
         }
 
 

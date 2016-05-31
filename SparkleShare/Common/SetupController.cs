@@ -34,6 +34,7 @@ namespace SparkleShare {
         Error,
         Finished,
         Tutorial,
+        StorageSetup,
         CryptoSetup,
         CryptoPassword
     }
@@ -500,6 +501,24 @@ namespace SparkleShare {
         }
 
 
+        public void StoragePageCompleted (StorageType storage_type)
+        {
+            if (storage_type == StorageType.Encrypted) {
+                ChangePageEvent (PageType.CryptoSetup, null);
+                return;
+            }
+
+            ProgressBarPercentage = 100.0;
+            ChangePageEvent (PageType.Syncing, null);
+
+            new Thread (() => {
+                Thread.Sleep (1000);
+                SparkleShare.Controller.FinishFetcher (); // TODO: 
+
+            }).Start ();
+        }
+
+
         public void CheckCryptoSetupPage (string password)
         {
             new Thread (() => {
@@ -535,7 +554,7 @@ namespace SparkleShare {
 
             new Thread (() => {
                 Thread.Sleep (1000);
-                SparkleShare.Controller.FinishFetcher (password);
+                SparkleShare.Controller.FinishFetcher (StorageType.Encrypted, password);
 
             }).Start ();
         }
