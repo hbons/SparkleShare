@@ -105,7 +105,7 @@ namespace SparkleShare {
             };
 
             if (InstallationInfo.Directory.StartsWith ("/app", StringComparison.InvariantCulture))
-                version.Text += " (xdg-app)";
+                version.Text += " (flatpak)";
 
             version.StyleContext.AddProvider (label_css_provider, 800);
 
