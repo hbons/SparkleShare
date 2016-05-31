@@ -314,7 +314,7 @@ namespace SparkleShare {
 
         public void AddHostedProjectClicked ()
         {
-            new Thread (() => SparkleShare.Controller.ShowSetupWindow (PageType.Add)).Start ();
+            new Thread (() => SparkleShare.Controller.ShowSetupWindow (PageType.StorageSetup)).Start ();
         }
 
         public void CopyToClipboardClicked ()
