@@ -57,6 +57,7 @@
   <ItemGroup>
     <Folder Include="UserInterface\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Presets\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\HTML\day-entry.html">
@@ -70,6 +71,51 @@
     </None>
     <None Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
+    </None>
+    <None Include="..\Common\Presets\bitbucket.png">
+      <Link>Presets\bitbucket.png</Link>
+    </None>
+    <None Include="..\Common\Presets\bitbucket.xml">
+      <Link>Presets\bitbucket.xml</Link>
+    </None>
+    <None Include="..\Common\Presets\bitbucket%402x.png">
+      <Link>Presets\bitbucket%402x.png</Link>
+    </None>
+    <None Include="..\Common\Presets\github.png">
+      <Link>Presets\github.png</Link>
+    </None>
+    <None Include="..\Common\Presets\github.xml">
+      <Link>Presets\github.xml</Link>
+    </None>
+    <None Include="..\Common\Presets\github%402x.png">
+      <Link>Presets\github%402x.png</Link>
+    </None>
+    <None Include="..\Common\Presets\gitlab.png">
+      <Link>Presets\gitlab.png</Link>
+    </None>
+    <None Include="..\Common\Presets\gitlab.xml">
+      <Link>Presets\gitlab.xml</Link>
+    </None>
+    <None Include="..\Common\Presets\gitlab%402x.png">
+      <Link>Presets\gitlab%402x.png</Link>
+    </None>
+    <None Include="..\Common\Presets\own-server.png">
+      <Link>Presets\own-server.png</Link>
+    </None>
+    <None Include="..\Common\Presets\own-server.xml">
+      <Link>Presets\own-server.xml</Link>
+    </None>
+    <None Include="..\Common\Presets\own-server%402x.png">
+      <Link>Presets\own-server%402x.png</Link>
+    </None>
+    <None Include="..\Common\Presets\planio.png">
+      <Link>Presets\planio.png</Link>
+    </None>
+    <None Include="..\Common\Presets\planio.xml">
+      <Link>Presets\planio.xml</Link>
+    </None>
+    <None Include="..\Common\Presets\planio%402x.png">
+      <Link>Presets\planio%402x.png</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
