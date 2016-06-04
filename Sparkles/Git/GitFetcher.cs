@@ -273,6 +273,8 @@ namespace Sparkles.Git {
 
         public override void EnableFetchedRepoCrypto (string password)
         {
+            var git_config_required = new GitCommand (TargetFolder, "config filter.encryption.required true");
+
             var git_config_smudge = new GitCommand (TargetFolder,
                 "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64" + " " +
                 "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
@@ -283,6 +285,7 @@ namespace Sparkles.Git {
                 "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
                 "-pass file:.git/info/encryption_password\"");
 
+            git_config_required.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
 
