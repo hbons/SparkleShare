@@ -1,29 +1,28 @@
-## Building on Linux distributions
+# SparkleShare for Linux
 
-You can choose to build SparkleShare from source or to get the package through your distribution's repositories.
 To run SparkleShare, you'll need these packages:
 
-
 ```
+curl
 git >= 2.3
+git-lfs >= 1.2.1
 gtk-sharp3
-mono-core >= 2.8
+gvfs
+mono-core >= 4.0
 notify-sharp
-webkitgtk-sharp
+webkit2gtk-sharp
 ```
 
-**Note:** These packages may not overlap with the packages required to perform a build, so please make sure that at least the above packages are installed. 
-
-Optional packages:
+On Ubuntu you'll also need:
 
 ```
-gvfs (to change file/folder icons)
-libappindicator (for Ubuntu integration)
-curl (to make the "sparkleshare://" protocol handler work)
+libappindicator-sharp
 ```
 
 
-### Installing common build requirements
+## Building on Linux
+
+### Common build requirements
 
 You will need the packages listed below for the most used Linux distributions:  
 
@@ -39,7 +38,7 @@ nant
 ```
 
 
-### Installing additional source build requirements
+### Additional source build requirements
 
 Install the `gtk-sharp3` bindings from:  
 https://github.com/mono/gtk-sharp  
@@ -49,21 +48,20 @@ https://launchpad.net/~meebey/+archive/mono-preview
 Install the `notify-sharp` bindings from:  
 https://download.gnome.org/sources/notify-sharp/3.0/
 
-Install the `soup-sharp` and `webkitgtk-sharp` bindings from:  
-https://github.com/xDarkice/soup-sharp  
-https://github.com/xDarkice/webkitgtk-sharp
+Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:  
+https://github.com/hbons/soup-sharp  
+https://github.com/hbons/webkit2gtk-sharp
 
 All with the usual:
 
-```
+```bash
 ./autogen.sh
 make
 sudo make install
 ```
 
 If you're using Ubuntu, also install the `appindicator-sharp` bindings from:  
-https://github.com/xDarkice/appindicator-sharp
-
+https://github.com/hbons/appindicator-sharp
 
 
 ### Start the build
@@ -77,17 +75,16 @@ $ sudo make install
 ```
 
 
-### Reset SparkleShare settings
-
-```
-rm -Rf ~/SparkleShare
-rm -Rf ~/.config/sparkleshare
-```
-
-
 ### Uninstall
 
-```
+```bash
 sudo make uninstall
 ```
 
+
+### Reset SparkleShare settings
+
+```bash
+rm -Rf ~/SparkleShare
+rm -Rf ~/.config/sparkleshare
+```
