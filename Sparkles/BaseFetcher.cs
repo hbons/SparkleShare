@@ -80,30 +80,6 @@ namespace Sparkles {
         protected List<string> warnings = new List<string> ();
         protected List<string> errors   = new List<string> ();
 
-        protected string [] ExcludeRules = {
-            "*.autosave", // Various autosaving apps
-            "*~", // gedit and emacs
-            ".~lock.*", // LibreOffice
-            "*.part", "*.crdownload", // Firefox and Chromium temporary download files
-            ".*.sw[a-z]", "*.un~", "*.swp", "*.swo", // vi(m)
-            ".directory", // KDE
-            "*.kate-swp", // Kate
-            ".DS_Store", "Icon\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
-            "*(Autosaved).graffle", // Omnigraffle
-            "Thumbs.db", "Desktop.ini", // Windows
-            "~*.tmp", "~*.TMP", "*~*.tmp", "*~*.TMP", // MS Office
-            "~*.ppt", "~*.PPT", "~*.pptx", "~*.PPTX",
-            "~*.xls", "~*.XLS", "~*.xlsx", "~*.XLSX",
-            "~*.doc", "~*.DOC", "~*.docx", "~*.DOCX",
-            "~$*",
-            "*.a$v", // QuarkXPress
-            "*/CVS/*", ".cvsignore", "*/.cvsignore", // CVS
-            "/.svn/*", "*/.svn/*", // Subversion
-            "/.hg/*", "*/.hg/*", "*/.hgignore", // Mercurial
-            "/.bzr/*", "*/.bzr/*", "*/.bzrignore", // Bazaar
-            "*<*", "*>*", "*:*", "*\"*", "*|*", "*\\?*", "*\\**", "*\\\\*" // Not allowed on Windows systems,
-            // see (http://msdn.microsoft.com/en-us/library/aa365247(v=vs.85).aspx)
-        };
 
 
         Thread thread;
@@ -263,5 +239,31 @@ namespace Sparkles {
 
             return "Git";
         }
+
+
+        protected string [] ExcludeRules = {
+            "*.autosave", // Various autosaving apps
+            "*~", // gedit and emacs
+            ".~lock.*", // LibreOffice
+            "*.part", "*.crdownload", // Firefox and Chromium temporary download files
+            ".*.sw[a-z]", "*.un~", "*.swp", "*.swo", // vi(m)
+            ".directory", // KDE
+            "*.kate-swp", // Kate
+            ".DS_Store", "Icon\r", "._*", ".Spotlight-V100", ".Trashes", // Mac OS X
+            "*(Autosaved).graffle", // Omnigraffle
+            "Thumbs.db", "Desktop.ini", // Windows
+            "~*.tmp", "~*.TMP", "*~*.tmp", "*~*.TMP", // MS Office
+            "~*.ppt", "~*.PPT", "~*.pptx", "~*.PPTX",
+            "~*.xls", "~*.XLS", "~*.xlsx", "~*.XLSX",
+            "~*.doc", "~*.DOC", "~*.docx", "~*.DOCX",
+            "~$*",
+            "*.a$v", // QuarkXPress
+            "*/CVS/*", ".cvsignore", "*/.cvsignore", // CVS
+            "/.svn/*", "*/.svn/*", // Subversion
+            "/.hg/*", "*/.hg/*", "*/.hgignore", // Mercurial
+            "/.bzr/*", "*/.bzr/*", "*/.bzrignore", // Bazaar
+            "*<*", "*>*", "*:*", "*\"*", "*|*", "*\\?*", "*\\**", "*\\\\*" // Not allowed on Windows systems,
+            // see (http://msdn.microsoft.com/en-us/library/aa365247(v=vs.85).aspx)
+        };
     }
 }
