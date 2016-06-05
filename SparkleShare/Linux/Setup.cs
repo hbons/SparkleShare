@@ -469,55 +469,49 @@ namespace SparkleShare {
             }
 
             if (type == PageType.StorageSetup) {
-                Header = "Set up storage type";
+                Header = string.Format ("Storage type for ‘{0}’", Controller.SyncingFolder);
                 Description = "What type of storage would you like to use?";
 
                 VBox layout_vertical = new VBox (false, 0);
+                VBox layout_radio_buttons = new VBox (false, 0) { BorderWidth = 12 };
 
-                var css_provider = new CssProvider ();
+                foreach (StorageTypeInfo storage_type in SparkleShare.Controller.FetcherAvailableStorageTypes) {
+                    RadioButton radio_button = new RadioButton (null,
+                        storage_type.Name + "\n" + storage_type.Description);
 
-                css_provider.LoadFromData ("GtkRadioButton {" +
-                    "font-weight: bold;" +
-                    "}");
+                    (radio_button.Child as Label).Markup = string.Format(
+                        "<b>{0}</b>\n<span fgcolor=\"{1}\">{2}</span>",
+                        storage_type.Name, SparkleShare.UI.SecondaryTextColor, storage_type.Description);
 
-                RadioButton radio_plain = new RadioButton (null, "Plain Storage") { Active = true };
-                Label label_plain = new Label ("Nothing fancy.") { Xalign = 0 };
+                    (radio_button.Child as Label).Xpad = 9;
+                   
+                    layout_radio_buttons.PackStart (radio_button, false, false, 9);
+                    radio_button.Group = (layout_radio_buttons.Children [0] as RadioButton).Group;
+                }
 
-                RadioButton radio_large_files = new RadioButton (radio_plain, "Media Storage");
-                Label label_large_files = new Label ("Trade off versioning for space; don't keep a history locally.") { Xalign = 0 };
-
-                RadioButton radio_encrypted = new RadioButton (radio_plain, "Encrypted Storage");
-                Label label_encrypted = new Label ("Trade off efficiency for privacy; encrypt files before storing them.") { Xalign = 0 };
-
-
-                radio_plain.StyleContext.AddProvider (css_provider, 800);
-                radio_large_files.StyleContext.AddProvider (css_provider, 800);
-                radio_encrypted.StyleContext.AddProvider (css_provider, 800);
-
-                layout_vertical.PackStart (radio_plain, false, false, 6);
-                layout_vertical.PackStart (label_plain, false, false, 0);
-                layout_vertical.PackStart (radio_large_files, false, false, 6);
-                layout_vertical.PackStart (label_large_files, false, false, 0);
-                layout_vertical.PackStart (radio_encrypted, false, false, 6);
-                layout_vertical.PackStart (label_encrypted, false, false, 0);
-
+                layout_vertical.PackStart (new Label (""), true, true, 0);
+                layout_vertical.PackStart (layout_radio_buttons, false, false, 0);
+                layout_vertical.PackStart (new Label (""), true, true, 0);
                 Add (layout_vertical);
 
                 Button cancel_button = new Button ("Cancel");
                 Button continue_button = new Button ("Continue");
 
                 continue_button.Clicked += delegate {
-                    if (radio_large_files.Active) {
-                        Controller.StoragePageCompleted (StorageType.Media);
-                        return;
-                    }
+                    int checkbox_index= 0;
+                    foreach (RadioButton radio_button in layout_radio_buttons.Children) {
+                        if (radio_button.Active) {
+                            StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes [checkbox_index];
+                            Controller.StoragePageCompleted (selected_storage_type.Type);
+                            return;
+                        }
 
-                    if (radio_encrypted.Active) {
-                        Controller.StoragePageCompleted (StorageType.Media);
-                        return;
+                        checkbox_index++;
                     }
+                };
 
-                    Controller.StoragePageCompleted (StorageType.Plain);
+                cancel_button.Clicked += delegate {
+                    Controller.SyncingCancelled ();
                 };
 
                 AddButton (cancel_button);
@@ -526,11 +520,11 @@ namespace SparkleShare {
 
             if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {
                 if (type == PageType.CryptoSetup) {
-                    Header      = "Set up file encryption";
+                    Header      = string.Format ("Encryption password for ‘{0}’", Controller.SyncingFolder);
                     Description = "Please a provide a strong password that you don’t use elsewhere.";
                 
                 } else {
-                    Header      = "This project contains encrypted files";
+                    Header      = string.Format ("‘{0}’ contains encrypted files", Controller.SyncingFolder);
                     Description = "Please enter the password to see their contents.";
                 }
 
@@ -545,7 +539,7 @@ namespace SparkleShare {
                     ActivatesDefault = true
                 };
                 
-                CheckButton show_password_check_button = new CheckButton ("Show password") {
+                CheckButton show_password_check_button = new CheckButton ("Make visible") {
                     Active = false,
                     Xalign = 0,
                 };
