@@ -143,7 +143,7 @@ namespace SparkleShare {
                     SparkleMenuItem item = new SparkleMenuItem (project.Name);
 
                     Gdk.Pixbuf folder_icon;
-                    folder_icon = UserInterfaceHelpers.GetIcon ("folders", 16);
+                    folder_icon = UserInterfaceHelpers.GetIcon ("folder", 16);
 
                     item.Submenu = new Menu ();
 
