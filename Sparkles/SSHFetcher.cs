@@ -89,27 +89,20 @@ namespace Sparkles {
 
         string FetchHostKey ()
         {
-            Logger.LogInfo ("Auth", "Fetching host key for " + RemoteUrl.Host);
-            string [] key_types = {"rsa", "dsa", "ecdsa"};
-            
-            foreach (string key_type in key_types) {
-                string args = "-t " + key_type + " " + "-p" + " ";
+            Logger.LogInfo ("Auth", string.Format ("Fetching host key for {0}", RemoteUrl.Host));
+            var ssh_keyscan = new Command ("ssh-keyscan", string.Format ("-t rsa -p 22 {0}", RemoteUrl.Host));
 
-                if (RemoteUrl.Port < 1)
-                    args += "22 " + RemoteUrl.Host;
-                else
-                    args += RemoteUrl.Port + " " + RemoteUrl.Host;
+            if (RemoteUrl.Port > 0)
+                ssh_keyscan.StartInfo.Arguments = string.Format ("-t rsa -p {0} {1}", RemoteUrl.Port, RemoteUrl.Host);
 
-                var ssh_keyscan = new Command ("ssh-keyscan", args);
-                string host_key = ssh_keyscan.StartAndReadStandardOutput ();
+            string host_key = ssh_keyscan.StartAndReadStandardOutput ();
 
-                if (ssh_keyscan.ExitCode == 0 && !string.IsNullOrWhiteSpace (host_key))
-                    return host_key;
-            }
-            
+            if (ssh_keyscan.ExitCode == 0 && !string.IsNullOrWhiteSpace (host_key))
+                return host_key;
+
             return null;
         }
-        
+
         
         string DeriveFingerprint (string public_key)
         {
