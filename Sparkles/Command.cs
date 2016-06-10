@@ -39,10 +39,10 @@ namespace Sparkles {
             StartInfo.FileName = path;
             StartInfo.Arguments = args;
 
-			StartInfo.CreateNoWindow = true;
+            StartInfo.CreateNoWindow = true;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.RedirectStandardError = true;
-			StartInfo.UseShellExecute = false;
+            StartInfo.UseShellExecute = false;
 
             EnableRaisingEvents = true;
         }
