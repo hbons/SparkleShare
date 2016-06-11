@@ -49,7 +49,7 @@ namespace SparkleShare {
                 string status_message = "Waiting to sync";
                 
                 if (!repo.LastSync.Equals (DateTime.MinValue))
-                    status_message = string.Format ("✓ Synced {0}", repo.LastSync.ToPrettyDate ());
+                    status_message = string.Format ("✓ Synced – Last change {0}", repo.LastSync.ToPrettyDate ());
 
                 if (repo.Status == SyncStatus.SyncUp)
                     status_message = "Sending changes… " + repo.ProgressPercentage + "%";
@@ -63,7 +63,7 @@ namespace SparkleShare {
                 }
 
                 if (IsPaused)
-                    return "Paused";
+                    return "Syncing Paused";
 
                 if (HasError) {
                     switch (repo.Error) {
