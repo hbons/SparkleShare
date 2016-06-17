@@ -33,7 +33,6 @@ namespace SparkleShare {
         Syncing,
         Error,
         Finished,
-        Tutorial,
         StorageSetup,
         CryptoSetup,
         CryptoPassword
@@ -79,7 +78,6 @@ namespace SparkleShare {
 
         public bool WindowIsOpen { get; private set; }
         public SparkleInvite PendingInvite { get; private set; }
-        public int TutorialPageNumber { get; private set; }
         public string PreviousUrl { get; private set; }
         public string PreviousAddress { get; private set; }
         public string PreviousPath { get; private set; }
@@ -112,7 +110,6 @@ namespace SparkleShare {
                 this.current_page = page_type;
             };
 
-            TutorialPageNumber = 0;
             PreviousAddress    = "";
             PreviousPath       = "";
             PreviousUrl        = "";
@@ -150,7 +147,10 @@ namespace SparkleShare {
             };
 
             SparkleShare.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
-                if (page_type == PageType.CryptoSetup || page_type == PageType.CryptoPassword) {
+                if (page_type == PageType.StorageSetup ||
+                    page_type == PageType.CryptoSetup ||
+                    page_type == PageType.CryptoPassword) {
+
                     ChangePageEvent (page_type, null);
                     return;
                 }
@@ -179,7 +179,7 @@ namespace SparkleShare {
                             ChangePageEvent (PageType.Add, null);
                         }
 
-                    } else if (!SparkleShare.Controller.FirstRun && TutorialPageNumber == 0) {
+                    } else if (!SparkleShare.Controller.FirstRun) {
                         WindowIsOpen = true;
                         ChangePageEvent (PageType.Add, null);
                     }
@@ -232,41 +232,15 @@ namespace SparkleShare {
         public void SetupPageCompleted (string full_name, string email)
         {
             SparkleShare.Controller.CurrentUser = new User (full_name, email);
+            new Thread (() => SparkleShare.Controller.CreateStartupItem ()).Start ();
 
-            TutorialPageNumber = 1;
-            ChangePageEvent (PageType.Tutorial, null);
+            ChangePageEvent (PageType.Add, null);
         }
 
-
-        public void TutorialSkipped ()
-        {
-            TutorialPageNumber = 4;
-            ChangePageEvent (PageType.Tutorial, null);
-        }
-
-
+      
         public void HistoryItemChanged (bool fetch_prior_history)
         {
             this.fetch_prior_history = fetch_prior_history;
-        }
-
-
-        public void TutorialPageCompleted ()
-        {
-            TutorialPageNumber++;
-
-            if (TutorialPageNumber == 5) {
-                TutorialPageNumber = 0;
-
-                WindowIsOpen = false;
-                HideWindowEvent ();
-
-                if (this.create_startup_item)
-                    new Thread (() => SparkleShare.Controller.CreateStartupItem ()).Start ();
-
-            } else {
-                ChangePageEvent (PageType.Tutorial, null);
-            }
         }
 
 
@@ -326,8 +300,7 @@ namespace SparkleShare {
             if (remote_path.EndsWith (".git"))
                 SyncingFolder = remote_path.Substring (0, remote_path.Length - 4);
 
-			SyncingFolder         = SyncingFolder.Replace ("-crypto", "");
-			SyncingFolder         = SyncingFolder.ReplaceUnderscoreWithSpace ();
+            SyncingFolder = SyncingFolder.ReplaceUnderscoreWithSpace ();
             ProgressBarPercentage = 1.0;
 
             ChangePageEvent (PageType.Syncing, null);
@@ -422,7 +395,6 @@ namespace SparkleShare {
             if (PendingInvite.RemotePath.EndsWith (".git"))
                 SyncingFolder = PendingInvite.RemotePath.Substring (0, PendingInvite.RemotePath.Length - 4);
 
-			SyncingFolder   = SyncingFolder.Replace ("-crypto", "");
 			SyncingFolder   = SyncingFolder.ReplaceUnderscoreWithSpace ();
             PreviousAddress = PendingInvite.Address;
             PreviousPath    = PendingInvite.RemotePath;
@@ -513,7 +485,7 @@ namespace SparkleShare {
 
             new Thread (() => {
                 Thread.Sleep (1000);
-                SparkleShare.Controller.FinishFetcher (); // TODO: 
+                SparkleShare.Controller.FinishFetcher (storage_type);
 
             }).Start ();
         }
@@ -569,13 +541,7 @@ namespace SparkleShare {
         public void ShowFilesClicked ()
         {
             string folder_name = Path.GetFileName (PreviousPath);
-            folder_name        = folder_name.ReplaceUnderscoreWithSpace ();
-
-            if (PreviousPath.EndsWith ("-crypto"))
-                folder_name = folder_name.Replace ("-crypto", "");
-
-            if (PreviousPath.EndsWith ("-crypto.git"))
-                folder_name = folder_name.Replace ("-crypto.git", "");
+            folder_name = folder_name.ReplaceUnderscoreWithSpace ();
 
             SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
             FinishPageCompleted ();
