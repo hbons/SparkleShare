@@ -34,7 +34,7 @@ namespace Sparkles.Git {
         string password_salt = "662282447f6bbb8c8e15fb32dd09e3e708c32bc8";
 
 
-        public override bool IsFetchedRepoEmpty {
+        protected override bool IsFetchedRepoEmpty {
             get {
                 var git_rev_parse = new GitCommand (TargetFolder, "rev-parse HEAD");
                 git_rev_parse.StartAndWaitForExit ();
@@ -46,10 +46,6 @@ namespace Sparkles.Git {
 
         public GitFetcher (SparkleFetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info)
         {
-            AvailableStorageTypes.Add (
-                new StorageTypeInfo (StorageType.Encrypted, "Encrypted Storage",
-                    "Trade off efficiency for privacy; encrypt files before storing them."));
-
             this.auth_info = auth_info;
             var uri_builder = new UriBuilder (RemoteUrl);
 
@@ -60,8 +56,8 @@ namespace Sparkles.Git {
                 RemoteUrl.Host.Equals ("gitlab.com")) {
 
                 AvailableStorageTypes.Add (
-                    new StorageTypeInfo (StorageType.Media, "Media Storage",
-                        "Trade off versioning for space; don't keep a history locally."));
+                    new StorageTypeInfo (StorageType.Media, "Large File Storage",
+                        "Trade off versioning for space;\ndoesn't keep a local history"));
 
                 uri_builder.Scheme   = "ssh";
                 uri_builder.UserName = "git";
@@ -74,6 +70,35 @@ namespace Sparkles.Git {
             }
 
             RemoteUrl = uri_builder.Uri;
+
+            AvailableStorageTypes.Add (
+                new StorageTypeInfo (StorageType.Encrypted, "Encrypted Storage",
+                    "Trade off efficiency for privacy;\nencrypts before storing files on the host"));
+        }
+
+
+        StorageType? DetermineStorageType ()
+        {
+            var git_ls_remote = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
+                string.Format ("ls-remote --heads \"{0}\"", RemoteUrl), auth_info);
+
+            string output = git_ls_remote.StartAndReadStandardOutput ();
+
+            if (git_ls_remote.ExitCode != 0)
+                return null;
+
+            if (string.IsNullOrWhiteSpace (output))
+                return StorageType.Unknown;
+
+            foreach (string line in output.Split ("\n".ToCharArray ())) {
+                if (line.Contains ("x-sparkleshare-lfs"))
+                    return StorageType.Media;
+
+                if (line.Contains ("x-sparkleshare-encrypted"))
+                    return StorageType.Encrypted;
+            }
+
+            return StorageType.Plain;
         }
 
 
@@ -82,14 +107,24 @@ namespace Sparkles.Git {
             if (!base.Fetch ())
                 return false;
 
-            if (FetchPriorHistory) {
-                git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
-                    "clone --progress --no-checkout \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
+            StorageType? storage_type = DetermineStorageType ();
 
-            } else {
-                git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
-                    "clone --progress --no-checkout --depth=1 \"" + RemoteUrl + "\" \"" + TargetFolder + "\"", auth_info);
-            }
+            if (storage_type == null)
+                return false;
+
+            FetchedRepoStorageType = (StorageType) storage_type;
+
+            string git_clone_command = "clone --progress --no-checkout";
+
+            if (FetchPriorHistory)
+                git_clone_command += " --depth=1";
+
+            if (storage_type == StorageType.Media)
+                git_clone_command = "lfs " + git_clone_command;
+
+            var git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
+                string.Format ("{0} \"{1}\" \"{2}\"", git_clone_command, RemoteUrl, TargetFolder),
+                auth_info);
 
             git_clone.StartInfo.RedirectStandardError = true;
             git_clone.Start ();
@@ -192,7 +227,6 @@ namespace Sparkles.Git {
             InstallExcludeRules ();
             InstallAttributeRules ();
             InstallGitLFS ();
-            EnableGitLFS (); // TODO
 
             return true;
         }
@@ -222,14 +256,36 @@ namespace Sparkles.Git {
         }
 
 
-        public override void Complete ()
+        public override void Complete (StorageType selected_storage_type)
         {
-            if (!IsFetchedRepoEmpty) {
+            if (IsFetchedRepoEmpty) {
+                var git_commit = new GitCommand (TargetFolder,
+                    "commit --allow-empty --mesage=\"Initial commit by SparkleShare\"");
+
+                git_commit.StartAndWaitForExit ();
+
+                // These branches will be pushed  later by "git push --all"
+                if (selected_storage_type == StorageType.Media) {
+                    var git_branch = new GitCommand (TargetFolder, "branch x-sparkleshare-lfs", auth_info);
+                    git_branch.StartAndWaitForExit ();
+
+                    InstallGitLFS ();
+                    EnableGitLFS ();
+                }
+
+                if (selected_storage_type == StorageType.Encrypted) {
+                    var git_branch = new GitCommand (TargetFolder, "branch x-sparkleshare-encrypted", auth_info);
+                    git_branch.StartAndWaitForExit ();
+                }
+
+            } else {
                 string branch = "HEAD";
                 string prefered_branch = "SparkleShare";
 
                 // Prefer the "SparkleShare" branch if it exists
-                var git_show_ref = new GitCommand (TargetFolder, "show-ref --verify --quiet refs/heads/" + prefered_branch);
+                var git_show_ref = new GitCommand (TargetFolder,
+                   "show-ref --verify --quiet refs/heads/" + prefered_branch);
+
                 git_show_ref.StartAndWaitForExit ();
 
                 if (git_show_ref.ExitCode == 0)
@@ -239,7 +295,7 @@ namespace Sparkles.Git {
                 git_checkout.StartAndWaitForExit ();
             }
 
-            base.Complete ();
+            base.Complete (selected_storage_type);
         }
 
 
@@ -331,6 +387,18 @@ namespace Sparkles.Git {
         }
 
 
+        public override string FormatName ()
+        {
+            string name = Path.GetFileName (RemoteUrl.AbsolutePath);
+            name = name.ReplaceUnderscoreWithSpace ();
+
+            if (name.EndsWith (".git"))
+                name = name.Replace (".git", "");
+
+            return name;
+        }
+
+
         void InstallExcludeRules ()
         {
             string git_info_path = Path.Combine (TargetFolder, ".git", "info");
@@ -373,13 +441,15 @@ namespace Sparkles.Git {
         void InstallGitLFS ()
         {
             var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
-            var git_config_clean = new GitCommand (TargetFolder, "config filter.lfs.clean 'git-lfs clean %f'");
 
             string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
             string smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
 
             var git_config_smudge = new GitCommand (TargetFolder,
                 "config filter.lfs.smudge \"" + smudge_command + "\"");
+
+            var git_config_clean = new GitCommand (TargetFolder,
+                "config filter.lfs.clean 'git-lfs clean %f'");
             
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();

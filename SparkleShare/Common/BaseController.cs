@@ -480,9 +480,8 @@ namespace SparkleShare {
         
         void StartupInviteScan ()
         {
-            foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml")) {
+            foreach (string invite in Directory.GetFiles (FoldersPath, "*.xml"))
                 HandleInvite (invite);
-            }
         }
         
         
@@ -548,7 +547,14 @@ namespace SparkleShare {
                 OnIdle ();
         }
         
-        
+
+        public List<StorageTypeInfo> FetcherAvailableStorageTypes {
+            get {
+                return this.fetcher.AvailableStorageTypes;
+            }
+        }
+
+
         public void StartFetcher (SparkleFetcherInfo info)
         {
             string tmp_path = Config.TmpPath;
@@ -573,7 +579,7 @@ namespace SparkleShare {
                 
             } catch (Exception e) {
                 Logger.LogInfo ("Controller",
-                                       "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
+                    "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
                 
                 FolderFetchError (Path.Combine (info.Address, info.RemotePath).Replace (@"\", "/"),
                                   new string [] {"Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\""});
@@ -581,38 +587,43 @@ namespace SparkleShare {
                 return;
             }
             
-            this.fetcher.Finished += delegate (bool repo_is_encrypted, bool repo_is_empty, string [] warnings) {
+            this.fetcher.Finished += FetcherFinishedDelegate;
+            this.fetcher.Failed += FetcherFailedDelegate;
+            this.fetcher.ProgressChanged += FetcherProgressChangedDelgate;
 
-                if (repo_is_empty) {
-                    ShowSetupWindow (PageType.StorageSetup);
-                }
-
-                return; // TODO
-
-                if (repo_is_encrypted && repo_is_empty) {
-                    ShowSetupWindowEvent (PageType.CryptoSetup);
-                    
-                } else if (repo_is_encrypted) {
-                    ShowSetupWindowEvent (PageType.CryptoPassword);
-                    
-                } else {
-                    FinishFetcher ();
-                }
-            };
-            
-            this.fetcher.Failed += delegate {
-                FolderFetchError (this.fetcher.RemoteUrl.ToString (), this.fetcher.Errors);
-                StopFetcher ();
-            };
-            
-            this.fetcher.ProgressChanged += delegate (double percentage, double speed) {
-                FolderFetching (percentage, speed);
-            };
-            
             this.fetcher.Start ();
         }
-        
-        
+
+
+        void FetcherFinishedDelegate (StorageType storage_type, string [] warnings)
+        {
+            if (storage_type == StorageType.Unknown) {
+                ShowSetupWindow (PageType.StorageSetup);
+                return;
+            }
+
+            if (storage_type == StorageType.Encrypted) {
+                ShowSetupWindowEvent (PageType.CryptoPassword);
+                return;
+            }
+
+            FinishFetcher ();
+        }
+
+
+        void FetcherFailedDelegate ()
+        {
+            FolderFetchError (this.fetcher.RemoteUrl.ToString (), this.fetcher.Errors);
+            StopFetcher ();
+        }
+
+
+        void FetcherProgressChangedDelgate (double percentage, double speed)
+        {
+            FolderFetching (percentage, speed);
+        }
+
+
         public void StopFetcher ()
         {
             this.fetcher.Stop ();
@@ -629,65 +640,27 @@ namespace SparkleShare {
         }
 
 
-        public void FinishFetcher (StorageType storage_type)
-        {
-            if (storage_type == StorageType.Media) {
-                FinishFetcher (); // TODO: enable large files
-                return;
-            }
-
-            FinishFetcher ();
-        }
-        
-        
-        public void FinishFetcher (StorageType storage_type, string password)
-        {
-            if (storage_type != StorageType.Encrypted)
-                return;
-
-            this.fetcher.EnableFetchedRepoCrypto (password);
-            FinishFetcher ();
-        }
-        
-        
         public void FinishFetcher ()
         {
+            FinishFetcher (StorageType.Plain);
+        }
+
+
+        public void FinishFetcher (StorageType storage_type, string password)
+        {
+            this.fetcher.EnableFetchedRepoCrypto (password);
+            FinishFetcher (StorageType.Encrypted);
+        }
+        
+        
+        public void FinishFetcher (StorageType storage_type)
+        {
             this.watcher.EnableRaisingEvents = false;
-            
-            this.fetcher.Complete ();
-            string canonical_name = Path.GetFileName (this.fetcher.RemoteUrl.AbsolutePath);
-            
-            if (canonical_name.EndsWith (".git"))
-                canonical_name = canonical_name.Replace (".git", "");
-            
-            canonical_name = canonical_name.Replace ("-crypto", "");
-            canonical_name = canonical_name.ReplaceUnderscoreWithSpace ();
-            canonical_name = canonical_name.Replace ("%20", " ");
-            
-            bool target_folder_exists = Directory.Exists (
-                Path.Combine (Config.FoldersPath, canonical_name));
-            
-            // Add a numbered suffix to the name if a folder with the same name
-            // already exists. Example: "Folder (2)"
-            int suffix = 1;
-            while (target_folder_exists) {
-                suffix++;
-                target_folder_exists = Directory.Exists (
-                    Path.Combine (Config.FoldersPath, canonical_name + " (" + suffix + ")"));
-            }
-            
-            string target_folder_name = canonical_name;
+            this.fetcher.Complete (storage_type);
 
-            if (suffix > 1)
-                target_folder_name += " (" + suffix + ")";
+            string target_folder_path = DetermineFolderPath ();
+            string target_folder_name = Path.GetFileName (target_folder_path);
 
-            string group_folder_path = Path.Combine (Config.FoldersPath, this.fetcher.RemoteUrl.Host);
-
-            if (!Directory.Exists (group_folder_path))
-                Directory.CreateDirectory (group_folder_path);
-
-            string target_folder_path = Path.Combine (group_folder_path, target_folder_name);
-            
             try {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
                 
@@ -711,23 +684,47 @@ namespace SparkleShare {
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
             
             Config.AddFolder (target_folder_name, this.fetcher.Identifier,
-                              this.fetcher.RemoteUrl.ToString (), backend);
-            
+                this.fetcher.RemoteUrl.ToString (), backend);
+
+            if (storage_type != StorageType.Plain) {
+                Config.SetFolderOptionalAttribute (target_folder_name,
+                    "storage_type", storage_type.ToString ());
+            }
+
             if (this.fetcher.OriginalFetcherInfo.AnnouncementsUrl != null) {
                 Config.SetFolderOptionalAttribute (target_folder_name, "announcements_url",
-                                                   this.fetcher.OriginalFetcherInfo.AnnouncementsUrl);
+                    this.fetcher.OriginalFetcherInfo.AnnouncementsUrl);
             }
-            
-            RepositoriesLoaded = true;
-            FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
-            
+
             AddRepository (target_folder_path);
+            RepositoriesLoaded = true;
+
             FolderListChanged ();
+            FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
             
             this.fetcher.Dispose ();
             this.fetcher = null;
             
             this.watcher.EnableRaisingEvents = true;
+        }
+
+
+        string DetermineFolderPath ()
+        {
+            string folder_name = this.fetcher.FormatName ();
+            string folder_group_path = Path.Combine (Config.FoldersPath, this.fetcher.RemoteUrl.Host);
+            string folder_path = Path.Combine (Config.FoldersPath, folder_group_path, folder_name);
+
+            if (!Directory.Exists (folder_path)) {
+                if (!Directory.Exists (folder_group_path))
+                    Directory.CreateDirectory (folder_group_path);
+
+                return folder_path;
+            }
+
+            // Add a number suffix when needed, e.g. "Folder (3)"
+            int suffix = 2 + Directory.GetDirectories (folder_group_path, folder_name + " (*").Length;
+            return string.Format ("{0} ({1})", folder_path, suffix);
         }
         
         
