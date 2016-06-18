@@ -185,7 +185,11 @@ namespace SparkleShare {
                     Sensitive = (Controller.SelectedPreset.Path == null),
                     ActivatesDefault = true
                 };
-                
+
+                tree_view.ButtonReleaseEvent += delegate {
+                    path_entry.GrabFocus ();
+                };
+
                 Label address_example = new Label () {
                     Xalign = 0,
                     UseMarkup = true,
