@@ -141,7 +141,12 @@ namespace SparkleShare {
 
                 ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (Preset));
 
-                SparkleTreeView tree_view = new SparkleTreeView (store) { HeadersVisible = false };
+                SparkleTreeView tree_view = new SparkleTreeView (store) {
+                    HeadersVisible = false,
+                    SearchColumn = -1,
+                    EnableSearch = false
+                };
+
                 ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
                 scrolled_window.SetPolicy (PolicyType.Never, PolicyType.Automatic);
 
