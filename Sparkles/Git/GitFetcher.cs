@@ -357,7 +357,7 @@ namespace Sparkles.Git {
             // Pass all files through the encryption filter
             // TODO: diff=encryption merge=encryption -text?
             string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            File.WriteAllText (git_attributes_file_path, "* filter=encryption diff=encryption merge=encryption -text");
+            File.WriteAllText (git_attributes_file_path, "* filter=encryption -diff merge=binary");
 
             // Store the password
             string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
