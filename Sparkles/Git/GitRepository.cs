@@ -29,25 +29,9 @@ namespace Sparkles.Git {
 
         SSHAuthenticationInfo auth_info;
         bool user_is_set;
-        bool is_encrypted;
+
 
         string cached_branch;
-
-        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-        
-        Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
-                                             "Author: (.+) <(.+)>\n" +
-                                             "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                             "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                                             "*", RegexOptions.Compiled);
-
-        Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
-                                               "Merge: [a-f0-9]{7} [a-f0-9]{7}\n" +
-                                               "Author: (.+) <(.+)>\n" +
-                                               "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-                                               "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-                                               "*", RegexOptions.Compiled);
 
         string branch {
             get {
@@ -95,11 +79,6 @@ namespace Sparkles.Git {
 
             git_config = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git_config.StartAndWaitForExit ();
-
-            string password_file_path = Path.Combine (LocalPath, ".git", "password");
-
-            if (File.Exists (password_file_path))
-                this.is_encrypted = true;
         }
 
 
@@ -177,7 +156,7 @@ namespace Sparkles.Git {
                 var git = new GitCommand (LocalPath,
                     "ls-remote --heads --exit-code \"" + RemoteUrl + "\" " + this.branch, auth_info);
 
-                string output  = git.StartAndReadStandardOutput ();
+                string output = git.StartAndReadStandardOutput ();
 
                 if (git.ExitCode != 0)
                     return false;
@@ -651,7 +630,7 @@ namespace Sparkles.Git {
 
             // git-show doesn't decrypt objects, so we can't use it to retrieve
             // files from the index. This is a suboptimal workaround but it does the job
-            if (this.is_encrypted) {
+            if (StorageType == StorageType.Encrypted) {
                 // Restore the older file...
                 var git = new GitCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
                 git.StartAndWaitForExit ();
@@ -1179,5 +1158,22 @@ namespace Sparkles.Git {
             FileAttributes attributes = File.GetAttributes (file);
             return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
+
+
+        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+
+        Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
+            "Author: (.+) <(.+)>\n" +
+            "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+            "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+            "*", RegexOptions.Compiled);
+
+        Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
+            "Merge: [a-f0-9]{7} [a-f0-9]{7}\n" +
+            "Author: (.+) <(.+)>\n" +
+            "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
+            "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
+            "*", RegexOptions.Compiled);
     }
 }
