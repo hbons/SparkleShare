@@ -191,6 +191,11 @@ namespace Sparkles {
             this.identifier   = Identifier;
             ChangeSets        = GetChangeSets ();
 
+            string storage_type = this.local_config.GetFolderOptionalAttribute (Name, "storage_type");
+
+            if (!string.IsNullOrEmpty (storage_type))
+                StorageType = (StorageType) Enum.Parse(typeof(StorageType), storage_type);
+
             string is_paused = this.local_config.GetFolderOptionalAttribute (Name, "paused");
             if (is_paused != null && is_paused.Equals (bool.TrueString))
                 Status = SyncStatus.Paused;

@@ -95,12 +95,12 @@ namespace Sparkles {
             
             } else if (day_diff < 31) {
                 if (day_diff < 14)
-                    return "last week";
+                    return "a week ago";
                 else
                     return string.Format ("{0} weeks ago", Math.Ceiling ((double) day_diff / 7));
 
             } else if (day_diff < 62) {
-                return "last month";
+                return "a month ago";
 
             } else { 
                 return string.Format ("{0} months ago", Math.Ceiling ((double) day_diff / 31));

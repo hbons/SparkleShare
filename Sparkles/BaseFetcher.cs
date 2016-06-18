@@ -23,13 +23,16 @@ using System.Threading;
 namespace Sparkles {
 
     public class SparkleFetcherInfo {
-        public string Address;
+        public string Address; // TODO: Uri object
         public string RemotePath;
-        public string Backend;
+
         public string Fingerprint;
+
+        public string Backend;
         public string TargetDirectory;
-        public string AnnouncementsUrl;
         public bool FetchPriorHistory;
+
+        public string AnnouncementsUrl; // TODO: Uri object
     }
 
 
@@ -39,7 +42,7 @@ namespace Sparkles {
         public event Action Failed = delegate { };
 
         public event FinishedEventHandler Finished = delegate { };
-        public delegate void FinishedEventHandler (bool repo_is_encrypted, bool repo_is_empty, string [] warnings);
+        public delegate void FinishedEventHandler (StorageType storage_type, string [] warnings);
 
         public event ProgressChangedEventHandler ProgressChanged = delegate { };
         public delegate void ProgressChangedEventHandler (double percentage, double speed);
@@ -47,22 +50,29 @@ namespace Sparkles {
 
         public abstract bool Fetch ();
         public abstract void Stop ();
-        public abstract bool IsFetchedRepoEmpty { get; }
+        public bool IsActive { get; protected set; }
+        public double ProgressPercentage { get; private set; }
+        public double ProgressSpeed { get; private set; }
+
+
+        protected abstract bool IsFetchedRepoEmpty { get; }
+        protected StorageType FetchedRepoStorageType = StorageType.Unknown;
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
 
-        protected readonly List<StorageTypeInfo> AvailableStorageTypes = new List<StorageTypeInfo> ();
+        public readonly List<StorageTypeInfo> AvailableStorageTypes = new List<StorageTypeInfo> ();
 
-        public double ProgressPercentage { get; private set; }
-        public double ProgressSpeed { get; private set; }
 
         public Uri RemoteUrl { get; protected set; }
         public string RequiredFingerprint { get; protected set; }
         public readonly bool FetchPriorHistory;
         public string TargetFolder { get; protected set; }
-        public bool IsActive { get; protected set; }
         public string Identifier;
         public SparkleFetcherInfo OriginalFetcherInfo;
+
+
+        protected List<string> warnings = new List<string> ();
+        protected List<string> errors   = new List<string> ();
 
         public string [] Warnings {
             get {
@@ -77,18 +87,11 @@ namespace Sparkles {
         }
 
         
-        protected List<string> warnings = new List<string> ();
-        protected List<string> errors   = new List<string> ();
-
-
-
-        Thread thread;
-
 
         protected BaseFetcher (SparkleFetcherInfo info)
         {
             AvailableStorageTypes.Add (
-                new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy."));
+                new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy"));
 
             OriginalFetcherInfo = info;
             RequiredFingerprint = info.Fingerprint;
@@ -111,6 +114,8 @@ namespace Sparkles {
             IsActive  = false;
         }
 
+
+        Thread thread;
 
         public void Start ()
         {
@@ -136,9 +141,7 @@ namespace Sparkles {
                     Logger.LogInfo ("Fetcher", "Finished");
 
                     IsActive = false;
-                    bool repo_is_encrypted = RemoteUrl.AbsolutePath.Contains ("-crypto");
-
-                    Finished (repo_is_encrypted, IsFetchedRepoEmpty, Warnings);
+                    Finished (FetchedRepoStorageType, Warnings);
 
                 } else {
                     Thread.Sleep (500);
@@ -159,7 +162,18 @@ namespace Sparkles {
         }
 
 
-        public virtual void Complete ()
+        public void Complete ()
+        {
+            if (FetchedRepoStorageType == StorageType.Unknown) {
+                Complete (StorageType.Plain);
+                return;
+            }
+
+            this.Complete (FetchedRepoStorageType);
+        }
+
+
+        public virtual void Complete (StorageType storage_type)
         {
             string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
 
@@ -203,7 +217,7 @@ namespace Sparkles {
                 n +
                 "Have fun! :)" + n;
 
-            if (RemoteUrl.AbsolutePath.Contains ("-crypto") || RemoteUrl.Host.Equals ("sparkleshare.net"))
+            if (FetchedRepoStorageType == StorageType.Encrypted)
                 text = text.Replace ("a SparkleShare repository", "an encrypted SparkleShare repository");
 
             File.WriteAllText (file_path, text);
@@ -213,13 +227,6 @@ namespace Sparkles {
         public static string CreateIdentifier ()
         {
             return Path.GetRandomFileName ().SHA256 ();
-        }
-
-
-        public void Dispose ()
-        {
-            if (thread != null)
-                thread.Abort ();
         }
 
 
@@ -238,6 +245,19 @@ namespace Sparkles {
             }
 
             return "Git";
+        }
+
+
+        public virtual string FormatName ()
+        {
+            return Path.GetFileName (RemoteUrl.AbsolutePath);
+        }
+
+
+        public void Dispose ()
+        {
+            if (thread != null)
+                thread.Abort ();
         }
 
 

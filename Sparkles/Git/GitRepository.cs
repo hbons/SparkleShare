@@ -57,6 +57,7 @@ namespace Sparkles.Git {
                 var git = new GitCommand (LocalPath, "config core.ignorecase true");
                 git.StartAndWaitForExit ();
 
+                // TODO: ugly
                 while (this.in_merge && HasLocalChanges) {
                     try {
                         ResolveConflict ();
@@ -223,10 +224,12 @@ namespace Sparkles.Git {
 
             string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
 
-            // We start "git lfs push" manually, so remove the
-            // hook automatically created by the clean/smudge filters
-            if (File.Exists (pre_push_hook_path))
-                File.Delete (pre_push_hook_path);
+            string pre_push_hook_content =
+                "#!/bin/sh" + Environment.NewLine +
+                "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
+                "git-lfs pre-push \"$@\"";
+
+            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
 
             if (StorageType == StorageType.Media) {
                 // TODO: Progress reporting, error handling
@@ -234,12 +237,13 @@ namespace Sparkles.Git {
                 git_lfs_push.StartAndWaitForExit ();
             }
 
-            var git_push = new GitCommand (LocalPath, "push --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
+            var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress \"{0}\"", RemoteUrl), auth_info);
             git_push.StartInfo.RedirectStandardError = true;
             git_push.Start ();
 
             double percentage = 1.0;
 
+            // TODO: parse LFS progress
             while (!git_push.StandardError.EndOfStream) {
                 string line   = git_push.StandardError.ReadLine ();
                 Match match   = this.progress_regex.Match (line);
@@ -305,18 +309,14 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
-            if (StorageType == StorageType.Media) {
-                var git_lfs_pull = new GitCommand (LocalPath, "lfs pull", auth_info);
-                git_lfs_pull.StartAndWaitForExit ();
-            }
-
-            var git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + this.branch, auth_info);
+            var git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + branch, auth_info);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();
 
             double percentage = 1.0;
 
+            // TODO: parse LFS progress
             while (!git.StandardError.EndOfStream) {
                 string line   = git.StandardError.ReadLine ();
                 Match match   = this.progress_regex.Match (line);
@@ -751,20 +751,20 @@ namespace Sparkles.Git {
             GitCommand git;
 
             if (path == null) {
-                git = new GitCommand (LocalPath, "log --since=1.month --raw --find-renames --date=iso " +
+                git = new GitCommand (LocalPath, "--no-pager log --since=1.month --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges");
 
             } else {
                 path = path.Replace ("\\", "/");
 
-                git = new GitCommand (LocalPath, "log --raw --find-renames --date=iso " +
+                git = new GitCommand (LocalPath, "--no-pager log --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges -- \"" + path + "\"");
             }
 
             string output = git.StartAndReadStandardOutput ();
 
             if (path == null && string.IsNullOrWhiteSpace (output)) {
-                git = new GitCommand (LocalPath, "log -n 75 --raw --find-renames --date=iso " +
+                git = new GitCommand (LocalPath, "--no-pager log -n 75 --raw --find-renames --date=iso " +
                     "--format=medium --no-color --no-merges");
 
                 output = git.StartAndReadStandardOutput ();
