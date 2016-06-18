@@ -28,10 +28,11 @@ namespace Sparkles.Git {
         SSHAuthenticationInfo auth_info;
         GitCommand git_clone;
 
+        string password_salt = Path.GetRandomFileName ().SHA256 ().Substring (0, 16);
+
         Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
         Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
-        string password_salt = "662282447f6bbb8c8e15fb32dd09e3e708c32bc8";
 
 
         protected override bool IsFetchedRepoEmpty {
@@ -91,11 +92,18 @@ namespace Sparkles.Git {
                 return StorageType.Unknown;
 
             foreach (string line in output.Split ("\n".ToCharArray ())) {
-                if (line.Contains ("x-sparkleshare-lfs"))
+                string [] line_parts = line.Split ('/');
+                string branch = line_parts [line_parts.Length - 1];
+
+                if (branch == "x-sparkleshare-lfs")
                     return StorageType.Media;
 
-                if (line.Contains ("x-sparkleshare-encrypted"))
+                string encrypted_storage_prefix = "x-sparkleshare-encrypted-";
+
+                if (branch.StartsWith (encrypted_storage_prefix)) {
+                    password_salt = branch.Replace (encrypted_storage_prefix, "");
                     return StorageType.Encrypted;
+                }
             }
 
             return StorageType.Plain;
@@ -116,7 +124,7 @@ namespace Sparkles.Git {
 
             string git_clone_command = "clone --progress --no-checkout";
 
-            if (FetchPriorHistory)
+            if (!FetchPriorHistory)
                 git_clone_command += " --depth=1";
 
             if (storage_type == StorageType.Media)
@@ -258,10 +266,14 @@ namespace Sparkles.Git {
 
         public override void Complete (StorageType selected_storage_type)
         {
-            if (IsFetchedRepoEmpty) {
-                var git_commit = new GitCommand (TargetFolder,
-                    "commit --allow-empty --mesage=\"Initial commit by SparkleShare\"");
+            base.Complete (selected_storage_type);
 
+            if (IsFetchedRepoEmpty) {
+                var git_add    = new GitCommand (TargetFolder, "add .sparkleshare");
+                var git_commit = new GitCommand (TargetFolder, "commit --message=\"Initial commit by SparkleShare\"");
+
+                // We can't do the "commit --all" shortcut because it doesn't add untracked files
+                git_add.StartAndWaitForExit ();
                 git_commit.StartAndWaitForExit ();
 
                 // These branches will be pushed  later by "git push --all"
@@ -274,7 +286,9 @@ namespace Sparkles.Git {
                 }
 
                 if (selected_storage_type == StorageType.Encrypted) {
-                    var git_branch = new GitCommand (TargetFolder, "branch x-sparkleshare-encrypted", auth_info);
+                    var git_branch = new GitCommand (TargetFolder,
+                        string.Format ("branch x-sparkleshare-encrypted-{0}", password_salt), auth_info);
+
                     git_branch.StartAndWaitForExit ();
                 }
 
@@ -291,11 +305,9 @@ namespace Sparkles.Git {
                 if (git_show_ref.ExitCode == 0)
                     branch = prefered_branch;
 
-                var git_checkout = new GitCommand (TargetFolder, "checkout --quiet " + branch);
+                var git_checkout = new GitCommand (TargetFolder, "checkout --quiet --force " + branch);
                 git_checkout.StartAndWaitForExit ();
             }
-
-            base.Complete (selected_storage_type);
         }
 
 
@@ -329,17 +341,14 @@ namespace Sparkles.Git {
 
         public override void EnableFetchedRepoCrypto (string password)
         {
+            string password_file = ".git/info/encryption_password";
             var git_config_required = new GitCommand (TargetFolder, "config filter.encryption.required true");
 
-            var git_config_smudge = new GitCommand (TargetFolder,
-                "config filter.encryption.smudge \"openssl enc -d -aes-256-cbc -base64" + " " +
-                "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
-                "-pass file:.git/info/encryption_password\"");
+            var git_config_smudge = new GitCommand (TargetFolder, "config filter.encryption.smudge " +
+                string.Format ("\"openssl enc -d -aes-256-cbc -base64 -S {0} -pass file:{1}\"", password_salt, password_file));
 
-            var git_config_clean = new GitCommand (TargetFolder,
-                "config filter.encryption.clean  \"openssl enc -e -aes-256-cbc -base64" + " " +
-                "-S " + password.SHA256 (password_salt).Substring (0, 16) + " " +
-                "-pass file:.git/info/encryption_password\"");
+            var git_config_clean = new GitCommand (TargetFolder, "config filter.encryption.clean " +
+                string.Format ("\"openssl enc -e -aes-256-cbc -base64 -S {0} -pass file:{1}\"", password_salt, password_file));
 
             git_config_required.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
@@ -348,7 +357,7 @@ namespace Sparkles.Git {
             // Pass all files through the encryption filter
             // TODO: diff=encryption merge=encryption -text?
             string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            File.WriteAllText (git_attributes_file_path, "* filter=encryption");
+            File.WriteAllText (git_attributes_file_path, "* filter=encryption diff=encryption merge=encryption -text");
 
             // Store the password
             string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
@@ -370,12 +379,12 @@ namespace Sparkles.Git {
                     return false;
             }
 
-            string args = "enc -d -aes-256-cbc -base64 -salt -pass pass:" + password.SHA256 (password_salt) + " " + 
-                "-in \"" + password_check_file_path + "\"";
+            string args = string.Format ("enc -d -aes-256-cbc -base64 -S {0} -pass pass:{1} -in \"{2}\"",
+                password_salt, password.SHA256 (password_salt), password_check_file_path);
 
             var process = new Command ("openssl", args);
-            process.StartInfo.WorkingDirectory = TargetFolder;
 
+            process.StartInfo.WorkingDirectory = TargetFolder;
             process.StartAndWaitForExit ();
 
             if (process.ExitCode == 0) {
