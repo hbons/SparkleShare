@@ -45,7 +45,7 @@ namespace Sparkles.Git {
                 if (GitPath == null)
                     GitPath = LocateCommand ("git");
 
-                string git_version = new Command (GitPath, "--version").StartAndReadStandardOutput ();
+                string git_version = new Command (GitPath, "--version", false).StartAndReadStandardOutput ();
                 return git_version.Replace ("git version ", "");
             }
         }
@@ -56,7 +56,7 @@ namespace Sparkles.Git {
                 if (GitPath == null)
                     GitPath = LocateCommand ("git");
 
-                string git_lfs_version = new Command (GitPath, "lfs version").StartAndReadStandardOutput ();
+                string git_lfs_version = new Command (GitPath, "lfs version", false).StartAndReadStandardOutput ();
                 return git_lfs_version.Replace ("git-lfs/", "").Split (' ') [0];
             }
         }
