@@ -67,7 +67,6 @@ namespace Sparkles {
         public string RequiredFingerprint { get; protected set; }
         public readonly bool FetchPriorHistory;
         public string TargetFolder { get; protected set; }
-        public string Identifier;
         public SparkleFetcherInfo OriginalFetcherInfo;
 
 
@@ -173,22 +172,12 @@ namespace Sparkles {
         }
 
 
-        public virtual void Complete (StorageType storage_type)
+        public virtual string Complete (StorageType storage_type)
         {
-            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
-
-            if (File.Exists (identifier_path)) {
-                Identifier = File.ReadAllText (identifier_path).Trim ();
+            if (IsFetchedRepoEmpty)
+                CreateInitialChangeSet ();
             
-            } else {
-                Identifier = CreateIdentifier ();
-                File.WriteAllText (identifier_path, Identifier);
-
-                if (IsFetchedRepoEmpty)
-                    CreateInitialChangeSet ();
-            }
-
-            File.SetAttributes (identifier_path, FileAttributes.Hidden);
+            return Path.GetRandomFileName ().SHA256 ();
         }
 
 
@@ -221,12 +210,6 @@ namespace Sparkles {
                 text = text.Replace ("a SparkleShare repository", "an encrypted SparkleShare repository");
 
             File.WriteAllText (file_path, text);
-        }
-
-
-        public static string CreateIdentifier ()
-        {
-            return Path.GetRandomFileName ().SHA256 ();
         }
 
 
