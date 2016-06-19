@@ -128,7 +128,7 @@ namespace Sparkles.Git {
                 git_clone_command += " --depth=1";
 
             if (storage_type == StorageType.Media)
-                git_clone_command = "lfs " + git_clone_command;
+                git_clone_command = "lfs clone --progress --no-checkout";
 
             var git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
                 string.Format ("{0} \"{1}\" \"{2}\"", git_clone_command, RemoteUrl, TargetFolder),
@@ -264,11 +264,14 @@ namespace Sparkles.Git {
         }
 
 
-        public override void Complete (StorageType selected_storage_type)
+        public override string Complete (StorageType selected_storage_type)
         {
-            base.Complete (selected_storage_type);
+            string identifier = base.Complete (selected_storage_type);
+            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
 
             if (IsFetchedRepoEmpty) {
+                File.WriteAllText (identifier_path, identifier);
+
                 var git_add    = new GitCommand (TargetFolder, "add .sparkleshare");
                 var git_commit = new GitCommand (TargetFolder, "commit --message=\"Initial commit by SparkleShare\"");
 
@@ -293,6 +296,9 @@ namespace Sparkles.Git {
                 }
 
             } else {
+                if (File.Exists (identifier_path))
+                    identifier = File.ReadAllText (identifier_path).Trim ();
+
                 string branch = "HEAD";
                 string prefered_branch = "SparkleShare";
 
@@ -305,9 +311,18 @@ namespace Sparkles.Git {
                 if (git_show_ref.ExitCode == 0)
                     branch = prefered_branch;
 
-                var git_checkout = new GitCommand (TargetFolder, "checkout --quiet --force " + branch);
+                GitCommand git_checkout;
+
+                if (FetchedRepoStorageType == StorageType.Media)
+                    git_checkout = new GitCommand (TargetFolder, "lfs checkout");
+                else
+                    git_checkout = new GitCommand (TargetFolder, "checkout --quiet --force " + branch);
+
                 git_checkout.StartAndWaitForExit ();
             }
+
+            File.SetAttributes (identifier_path, FileAttributes.Hidden);
+            return identifier;
         }
 
 
@@ -359,7 +374,7 @@ namespace Sparkles.Git {
             string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
             File.WriteAllText (git_attributes_file_path, "* filter=encryption -diff merge=binary");
 
-            // Store the password
+            // Store the password, TODO: 600 permissions
             string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
             File.WriteAllText (password_file_path, password.SHA256 (password_salt));
         }
