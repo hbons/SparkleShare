@@ -656,7 +656,7 @@ namespace SparkleShare {
         public void FinishFetcher (StorageType storage_type)
         {
             this.watcher.EnableRaisingEvents = false;
-            this.fetcher.Complete (storage_type);
+            string identifier = this.fetcher.Complete (storage_type);
 
             string target_folder_path = DetermineFolderPath ();
             string target_folder_name = Path.GetFileName (target_folder_path);
@@ -683,8 +683,7 @@ namespace SparkleShare {
             
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
             
-            Config.AddFolder (target_folder_name, this.fetcher.Identifier,
-                this.fetcher.RemoteUrl.ToString (), backend);
+            Config.AddFolder (target_folder_name, identifier, this.fetcher.RemoteUrl.ToString (), backend);
 
             if (storage_type != StorageType.Plain) {
                 Config.SetFolderOptionalAttribute (target_folder_name,

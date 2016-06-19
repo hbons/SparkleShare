@@ -154,7 +154,7 @@ namespace Sparkles.Git {
                 string current_revision = CurrentRevision;
 
                 var git = new GitCommand (LocalPath,
-                    "ls-remote --heads --exit-code \"" + RemoteUrl + "\" " + this.branch, auth_info);
+                    "ls-remote --heads --exit-code origin " + this.branch, auth_info);
 
                 string output = git.StartAndReadStandardOutput ();
 
@@ -216,7 +216,7 @@ namespace Sparkles.Git {
                 git_lfs_push.StartAndWaitForExit ();
             }
 
-            var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress \"{0}\"", RemoteUrl), auth_info);
+            var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
             git_push.StartInfo.RedirectStandardError = true;
             git_push.Start ();
 
@@ -288,7 +288,7 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
-            var git = new GitCommand (LocalPath, "fetch --progress \"" + RemoteUrl + "\" " + branch, auth_info);
+            var git = new GitCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
 
             git.StartInfo.RedirectStandardError = true;
             git.Start ();

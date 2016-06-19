@@ -143,7 +143,7 @@ namespace Sparkles {
                     if (!string.IsNullOrEmpty (config_identifier))
                         this.identifier = config_identifier;
                     else
-                        this.identifier = BaseFetcher.CreateIdentifier ();
+                        this.identifier = Path.GetRandomFileName ().SHA256 ();
 
                     File.WriteAllText (id_path, this.identifier);
                     File.SetAttributes (id_path, FileAttributes.Hidden);
