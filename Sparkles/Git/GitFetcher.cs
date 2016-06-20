@@ -57,7 +57,7 @@ namespace Sparkles.Git {
                 RemoteUrl.Host.Equals ("gitlab.com")) {
 
                 AvailableStorageTypes.Add (
-                    new StorageTypeInfo (StorageType.Media, "Large File Storage",
+                    new StorageTypeInfo (StorageType.LargeFiles, "Large File Storage",
                         "Trade off versioning for space;\ndoesn't keep a local history"));
 
                 uri_builder.Scheme   = "ssh";
@@ -96,7 +96,7 @@ namespace Sparkles.Git {
                 string branch = line_parts [line_parts.Length - 1];
 
                 if (branch == "x-sparkleshare-lfs")
-                    return StorageType.Media;
+                    return StorageType.LargeFiles;
 
                 string encrypted_storage_prefix = "x-sparkleshare-encrypted-";
 
@@ -127,7 +127,7 @@ namespace Sparkles.Git {
             if (!FetchPriorHistory)
                 git_clone_command += " --depth=1";
 
-            if (storage_type == StorageType.Media)
+            if (storage_type == StorageType.LargeFiles)
                 git_clone_command = "lfs clone --progress --no-checkout";
 
             var git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
@@ -231,11 +231,6 @@ namespace Sparkles.Git {
 
             OnProgressChanged (100, 0);
 
-            InstallConfiguration ();
-            InstallExcludeRules ();
-            InstallAttributeRules ();
-            InstallGitLFS ();
-
             return true;
         }
 
@@ -266,6 +261,12 @@ namespace Sparkles.Git {
 
         public override string Complete (StorageType selected_storage_type)
         {
+            InstallConfiguration ();
+            InstallGitLFS ();
+
+            InstallAttributeRules ();
+            InstallExcludeRules ();
+
             string identifier = base.Complete (selected_storage_type);
             string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
 
@@ -280,12 +281,9 @@ namespace Sparkles.Git {
                 git_commit.StartAndWaitForExit ();
 
                 // These branches will be pushed  later by "git push --all"
-                if (selected_storage_type == StorageType.Media) {
+                if (selected_storage_type == StorageType.LargeFiles) {
                     var git_branch = new GitCommand (TargetFolder, "branch x-sparkleshare-lfs", auth_info);
                     git_branch.StartAndWaitForExit ();
-
-                    InstallGitLFS ();
-                    EnableGitLFS ();
                 }
 
                 if (selected_storage_type == StorageType.Encrypted) {
@@ -311,13 +309,7 @@ namespace Sparkles.Git {
                 if (git_show_ref.ExitCode == 0)
                     branch = prefered_branch;
 
-                GitCommand git_checkout;
-
-                if (FetchedRepoStorageType == StorageType.Media)
-                    git_checkout = new GitCommand (TargetFolder, "lfs checkout");
-                else
-                    git_checkout = new GitCommand (TargetFolder, "checkout --quiet --force " + branch);
-
+                var git_checkout = new GitCommand (TargetFolder, string.Format ("checkout --quiet --force {0}", branch));
                 git_checkout.StartAndWaitForExit ();
             }
 
@@ -368,11 +360,6 @@ namespace Sparkles.Git {
             git_config_required.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
-
-            // Pass all files through the encryption filter
-            // TODO: diff=encryption merge=encryption -text?
-            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            File.WriteAllText (git_attributes_file_path, "* filter=encryption -diff merge=binary");
 
             // Store the password, TODO: 600 permissions
             string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
@@ -439,8 +426,19 @@ namespace Sparkles.Git {
 
         void InstallAttributeRules ()
         {
-            string attribute_rules_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            TextWriter writer = new StreamWriter (attribute_rules_file_path);
+            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
+
+            if (FetchedRepoStorageType == StorageType.LargeFiles) {
+                File.WriteAllText (git_attributes_file_path, "* filter=lfs diff=lfs merge=lfs -text");
+                return;
+            }
+
+            if (FetchedRepoStorageType == StorageType.Encrypted) {
+                File.WriteAllText (git_attributes_file_path, "* filter=encryption -diff -delta merge=binary");
+                return;
+            }
+
+            TextWriter writer = new StreamWriter (git_attributes_file_path);
 
             // Treat all files as binary as we always want to keep both file versions on a conflict
             writer.WriteLine ("* merge=binary");
@@ -479,13 +477,6 @@ namespace Sparkles.Git {
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
-        }
-
-
-        void EnableGitLFS ()
-        {
-            string git_attributes_file_path = Path.Combine (TargetFolder, ".gitattributes");
-            File.WriteAllText (git_attributes_file_path, "* filter=lfs diff=lfs merge=lfs -text");
         }
     }
 }
