@@ -141,9 +141,7 @@ namespace SparkleShare {
                 int i = 0;
                 foreach (ProjectInfo project in Controller.Projects) {
                     SparkleMenuItem item = new SparkleMenuItem (project.Name);
-
-                    Gdk.Pixbuf folder_icon;
-                    folder_icon = UserInterfaceHelpers.GetIcon ("folder", 16);
+                    Gdk.Pixbuf folder_icon = UserInterfaceHelpers.GetIcon ("folder", 16);
 
                     item.Submenu = new Menu ();
 
