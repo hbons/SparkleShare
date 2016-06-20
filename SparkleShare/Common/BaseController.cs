@@ -646,17 +646,17 @@ namespace SparkleShare {
         }
 
 
-        public void FinishFetcher (StorageType storage_type, string password)
+        public void FinishFetcher (StorageType selected_storage_type, string password)
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
             FinishFetcher (StorageType.Encrypted);
         }
         
         
-        public void FinishFetcher (StorageType storage_type)
+        public void FinishFetcher (StorageType selected_storage_type)
         {
             this.watcher.EnableRaisingEvents = false;
-            string identifier = this.fetcher.Complete (storage_type);
+            string identifier = this.fetcher.Complete (selected_storage_type);
 
             string target_folder_path = DetermineFolderPath ();
             string target_folder_name = Path.GetFileName (target_folder_path);
@@ -685,9 +685,9 @@ namespace SparkleShare {
             
             Config.AddFolder (target_folder_name, identifier, this.fetcher.RemoteUrl.ToString (), backend);
 
-            if (storage_type != StorageType.Plain) {
+            if (this.fetcher.FetchedRepoStorageType != StorageType.Plain) {
                 Config.SetFolderOptionalAttribute (target_folder_name,
-                    "storage_type", storage_type.ToString ());
+                    "storage_type", this.fetcher.FetchedRepoStorageType.ToString ());
             }
 
             if (this.fetcher.OriginalFetcherInfo.AnnouncementsUrl != null) {
