@@ -100,7 +100,6 @@ namespace SparkleShare {
         private PageType current_page;
         private string saved_address     = "";
         private string saved_remote_path = "";
-        private bool create_startup_item = true;
         private bool fetch_prior_history = false;
 
 
@@ -267,12 +266,6 @@ namespace SparkleShare {
             } else {
                 ChangePathFieldEvent (this.saved_remote_path, "", FieldState.Enabled);
             }
-        }
-
-
-        public void StartupItemChanged (bool create_startup_item)
-        {
-            this.create_startup_item = create_startup_item;
         }
 
 
