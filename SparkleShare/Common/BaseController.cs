@@ -557,12 +557,9 @@ namespace SparkleShare {
 
         public void StartFetcher (SparkleFetcherInfo info)
         {
-            string tmp_path = Config.TmpPath;
-            
-            if (!Directory.Exists (tmp_path)) {
-                Directory.CreateDirectory (tmp_path);
-                File.SetAttributes (tmp_path, File.GetAttributes (tmp_path) | FileAttributes.Hidden);
-            }
+            Directory.Delete (Config.TmpPath, true);
+            Directory.CreateDirectory (Config.TmpPath);
+            File.SetAttributes (Config.TmpPath, File.GetAttributes (Config.TmpPath) | FileAttributes.Hidden);
             
             string canonical_name = Path.GetFileName (info.RemotePath);
             string backend        = info.Backend; 
@@ -570,7 +567,7 @@ namespace SparkleShare {
             if (string.IsNullOrEmpty (backend))
                 backend = BaseFetcher.GetBackend (info.Address);
             
-            info.TargetDirectory  = Path.Combine (tmp_path, canonical_name);
+            info.TargetDirectory  = Path.Combine (Config.TmpPath, canonical_name);
             
             try {
                 this.fetcher = (BaseFetcher) Activator.CreateInstance (
@@ -680,7 +677,8 @@ namespace SparkleShare {
                     return;
                 }
             }
-            
+
+            Directory.Delete (Config.TmpPath, true);
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
             
             Config.AddFolder (target_folder_name, identifier, this.fetcher.RemoteUrl.ToString (), backend);
