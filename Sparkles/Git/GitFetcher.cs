@@ -442,6 +442,9 @@ namespace Sparkles.Git {
             string attribute_rules_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
             TextWriter writer = new StreamWriter (attribute_rules_file_path);
 
+            // Treat all files as binary as we always want to keep both file versions on a conflict
+            writer.WriteLine ("* merge=binary");
+
             // Compile a list of files we don't want Git to compress. Not compressing
             // already compressed files decreases memory usage and increases speed
             string [] extensions = {
@@ -452,12 +455,10 @@ namespace Sparkles.Git {
             };
 
             foreach (string extension in extensions) {
-                writer.WriteLine ("*." + extension + " -delta");
-                writer.WriteLine ("*." + extension.ToUpper () + " -delta");
+                writer.WriteLine ("*." + extension + " -delta merge=binary");
+                writer.WriteLine ("*." + extension.ToUpper () + " -delta merge=binary");
             }
 
-            writer.WriteLine ("*.txt text");
-            writer.WriteLine ("*.TXT text");
             writer.Close ();
         }
 
