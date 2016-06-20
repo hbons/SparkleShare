@@ -33,17 +33,18 @@ namespace SparkleShare {
 
         public SetupController Controller = new SetupController ();
 
-        private NSButton ContinueButton, AddButton, CopyButton, TryAgainButton, CancelButton, 
-            SkipTutorialButton, FinishButton, ShowFilesButton;
+        private NSButton ContinueButton, AddButton, TryAgainButton, CancelButton, FinishButton, ShowFilesButton;
 
-        private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField,
-        LinkCodeTextField, AddressTextField, AddressLabel, AddressHelpLabel, PathTextField, PathLabel,
-        PathHelpLabel, ProgressLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
+        private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField;
+        private NSTextField AddressTextField, AddressLabel, AddressHelpLabel;
+        private NSTextField PathLabel, PathTextField, PathHelpLabel;
+        private NSTextField ProgressLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
 
-        private NSButton StartupCheckButton, HistoryCheckButton, ShowPasswordCheckButton;
+        private NSImage WarningImage;
+        private NSImageView WarningImageView;
+
+        private NSButton HistoryCheckButton, ShowPasswordCheckButton;
         private NSProgressIndicator ProgressIndicator;
-        private NSImage WarningImage, SlideImage;
-        private NSImageView WarningImageView, SlideImageView;
         private NSTableColumn IconColumn, DescriptionColumn;
         private NSTableView TableView;
         private NSScrollView ScrollView;
@@ -609,116 +610,6 @@ namespace SparkleShare {
                 Buttons.Add (ShowFilesButton);
 
                 NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
-            }
-
-            if (type == PageType.Tutorial) {
-                SlideImage = NSImage.ImageNamed ("tutorial-slide-" + Controller.TutorialPageNumber);
-                if (SlideImage != null) {
-                    SlideImage.Size = new SizeF (324, 200);
-
-                    SlideImageView = new NSImageView () {
-                        Image = SlideImage,
-                        Frame = new RectangleF (228, Frame.Height - 350, 324, 200)
-                    };
-
-                    ContentView.AddSubview (SlideImageView);
-                }
-
-                switch (Controller.TutorialPageNumber) {
-                    case 1: {
-                        Header      = "What’s happening next?";
-                        Description = "SparkleShare creates a special folder on your computer " +
-                            "that will keep track of your projects.";
-
-                        SkipTutorialButton = new NSButton () { Title = "Skip Tutorial" };
-                        ContinueButton     = new NSButton () { Title = "Continue" };
-
-
-                        SkipTutorialButton.Activated += delegate { Controller.TutorialSkipped (); };
-                        ContinueButton.Activated     += delegate { Controller.TutorialPageCompleted (); };
-
-
-                        ContentView.AddSubview (SlideImageView);
-
-                        Buttons.Add (ContinueButton);
-                        Buttons.Add (SkipTutorialButton);
-
-                        break;
-                    }
-
-                    case 2: {
-                        Header      = "Sharing files with others";
-                        Description = "All files added to your project folders are synced automatically with " +
-                            "the host and your team members.";
-
-                        ContinueButton = new NSButton () { Title = "Continue" };
-                        ContinueButton.Activated += delegate { Controller.TutorialPageCompleted (); };
-                        Buttons.Add (ContinueButton);
-
-                        break;
-                    }
-
-                    case 3: {
-                        Header      = "The status icon helps you";
-                        Description = "It shows the syncing progress, provides easy access to " +
-                            "your projects, and lets you view recent changes.";
-
-                        ContinueButton = new NSButton () { Title = "Continue" };
-                        ContinueButton.Activated += delegate { Controller.TutorialPageCompleted (); };
-                        Buttons.Add (ContinueButton);
-
-                        break;
-                    }
-
-                    case 4: {
-                        Header      = "Here’s your unique Client ID";
-                        Description = "You’ll need it whenever you want to link this computer to a host. " +
-                            "You can also find it in the status icon menu.";
-
-                        LinkCodeTextField = new NSTextField () {
-                            StringValue = SparkleShare.Controller.UserAuthenticationInfo.PublicKey,
-                            Enabled     = false,
-                            Selectable  = false,
-                            Frame       = new RectangleF (230, Frame.Height - 238, 246, 22)
-                        };
-
-                        LinkCodeTextField.Cell.UsesSingleLineMode = true;
-                        LinkCodeTextField.Cell.LineBreakMode      = NSLineBreakMode.TruncatingTail;
-                        
-                        CopyButton = new NSButton () {
-                            Title      = "Copy",
-                            BezelStyle = NSBezelStyle.RoundRect,
-                            Frame      = new RectangleF (480, Frame.Height - 238, 60, 22)
-                        };
-                        
-                        StartupCheckButton = new NSButton () {
-                            Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
-                            Title = "Add SparkleShare to startup items",
-                            State = NSCellStateValue.On
-                        };
-
-                        StartupCheckButton.SetButtonType (NSButtonType.Switch);
-
-                        FinishButton = new NSButton () { Title = "Finish" };
-
-
-                        StartupCheckButton.Activated += delegate {
-                            Controller.StartupItemChanged (StartupCheckButton.State == NSCellStateValue.On);
-                        };
-
-                        CopyButton.Activated += delegate { Controller.CopyToClipboardClicked (); };
-                        FinishButton.Activated += delegate { Controller.TutorialPageCompleted (); };
-
-
-                        ContentView.AddSubview (LinkCodeTextField);
-                        ContentView.AddSubview (CopyButton);
-                        ContentView.AddSubview (StartupCheckButton);
-
-                        Buttons.Add (FinishButton);
-
-                        break;
-                    }
-                }
             }
         }
     }
