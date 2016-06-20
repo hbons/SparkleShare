@@ -203,18 +203,13 @@ namespace Sparkles.Git {
 
             string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
 
+            // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
             string pre_push_hook_content =
                 "#!/bin/sh" + Environment.NewLine +
                 "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
                 "git-lfs pre-push \"$@\"";
 
             File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
-
-            if (StorageType == StorageType.Media) {
-                // TODO: Progress reporting, error handling
-                var git_lfs_push = new GitCommand (LocalPath, "lfs push origin " + branch, auth_info);
-                git_lfs_push.StartAndWaitForExit ();
-            }
 
             var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
             git_push.StartInfo.RedirectStandardError = true;
@@ -224,9 +219,9 @@ namespace Sparkles.Git {
 
             // TODO: parse LFS progress
             while (!git_push.StandardError.EndOfStream) {
-                string line   = git_push.StandardError.ReadLine ();
-                Match match   = this.progress_regex.Match (line);
-                double speed  = 0.0;
+                string line = git_push.StandardError.ReadLine ();
+                Match match = this.progress_regex.Match (line);
+                double speed = 0.0;
                 double number = 0.0;
 
                 if (match.Success) {
@@ -276,6 +271,7 @@ namespace Sparkles.Git {
             }
 
             git_push.WaitForExit ();
+
             UpdateSizes ();
 
             if (git_push.ExitCode == 0)
@@ -288,6 +284,11 @@ namespace Sparkles.Git {
 
         public override bool SyncDown ()
         {
+            string lfs_is_behind_file_path = Path.Combine (LocalPath, ".git", "lfs", "is_behind");
+
+            if (StorageType == StorageType.LargeFiles)
+                File.Create (lfs_is_behind_file_path);
+
             var git = new GitCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
 
             git.StartInfo.RedirectStandardError = true;
@@ -350,18 +351,32 @@ namespace Sparkles.Git {
             }
 
             git.WaitForExit ();
-            UpdateSizes ();
 
-            if (git.ExitCode == 0) {
-                if (Merge ())
-                    return true;
-                else
-                    return false;
-
-            } else {
+            if (git.ExitCode != 0) {
                 Error = ErrorStatus.HostUnreachable;
                 return false;
             }
+
+            if (Merge ()) {
+                if (StorageType == StorageType.LargeFiles) {
+                    // Pull LFS files manually to benefit from concurrency
+                    var git_lfs_pull = new GitCommand (LocalPath, "lfs pull origin", auth_info);
+                    git_lfs_pull.StartAndWaitForExit ();
+
+                    if (git_lfs_pull.ExitCode != 0) {
+                        Error = ErrorStatus.HostUnreachable;
+                        return false;
+                    }
+
+                    if (File.Exists (lfs_is_behind_file_path))
+                        File.Delete (lfs_is_behind_file_path);
+                }
+
+                UpdateSizes ();
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -379,6 +394,13 @@ namespace Sparkles.Git {
 
         public override bool HasUnsyncedChanges {
             get {
+                if (StorageType == StorageType.LargeFiles) {
+                    string lfs_is_behind_file_path = Path.Combine (LocalPath, ".git", "lfs", "is_behind");
+
+                    if (File.Exists (lfs_is_behind_file_path))
+                        return true;
+                }
+
                 string unsynced_file_path =  Path.Combine (LocalPath, ".git", "has_unsynced_changes");
                 return File.Exists (unsynced_file_path);
             }
@@ -994,7 +1016,7 @@ namespace Sparkles.Git {
                     if (child_path.EndsWith (".git")) {
                         if (child_path.Equals (Path.Combine (LocalPath, ".git")))
                             continue;
-    
+
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
     
                         if (File.Exists (HEAD_file_path)) {

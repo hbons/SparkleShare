@@ -27,7 +27,7 @@ namespace Sparkles {
     public enum StorageType {
         Unknown,
         Plain,
-        Media,
+        LargeFiles,
         Encrypted
     }
 
