@@ -76,7 +76,7 @@ namespace Sparkles.Git {
             if (auth_info != null)
                 GIT_SSH_COMMAND = FormatGitSSHCommand (auth_info);
 
-            if (ExecPath == null)
+            if (ExecPath != null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
 
 			SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
