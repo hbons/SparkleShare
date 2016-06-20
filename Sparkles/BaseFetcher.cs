@@ -56,7 +56,7 @@ namespace Sparkles {
 
 
         protected abstract bool IsFetchedRepoEmpty { get; }
-        protected StorageType FetchedRepoStorageType = StorageType.Unknown;
+        public StorageType FetchedRepoStorageType { get; protected set; }
         public abstract bool IsFetchedRepoPasswordCorrect (string password);
         public abstract void EnableFetchedRepoCrypto (string password);
 
@@ -89,6 +89,8 @@ namespace Sparkles {
 
         protected BaseFetcher (SparkleFetcherInfo info)
         {
+            FetchedRepoStorageType = StorageType.Unknown;
+
             AvailableStorageTypes.Add (
                 new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy"));
 

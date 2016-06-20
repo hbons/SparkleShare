@@ -20,7 +20,7 @@ namespace Sparkles.Git {
 
     public class GitCommand : Command {
 
-        public static string SSHPath;
+        public static string SSHPath = "ssh";
         public static string ExecPath;
 
 
@@ -70,9 +70,6 @@ namespace Sparkles.Git {
         public GitCommand (string working_dir, string args, SSHAuthenticationInfo auth_info) : base (GitPath, args)
         {
             StartInfo.WorkingDirectory = working_dir;
-
-            if (string.IsNullOrEmpty (SSHPath))
-                SSHPath = "ssh";
 
             string GIT_SSH_COMMAND = SSHPath;
 
