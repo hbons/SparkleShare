@@ -650,41 +650,25 @@ namespace Sparkles.Git {
 
             Logger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
-            // git-show doesn't decrypt objects, so we can't use it to retrieve
-            // files from the index. This is a suboptimal workaround but it does the job
-            if (StorageType == StorageType.Encrypted) {
-                // Restore the older file...
-                var git = new GitCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
-                git.StartAndWaitForExit ();
+            // Restore the older file...
+            var git = new GitCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
+            git.StartAndWaitForExit ();
 
-                string local_file_path = Path.Combine (LocalPath, path);
+            string local_file_path = Path.Combine (LocalPath, path);
 
-                // ...move it...
-                try {
-                    File.Move (local_file_path, target_file_path);
-                
-                } catch {
-                    Logger.LogInfo ("Git",
-                        Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
-                }
-
-                // ...and restore the most recent revision
-                git = new GitCommand (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
-                git.StartAndWaitForExit ();
+            // ...move it...
+            try {
+                File.Move (local_file_path, target_file_path);
             
-            // The correct way
-            } else {
-                path = path.Replace ("\"", "\\\"");
-
-                var git = new GitCommand (LocalPath, "show " + revision + ":\"" + path + "\"");
-                git.Start ();
-
-                FileStream stream = File.OpenWrite (target_file_path);    
-                git.StandardOutput.BaseStream.CopyTo (stream);
-                stream.Close ();
-
-                git.WaitForExit ();
+            } catch {
+                Logger.LogInfo ("Git",
+                    Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
             }
+
+            // ...and restore the most recent revision
+            git = new GitCommand (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
+            git.StartAndWaitForExit ();
+
 
             if (target_file_path.StartsWith (LocalPath))
                 new Thread (() => OnFileActivity (null)).Start ();
