@@ -209,7 +209,7 @@ namespace Sparkles.Git {
                 pre_push_hook_content =
                     "#!/bin/sh" + Environment.NewLine +
                     "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    Path.Combine (GitCommand.ExecPath, "git-lfs") + " pre-push \"$@\"";
+                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " pre-push \"$@\"";
 
             } else {
                 pre_push_hook_content =

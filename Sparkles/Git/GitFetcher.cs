@@ -313,6 +313,12 @@ namespace Sparkles.Git {
                 git_checkout.StartAndWaitForExit ();
             }
 
+            // git-lfs may leave junk behind
+            string git_lfs_tmp_path = Path.Combine (Configuration.DefaultConfiguration.TmpPath, "lfs");
+
+            if (Directory.Exists (git_lfs_tmp_path))
+                Directory.Delete (git_lfs_tmp_path, true);
+
             File.SetAttributes (identifier_path, FileAttributes.Hidden);
             return identifier;
         }
@@ -472,9 +478,9 @@ namespace Sparkles.Git {
 
             if (InstallationInfo.OperatingSystem == OS.Mac) {
                 smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' " + 
-                    Path.Combine (GitCommand.ExecPath, "git-lfs") + " smudge %f";
+                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " smudge %f";
 
-                clean_command = Path.Combine (GitCommand.ExecPath, "git-lfs") + " clean %f";
+                clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " clean %f";
 
             } else {
 				smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
