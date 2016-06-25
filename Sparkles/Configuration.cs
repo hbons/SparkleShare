@@ -27,9 +27,10 @@ namespace Sparkles {
         public static Configuration DefaultConfiguration;
         public static bool DebugMode = true;
 
-		public readonly string DirectoryPath;
+        public readonly string DirectoryPath;
         public readonly string FilePath;
         public readonly string TmpPath;
+        public readonly string BinPath;
         public readonly string LogFilePath;
 
 
@@ -58,12 +59,17 @@ namespace Sparkles {
             FilePath = Path.Combine (config_path, config_file_name);
             DirectoryPath = config_path;
 
+			BinPath = Path.Combine (config_path, "bin");
+
+            if (!Directory.Exists (BinPath))
+                Directory.CreateDirectory (BinPath);
+
             string logs_path = Path.Combine (config_path, "logs");
 
             int i = 1;
             do {
                 LogFilePath = Path.Combine (
-                    logs_path, "debug_log_" + DateTime.Now.ToString ("yyyy-MM-dd") + "." +  i + ".txt");
+                    logs_path, "log_" + DateTime.Now.ToString ("yyyy-MM-dd") + "." +  i + ".txt");
 
                 i++;
 
@@ -73,7 +79,7 @@ namespace Sparkles {
                 Directory.CreateDirectory (logs_path);
 
             // Delete logs older than a week
-            foreach (FileInfo file in new DirectoryInfo (logs_path).GetFiles ("debug_log*.txt")) {
+            foreach (FileInfo file in new DirectoryInfo (logs_path).GetFiles ("log*.txt")) {
                 if (file.LastWriteTime < DateTime.Now.AddDays (-7))
                     file.Delete ();
             }
@@ -103,7 +109,7 @@ namespace Sparkles {
 
             } finally {
                 Load (FilePath);
-                TmpPath = Path.Combine (FoldersPath, ".tmp");
+                TmpPath = Path.Combine (DirectoryPath, "tmp");
                 Directory.CreateDirectory (TmpPath);
             }
         }

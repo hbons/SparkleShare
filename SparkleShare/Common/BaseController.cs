@@ -343,9 +343,6 @@ namespace SparkleShare {
         void DetectRepositoryRenames ()
         {
             foreach (string group_path in Directory.GetDirectories (Config.FoldersPath)) {
-                if (group_path.EndsWith (".tmp"))
-                    continue;
-
                 foreach (string folder_path in Directory.GetDirectories (group_path)) {
                     string folder_name = Path.GetFileName (folder_path);
 
@@ -557,17 +554,16 @@ namespace SparkleShare {
 
         public void StartFetcher (SparkleFetcherInfo info)
         {
-            Directory.Delete (Config.TmpPath, true);
-            Directory.CreateDirectory (Config.TmpPath);
-            File.SetAttributes (Config.TmpPath, File.GetAttributes (Config.TmpPath) | FileAttributes.Hidden);
-            
             string canonical_name = Path.GetFileName (info.RemotePath);
             string backend        = info.Backend; 
             
             if (string.IsNullOrEmpty (backend))
                 backend = BaseFetcher.GetBackend (info.Address);
             
-            info.TargetDirectory  = Path.Combine (Config.TmpPath, canonical_name);
+            info.TargetDirectory = Path.Combine (Config.TmpPath, canonical_name);
+
+            if (Directory.Exists (info.TargetDirectory))
+                Directory.Delete (info.TargetDirectory);
             
             try {
                 this.fetcher = (BaseFetcher) Activator.CreateInstance (
@@ -678,7 +674,6 @@ namespace SparkleShare {
                 }
             }
 
-            Directory.Delete (Config.TmpPath, true);
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
             
             Config.AddFolder (target_folder_name, identifier, this.fetcher.RemoteUrl.ToString (), backend);
