@@ -39,6 +39,7 @@ namespace Sparkles {
             StartInfo.FileName = path;
             StartInfo.Arguments = args;
 
+            StartInfo.WorkingDirectory = Path.GetTempPath ();
             StartInfo.CreateNoWindow = true;
             StartInfo.RedirectStandardOutput = true;
             StartInfo.RedirectStandardError = true;
@@ -101,6 +102,15 @@ namespace Sparkles {
             StartInfo.RedirectStandardError = false;
 
             return output.TrimEnd ();
+        }
+
+
+        public void SetEnvironmentVariable (string variable, string content)
+        {
+            if (StartInfo.EnvironmentVariables.ContainsKey (variable))
+                StartInfo.EnvironmentVariables [variable] = content;
+            else
+                StartInfo.EnvironmentVariables.Add (variable, content);
         }
 
 
