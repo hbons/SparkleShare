@@ -44,9 +44,13 @@ namespace Sparkles.Git {
             get {
                 if (GitPath == null)
                     GitPath = LocateCommand ("git");
+                var git_version = new Command (GitPath, "--version", false);
 
-                string git_version = new Command (GitPath, "--version", false).StartAndReadStandardOutput ();
-                return git_version.Replace ("git version ", "");
+                if (ExecPath != null)
+                    git_version.SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
+
+                string version = git_version.StartAndReadStandardOutput ();
+                return version.Replace ("git version ", "");
             }
         }
 
@@ -56,8 +60,13 @@ namespace Sparkles.Git {
                 if (GitPath == null)
                     GitPath = LocateCommand ("git");
 
-                string git_lfs_version = new Command (GitPath, "lfs version", false).StartAndReadStandardOutput ();
-                return git_lfs_version.Replace ("git-lfs/", "").Split (' ') [0];
+                var git_lfs_version = new Command (GitPath, "lfs version", false);
+
+                if (ExecPath != null)
+                    git_lfs_version.SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
+
+                string version = git_lfs_version.StartAndReadStandardOutput ();
+                return version.Replace ("git-lfs/", "").Split (' ') [0];
             }
         }
 
@@ -93,15 +102,6 @@ namespace Sparkles.Git {
                 "-o IdentitiesOnly=yes" + " " + // Don't fall back to other keys on the system
                 "-o PasswordAuthentication=no" + " " + // Don't hang on possible password prompts
                 "-F /dev/null"; // Ignore the system's SSH config file
-        }
-
-
-        void SetEnvironmentVariable (string variable, string content)
-        {
-            if (StartInfo.EnvironmentVariables.ContainsKey (variable))
-                StartInfo.EnvironmentVariables [variable] = content;
-            else
-                StartInfo.EnvironmentVariables.Add (variable, content);
         }
     }
 }
