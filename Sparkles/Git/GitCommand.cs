@@ -44,6 +44,7 @@ namespace Sparkles.Git {
             get {
                 if (GitPath == null)
                     GitPath = LocateCommand ("git");
+
                 var git_version = new Command (GitPath, "--version", false);
 
                 if (ExecPath != null)
