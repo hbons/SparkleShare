@@ -51,6 +51,12 @@ namespace SparkleShare {
         private SparkleDataSource DataSource;
 
 
+
+        private NSButtonCell ButtonCellProto;
+
+        private NSMatrix Matrix;
+
+
         public Setup () : base ()
         {
             Controller.HideWindowEvent += delegate {
@@ -454,6 +460,57 @@ namespace SparkleShare {
 
                 Buttons.Add (TryAgainButton);
                 Buttons.Add (CancelButton);
+            }
+
+
+
+            if (type == PageType.StorageSetup) {
+                Header = string.Format ("Storage type for ‘{0}’", Controller.SyncingFolder);
+                Description = "What type of storage would you like to use?";
+
+
+                ButtonCellProto = new NSButtonCell ();
+                ButtonCellProto.SetButtonType (NSButtonType.Radio);
+                ButtonCellProto.Font = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
+
+
+                Matrix = new NSMatrix (new RectangleF (215, 0, 256, 256), NSMatrixMode.Radio,
+                    ButtonCellProto, SparkleShare.Controller.FetcherAvailableStorageTypes.Count, 1);
+                Matrix.BackgroundColor = NSColor.Yellow;
+                Matrix.CellSize = new SizeF (256, 18);
+                Matrix.IntercellSpacing = new SizeF (12, 12);
+
+                int i = 0;
+                foreach (StorageTypeInfo storage_type in SparkleShare.Controller.FetcherAvailableStorageTypes) {
+                    Matrix.Cells [i].Title = storage_type.Name;
+
+                    //  Matrix.IntercellSpacing = new SizeF (30, 30);
+                    // todo: description
+                    i++;
+                }
+
+                ContentView.AddSubview (Matrix);
+
+
+                CancelButton = new NSButton () { Title = "Cancel" };
+                ContinueButton = new NSButton () { Title = "Continue" };
+
+
+                ContinueButton.Activated += delegate {
+                    Console.WriteLine (Matrix.SelectedRow);
+
+                    StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes [Matrix.SelectedRow];
+                    Controller.StoragePageCompleted (selected_storage_type.Type);
+                };
+
+                CancelButton.Activated += delegate { Controller.SyncingCancelled (); };
+
+
+                Buttons.Add (ContinueButton);
+                Buttons.Add (CancelButton);
+
+                MakeFirstResponder ((NSResponder)PasswordTextField);
+                NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
             }
 
             if (type == PageType.CryptoSetup || type == PageType.CryptoPassword) {

@@ -229,6 +229,7 @@ namespace Sparkles.Git {
             // TODO: parse LFS progress
             while (!git_push.StandardError.EndOfStream) {
                 string line = git_push.StandardError.ReadLine ();
+                Console.WriteLine (line);
                 Match match = this.progress_regex.Match (line);
                 double speed = 0.0;
                 double number = 0.0;
