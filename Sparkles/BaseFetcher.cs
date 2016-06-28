@@ -45,7 +45,7 @@ namespace Sparkles {
         public delegate void FinishedEventHandler (StorageType storage_type, string [] warnings);
 
         public event ProgressChangedEventHandler ProgressChanged = delegate { };
-        public delegate void ProgressChangedEventHandler (double percentage, double speed);
+        public delegate void ProgressChangedEventHandler (double percentage, double speed, string information);
 
 
         public abstract bool Fetch ();
@@ -215,8 +215,8 @@ namespace Sparkles {
         }
 
 
-        protected void OnProgressChanged (double percentage, double speed) {
-            ProgressChanged (percentage, speed);
+        protected void OnProgressChanged (double percentage, double speed, string information) {
+            ProgressChanged (percentage, speed, information);
         }
 
 

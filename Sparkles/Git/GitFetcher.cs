@@ -25,14 +25,10 @@ namespace Sparkles.Git {
 
     public class GitFetcher : SSHFetcher {
 
-        SSHAuthenticationInfo auth_info;
         GitCommand git_clone;
+        SSHAuthenticationInfo auth_info;
 
         string password_salt = Path.GetRandomFileName ().SHA256 ().Substring (0, 16);
-
-        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-
 
 
         protected override bool IsFetchedRepoEmpty {
@@ -78,38 +74,6 @@ namespace Sparkles.Git {
         }
 
 
-        StorageType? DetermineStorageType ()
-        {
-            var git_ls_remote = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
-                string.Format ("ls-remote --heads \"{0}\"", RemoteUrl), auth_info);
-
-            string output = git_ls_remote.StartAndReadStandardOutput ();
-
-            if (git_ls_remote.ExitCode != 0)
-                return null;
-
-            if (string.IsNullOrWhiteSpace (output))
-                return StorageType.Unknown;
-
-            foreach (string line in output.Split ("\n".ToCharArray ())) {
-                string [] line_parts = line.Split ('/');
-                string branch = line_parts [line_parts.Length - 1];
-
-                if (branch == "x-sparkleshare-lfs")
-                    return StorageType.LargeFiles;
-
-                string encrypted_storage_prefix = "x-sparkleshare-encrypted-";
-
-                if (branch.StartsWith (encrypted_storage_prefix)) {
-                    password_salt = branch.Replace (encrypted_storage_prefix, "");
-                    return StorageType.Encrypted;
-                }
-            }
-
-            return StorageType.Plain;
-        }
-
-
         public override bool Fetch ()
         {
             if (!base.Fetch ())
@@ -130,88 +94,48 @@ namespace Sparkles.Git {
             if (storage_type == StorageType.LargeFiles)
                 git_clone_command = "lfs clone --progress --no-checkout";
 
-            var git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
+            git_clone = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
                 string.Format ("{0} \"{1}\" \"{2}\"", git_clone_command, RemoteUrl, TargetFolder),
                 auth_info);
 
             git_clone.StartInfo.RedirectStandardError = true;
             git_clone.Start ();
 
-            double percentage = 1.0;
+            StreamReader output_stream = git_clone.StandardError;
+
+            if (FetchedRepoStorageType == StorageType.LargeFiles)
+                output_stream = git_clone.StandardOutput;
 
             var last_change = DateTime.Now;
-            var change_interval = new TimeSpan (0, 0, 0, 1);
+			var change_interval = new TimeSpan (0, 0, 0, 1);
 
-            try {
-                while (!git_clone.StandardError.EndOfStream) {
-                    string line = git_clone.StandardError.ReadLine ();
-                    Match match = progress_regex.Match (line);
+            double previous_percentage = 0;
+            double percentage = 0;
+            double speed = 0;
+            string information = "";
 
-                    double number = 0.0;
-                    double speed  = 0.0;
-                    if (match.Success) {
-                        try {
-                            number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+            while (!output_stream.EndOfStream) {
+                string line = output_stream.ReadLine ();
 
-                        } catch (FormatException) {
-                            Logger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
-                        }
+                previous_percentage = percentage;
+                bool parse_success = ParseProgress (line, out percentage, out speed, out information);
 
-                        // The pushing progress consists of two stages: the "Compressing
-                        // objects" stage which we count as 20% of the total progress, and
-                        // the "Writing objects" stage which we count as the last 80%
-                        if (line.Contains ("Compressing")) {
-                            // "Compressing objects" stage
-                            number = (number / 100 * 20);
+                if (!parse_success) {
+                    IsActive = false;
+                    git_clone.Kill ();
+                    git_clone.Dispose ();
 
-                        } else {
-                            // "Writing objects" stage
-                            number = (number / 100 * 80 + 20);
-                            Match speed_match = speed_regex.Match (line);
-
-                            if (speed_match.Success) {
-                                try {
-                                    speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
-
-                                } catch (FormatException) {
-                                    Logger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
-                                }
-
-                                if (speed_match.Groups [2].Value.Equals ("M"))
-                                    speed = speed * 1024;
-                            }
-                        }
-
-                    } else {
-                        Logger.LogInfo ("Fetcher", line);
-                        line = line.Trim (new char [] {' ', '@'});
-
-                        if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
-                            line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
-
-                            errors.Add (line);
-
-                        } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
-                            errors.Add ("warning: Remote host identification has changed!");
-
-                        } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
-                            errors.Add ("warning: Possible DNS spoofing detected!");
-                        }
-                    }
-
-                    if (number >= percentage) {
-                        percentage = number;
-
-                        if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                            OnProgressChanged (percentage, speed);
-                            last_change = DateTime.Now;
-                        }
-                    }
+                    return false;
                 }
 
-            } catch (Exception) {
-                IsActive = false;
-                return false;
+                if (percentage <= previous_percentage)
+                    continue;
+
+                if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
+                    Console.WriteLine (percentage);
+                    OnProgressChanged (percentage, speed, information);
+                    last_change = DateTime.Now;
+                }
             }
 
             git_clone.WaitForExit ();
@@ -219,17 +143,81 @@ namespace Sparkles.Git {
             if (git_clone.ExitCode != 0)
                 return false;
 
-            while (percentage < 100) {
-                percentage += 25;
+            Thread.Sleep (500);
+            OnProgressChanged (100, 0, "");
+            Thread.Sleep (500);
 
-                if (percentage >= 100)
-                    break;
+            return true;
+        }
 
-                Thread.Sleep (500);
-                OnProgressChanged (percentage, 0);
+
+        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
+        Regex progress_regex_lfs = new Regex (@"^Git LFS:.*([0-9]+) of ([0-9]+).*", RegexOptions.Compiled);
+        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
+
+        public bool ParseProgress (string line, out double percentage, out double speed, out string information)
+        {
+            percentage = 0;
+            speed = 0;
+            information = "";
+
+            Match match;
+
+            if (FetchedRepoStorageType == StorageType.LargeFiles) {
+                match = progress_regex_lfs.Match (line);
+
+                if (!match.Success)
+                    return true;
+
+                percentage = double.Parse (match.Groups [1].Value) /  double.Parse (match.Groups [2].Value) * 100;
+                information = string.Format ("{0} of {1} files", match.Groups [1].Value, match.Groups [2].Value);
+
+                return true;
             }
 
-            OnProgressChanged (100, 0);
+            match = progress_regex.Match (line);
+
+            if (!match.Success) {
+                Logger.LogInfo ("Fetcher", line);
+                line = line.Trim (new char [] { ' ', '@' });
+
+                if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
+                    line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
+
+                    errors.Add (line);
+
+                } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
+                    errors.Add ("warning: Remote host identification has changed");
+
+                } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
+                    errors.Add ("warning: Possible DNS spoofing detected");
+                }
+
+                return false;
+            }
+
+            int number = int.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
+
+            // The pushing progress consists of two stages: the "Compressing
+            // objects" stage which we count as 20% of the total progress, and
+            // the "Writing objects" stage which we count as the last 80%
+            if (line.Contains ("Compressing objects")) {
+                // "Compressing objects" stage
+                percentage = (number / 100 * 20);
+
+            } else if (line.Contains ("Writing objects")) {
+                percentage = (number / 100 * 80 + 20);
+                Match speed_match = speed_regex.Match (line);
+
+                if (speed_match.Success) {
+                    speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
+
+                    if (speed_match.Groups [2].Value.Equals ("M"))
+                        speed = speed * 1024;
+
+                    information = speed.ToSize ();
+                }
+            }
 
             return true;
         }
@@ -413,6 +401,38 @@ namespace Sparkles.Git {
                 name = name.Replace (".git", "");
 
             return name;
+        }
+
+
+        StorageType? DetermineStorageType ()
+        {
+            var git_ls_remote = new GitCommand (Configuration.DefaultConfiguration.TmpPath,
+                string.Format ("ls-remote --heads \"{0}\"", RemoteUrl), auth_info);
+
+            string output = git_ls_remote.StartAndReadStandardOutput ();
+
+            if (git_ls_remote.ExitCode != 0)
+                return null;
+
+            if (string.IsNullOrWhiteSpace (output))
+                return StorageType.Unknown;
+
+            foreach (string line in output.Split ("\n".ToCharArray ())) {
+                string [] line_parts = line.Split ('/');
+                string branch = line_parts [line_parts.Length - 1];
+
+                if (branch == "x-sparkleshare-lfs")
+                    return StorageType.LargeFiles;
+
+                string encrypted_storage_prefix = "x-sparkleshare-encrypted-";
+
+                if (branch.StartsWith (encrypted_storage_prefix)) {
+                    password_salt = branch.Replace (encrypted_storage_prefix, "");
+                    return StorageType.Encrypted;
+                }
+            }
+
+            return StorageType.Plain;
         }
 
 

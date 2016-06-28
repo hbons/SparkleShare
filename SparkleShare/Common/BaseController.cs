@@ -88,7 +88,7 @@ namespace SparkleShare {
         public delegate void FolderFetchErrorHandler (string remote_url, string [] errors);
         
         public event FolderFetchingHandler FolderFetching = delegate { };
-        public delegate void FolderFetchingHandler (double percentage, double speed);
+        public delegate void FolderFetchingHandler (double percentage, double speed, string information);
         
         
         public event Action FolderListChanged = delegate { };
@@ -611,9 +611,9 @@ namespace SparkleShare {
         }
 
 
-        void FetcherProgressChangedDelgate (double percentage, double speed)
+        void FetcherProgressChangedDelgate (double percentage, double speed, string information)
         {
-            FolderFetching (percentage, speed);
+            FolderFetching (percentage, speed, information);
         }
 
 
