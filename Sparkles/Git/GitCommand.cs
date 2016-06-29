@@ -97,7 +97,7 @@ namespace Sparkles.Git {
 
 
         static Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        static Regex progress_regex_lfs = new Regex (@".*([0-9]+) of ([0-9]+).*", RegexOptions.Compiled);
+        static Regex progress_regex_lfs = new Regex (@".*([0-9]+) of ([0-9]+) files.*", RegexOptions.Compiled);
         static Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
         public static ErrorStatus ParseProgress (string line, out double percentage, out double speed, out string information)
@@ -122,14 +122,14 @@ namespace Sparkles.Git {
 
             match = progress_regex.Match (line);
 
-            if (!match.Success && !string.IsNullOrWhiteSpace (line)) {
+            if (!match.Success || string.IsNullOrWhiteSpace (line)) {
                 Logger.LogInfo ("Git", line);
                 return FindError (line);
             }
 
             int number = int.Parse (match.Groups [1].Value);
 
-            // The pushing progress consists of two stages: the "Compressing
+            // The transfer process consists of two stages: the "Compressing
             // objects" stage which we count as 20% of the total progress, and
             // the "Writing objects" stage which we count as the last 80%
             if (line.Contains ("Compressing objects")) {
