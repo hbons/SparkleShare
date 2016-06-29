@@ -92,7 +92,7 @@ namespace Sparkles {
             FetchedRepoStorageType = StorageType.Unknown;
 
             AvailableStorageTypes.Add (
-                new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy"));
+                new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy;\nmaximum compatibility"));
 
             OriginalFetcherInfo = info;
             RequiredFingerprint = info.Fingerprint;
