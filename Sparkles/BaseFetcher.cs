@@ -215,7 +215,13 @@ namespace Sparkles {
         }
 
 
+        DateTime progress_last_change = DateTime.Now;
+
         protected void OnProgressChanged (double percentage, double speed, string information) {
+            // Only trigger the ProgressChanged event once per second
+            if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (new TimeSpan (0, 0, 0, 1))) >= 0)
+                return;
+
             ProgressChanged (percentage, speed, information);
         }
 
