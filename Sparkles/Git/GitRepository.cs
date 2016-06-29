@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -224,61 +223,8 @@ namespace Sparkles.Git {
             git_push.StartInfo.RedirectStandardError = true;
             git_push.Start ();
 
-            double percentage = 1.0;
-
-            // TODO: parse LFS progress
-            while (!git_push.StandardError.EndOfStream) {
-                string line = git_push.StandardError.ReadLine ();
-                Console.WriteLine (line);
-                Match match = this.progress_regex.Match (line);
-                double speed = 0.0;
-                double number = 0.0;
-
-                if (match.Success) {
-                    try {
-                        number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
-                    
-                    } catch (FormatException) {
-                        Logger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
-                    }
-
-                    // The pushing progress consists of two stages: the "Compressing
-                    // objects" stage which we count as 20% of the total progress, and
-                    // the "Writing objects" stage which we count as the last 80%
-                    if (line.StartsWith ("Compressing")) {
-                        // "Compressing objects" stage
-                        number = (number / 100 * 20);
-
-                    } else {
-                        // "Writing objects" stage
-                        number = (number / 100 * 80 + 20);
-                        Match speed_match = this.speed_regex.Match (line);
-
-                        if (speed_match.Success) {
-                            try {
-                                speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
-                            
-                            } catch (FormatException) {
-                                Logger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
-                            }
-
-                            if (speed_match.Groups [2].Value.Equals ("M"))
-                                speed = speed * 1024;
-                        }    
-                    }
-
-                } else {
-                    Logger.LogInfo ("Git", Name + " | " + line);
-
-                    if (FindError (line))
-                        return false;
-                }
-
-                if (number >= percentage) {
-                    percentage = number;
-                    base.OnProgressChanged (percentage, speed);
-                }
-            }
+            if (!ReadStream (git_push))
+                return false;
 
             git_push.WaitForExit ();
 
@@ -299,70 +245,17 @@ namespace Sparkles.Git {
             if (StorageType == StorageType.LargeFiles)
                 File.Create (lfs_is_behind_file_path);
 
-            var git = new GitCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
+            var git_fetch = new GitCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
 
-            git.StartInfo.RedirectStandardError = true;
-            git.Start ();
+            git_fetch.StartInfo.RedirectStandardError = true;
+            git_fetch.Start ();
 
-            double percentage = 1.0;
+            if (!ReadStream (git_fetch))
+                return false;
 
-            // TODO: parse LFS progress
-            while (!git.StandardError.EndOfStream) {
-                string line   = git.StandardError.ReadLine ();
-                Match match   = this.progress_regex.Match (line);
-                double speed  = 0.0;
-                double number = 0.0;
+            git_fetch.WaitForExit ();
 
-                if (match.Success) {
-                    try {
-                        number = double.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));   
-                    
-                    } catch (FormatException) {
-                        Logger.LogInfo ("Git", "Error parsing progress: \"" + match.Groups [1] + "\"");
-                    }
-
-                    // The fetching progress consists of two stages: the "Compressing
-                    // objects" stage which we count as 20% of the total progress, and
-                    // the "Receiving objects" stage which we count as the last 80%
-                    if (line.StartsWith ("Compressing")) {
-                        // "Compressing objects" stage
-                        number = (number / 100 * 20);
-
-                    } else {
-                        // "Writing objects" stage
-                        number = (number / 100 * 80 + 20);
-                        Match speed_match = this.speed_regex.Match (line);
-                        
-                        if (speed_match.Success) {
-                            try {
-                                speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
-                                
-                            } catch (FormatException) {
-                                Logger.LogInfo ("Git", "Error parsing speed: \"" + speed_match.Groups [1] + "\"");
-                            }
-                            
-                            if (speed_match.Groups [2].Value.Equals ("M"))
-                                speed = speed * 1024;
-                        }
-                    }
-
-                } else {
-                    Logger.LogInfo ("Git", Name + " | " + line);
-
-                    if (FindError (line))
-                        return false;
-                }
-                
-
-                if (number >= percentage) {
-                    percentage = number;
-                    base.OnProgressChanged (percentage, speed);
-                }
-            }
-
-            git.WaitForExit ();
-
-            if (git.ExitCode != 0) {
+            if (git_fetch.ExitCode != 0) {
                 Error = ErrorStatus.HostUnreachable;
                 return false;
             }
@@ -387,6 +280,45 @@ namespace Sparkles.Git {
             }
 
             return false;
+        }
+
+
+        bool ReadStream (GitCommand command)
+        {
+            StreamReader output_stream = command.StandardError;
+
+            if (StorageType == StorageType.LargeFiles)
+                output_stream = command.StandardOutput;
+
+            double previous_percentage = 0;
+            double percentage = 0;
+            double speed = 0;
+            string information = "";
+
+            while (!output_stream.EndOfStream) {
+                string line = output_stream.ReadLine ();
+
+                previous_percentage = percentage;
+                ErrorStatus error = GitCommand.ParseProgress (line, out percentage, out speed, out information);
+
+                if (error != ErrorStatus.None) {
+                    Error = error;
+                    information = line;
+
+                    command.Kill ();
+                    command.Dispose ();
+                    Logger.LogInfo ("Git", Name + " | Error status changed to " + Error);
+
+                    return false;
+                }
+
+                if (percentage <= previous_percentage)
+                    continue;
+
+                OnProgressChanged (percentage, speed, information);
+            }
+
+            return true;
         }
 
 
@@ -682,44 +614,6 @@ namespace Sparkles.Git {
 
             if (target_file_path.StartsWith (LocalPath))
                 new Thread (() => OnFileActivity (null)).Start ();
-        }
-
-
-        bool FindError (string line)
-        {
-            Error = ErrorStatus.None;
-
-            if (line.Contains ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!") ||
-                line.Contains ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
-                
-                Error = ErrorStatus.HostIdentityChanged;
-                
-            } else if (line.StartsWith ("Permission denied") ||
-                       line.StartsWith ("ssh_exchange_identification: Connection closed by remote host") ||
-                       line.StartsWith ("The authenticity of host")) {
-
-                Error = ErrorStatus.AuthenticationFailed;
-                
-            } else if (line.EndsWith ("does not appear to be a git repository")) {
-                Error = ErrorStatus.NotFound;  
-
-            } else if (line.EndsWith ("expected old/new/ref, got 'shallow")) {
-                Error = ErrorStatus.IncompatibleClientServer;
-                
-            } else if (line.StartsWith ("error: Disk space exceeded") ||
-                       line.EndsWith ("No space left on device") ||
-                       line.EndsWith ("file write error (Disk quota exceeded)")) {
-
-                Error = ErrorStatus.DiskSpaceExceeded;
-            }
-
-            if (Error != ErrorStatus.None) {
-                Logger.LogInfo ("Git", Name + " | Error status changed to " + Error);
-                return true;
-            
-            } else {
-                return false;
-            }
         }
 
 
@@ -1175,9 +1069,6 @@ namespace Sparkles.Git {
             return ((attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint);
         }
 
-
-        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        Regex speed_regex    = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
         Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
             "Author: (.+) <(.+)>\n" +

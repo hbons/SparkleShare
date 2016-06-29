@@ -67,11 +67,12 @@ namespace SparkleShare {
         public bool RepositoriesLoaded { get; private set; }
         public string FoldersPath { get; private set; }
         
-        public double ProgressPercentage = 0.0;
-        public double ProgressSpeedUp    = 0.0;
-        public double ProgressSpeedDown  = 0.0;
-        
-        
+        public double ProgressPercentage  = 0.0;
+        public double ProgressSpeedUp     = 0.0;
+        public double ProgressSpeedDown   = 0.0;
+        public string ProgressInformation = "";
+
+
         public event ShowSetupWindowEventHandler ShowSetupWindowEvent = delegate { };
         public delegate void ShowSetupWindowEventHandler (PageType page_type);
 
@@ -417,18 +418,20 @@ namespace SparkleShare {
             
             repo.SyncStatusChanged += delegate (SyncStatus status) {
                 if (status == SyncStatus.Idle) {
-                    ProgressPercentage = 0.0;
-                    ProgressSpeedUp    = 0.0;
-                    ProgressSpeedDown  = 0.0;
+                    ProgressPercentage  = 0.0;
+                    ProgressSpeedUp     = 0.0;
+                    ProgressSpeedDown   = 0.0;
+                    ProgressInformation = "";
                 }
                 
                 UpdateState ();
             };
             
             repo.ProgressChanged += delegate {
-                ProgressPercentage = 0.0;
-                ProgressSpeedUp    = 0.0;
-                ProgressSpeedDown  = 0.0;
+                ProgressPercentage  = 0.0;
+                ProgressSpeedUp     = 0.0;
+                ProgressSpeedDown   = 0.0;
+                ProgressInformation = "";
                 
                 double percentage = 0.0;
                 int repo_count    = 0;
@@ -445,6 +448,9 @@ namespace SparkleShare {
                     if (rep.Status == SyncStatus.SyncDown)
                         ProgressSpeedDown += rep.ProgressSpeed;
                 }
+
+                if (repo_count == 1)
+                    ProgressInformation = repo.ProgressInformation;
                 
                 if (repo_count > 0)
                     ProgressPercentage = percentage / repo_count;
@@ -460,8 +466,7 @@ namespace SparkleShare {
             };
             
             repo.ConflictResolved += delegate {
-                AlertNotificationRaised ("Resolved a file collision",
-                                         "Local and server versions were kept.");
+                AlertNotificationRaised ("Resolved a file collision", "Local and server versions were kept.");
             };
             
             AddRepository (repo);

@@ -106,9 +106,6 @@ namespace Sparkles.Git {
             if (FetchedRepoStorageType == StorageType.LargeFiles)
                 output_stream = git_clone.StandardOutput;
 
-            var last_change = DateTime.Now;
-			var change_interval = new TimeSpan (0, 0, 0, 1);
-
             double previous_percentage = 0;
             double percentage = 0;
             double speed = 0;
@@ -118,9 +115,9 @@ namespace Sparkles.Git {
                 string line = output_stream.ReadLine ();
 
                 previous_percentage = percentage;
-                bool parse_success = ParseProgress (line, out percentage, out speed, out information);
+                ErrorStatus error = GitCommand.ParseProgress (line, out percentage, out speed, out information);
 
-                if (!parse_success) {
+                if (error != ErrorStatus.None) {
                     IsActive = false;
                     git_clone.Kill ();
                     git_clone.Dispose ();
@@ -130,12 +127,6 @@ namespace Sparkles.Git {
 
                 if (percentage <= previous_percentage)
                     continue;
-
-                if (DateTime.Compare (last_change, DateTime.Now.Subtract (change_interval)) < 0) {
-                    Console.WriteLine (percentage);
-                    OnProgressChanged (percentage, speed, information);
-                    last_change = DateTime.Now;
-                }
             }
 
             git_clone.WaitForExit ();
@@ -146,78 +137,6 @@ namespace Sparkles.Git {
             Thread.Sleep (500);
             OnProgressChanged (100, 0, "");
             Thread.Sleep (500);
-
-            return true;
-        }
-
-
-        Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        Regex progress_regex_lfs = new Regex (@"^Git LFS:.*([0-9]+) of ([0-9]+).*", RegexOptions.Compiled);
-        Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
-
-        public bool ParseProgress (string line, out double percentage, out double speed, out string information)
-        {
-            percentage = 0;
-            speed = 0;
-            information = "";
-
-            Match match;
-
-            if (FetchedRepoStorageType == StorageType.LargeFiles) {
-                match = progress_regex_lfs.Match (line);
-
-                if (!match.Success)
-                    return true;
-
-                percentage = double.Parse (match.Groups [1].Value) /  double.Parse (match.Groups [2].Value) * 100;
-                information = string.Format ("{0} of {1} files", match.Groups [1].Value, match.Groups [2].Value);
-
-                return true;
-            }
-
-            match = progress_regex.Match (line);
-
-            if (!match.Success) {
-                Logger.LogInfo ("Fetcher", line);
-                line = line.Trim (new char [] { ' ', '@' });
-
-                if (line.StartsWith ("fatal:", StringComparison.InvariantCultureIgnoreCase) ||
-                    line.StartsWith ("error:", StringComparison.InvariantCultureIgnoreCase)) {
-
-                    errors.Add (line);
-
-                } else if (line.StartsWith ("WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!")) {
-                    errors.Add ("warning: Remote host identification has changed");
-
-                } else if (line.StartsWith ("WARNING: POSSIBLE DNS SPOOFING DETECTED!")) {
-                    errors.Add ("warning: Possible DNS spoofing detected");
-                }
-
-                return false;
-            }
-
-            int number = int.Parse (match.Groups [1].Value, new CultureInfo ("en-US"));
-
-            // The pushing progress consists of two stages: the "Compressing
-            // objects" stage which we count as 20% of the total progress, and
-            // the "Writing objects" stage which we count as the last 80%
-            if (line.Contains ("Compressing objects")) {
-                // "Compressing objects" stage
-                percentage = (number / 100 * 20);
-
-            } else if (line.Contains ("Writing objects")) {
-                percentage = (number / 100 * 80 + 20);
-                Match speed_match = speed_regex.Match (line);
-
-                if (speed_match.Success) {
-                    speed = double.Parse (speed_match.Groups [1].Value, new CultureInfo ("en-US")) * 1024;
-
-                    if (speed_match.Groups [2].Value.Equals ("M"))
-                        speed = speed * 1024;
-
-                    information = speed.ToSize ();
-                }
-            }
 
             return true;
         }

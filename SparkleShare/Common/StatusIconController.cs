@@ -133,37 +133,10 @@ namespace SparkleShare {
         public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
 
         public IconState CurrentState = IconState.Idle;
-        public string StateText       = "Welcome to SparkleShare!";
+        public string StateText = "Welcome to SparkleShare!";
 
         public ProjectInfo [] Projects = new ProjectInfo [0];
 
-
-        public int ProgressPercentage {
-            get {
-                return (int) SparkleShare.Controller.ProgressPercentage;
-            }
-        }
-
-        public string ProgressSpeed {
-            get {
-                string progress_speed = "";
-
-                if (SparkleShare.Controller.ProgressSpeedDown == 0.0 && SparkleShare.Controller.ProgressSpeedUp > 0.0) {
-                    progress_speed = SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s ";
-
-                } else if (SparkleShare.Controller.ProgressSpeedUp == 0.0 && SparkleShare.Controller.ProgressSpeedDown > 0.0) {
-                    progress_speed = SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s ";
-                        
-                } else if (SparkleShare.Controller.ProgressSpeedUp   > 0.0 &&
-                           SparkleShare.Controller.ProgressSpeedDown > 0.0) {
-
-                    progress_speed = "Up: " + SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s " +
-                        "Down: " + SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s";
-                }
-
-                return progress_speed;
-            }
-        }
 
         public bool RecentEventsItemEnabled {
             get {
@@ -242,8 +215,23 @@ namespace SparkleShare {
                     StateText    = "Receiving…";
                 }
 
-                if (ProgressPercentage > 0)
-                    StateText += " " + ProgressPercentage + "%  " + ProgressSpeed;
+                int progress_percentage = (int) SparkleShare.Controller.ProgressPercentage;
+                string progress_speed = "";
+
+                if (SparkleShare.Controller.ProgressSpeedUp > 0.0 && SparkleShare.Controller.ProgressSpeedDown > 0.0) {
+                    progress_speed = "Up: " + SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s " +
+                        "Down: " + SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s";
+                }
+
+                if (SparkleShare.Controller.ProgressSpeedUp > 0.0)
+                    progress_speed = SparkleShare.Controller.ProgressSpeedUp.ToSize () + "/s ";
+
+                if (SparkleShare.Controller.ProgressSpeedDown > 0.0)
+                    progress_speed = SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s ";
+
+                if (progress_percentage > 0)
+                    StateText += string.Format (" {0}% {1} – {2}",
+                        progress_percentage, progress_speed, SparkleShare.Controller.ProgressInformation);
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
