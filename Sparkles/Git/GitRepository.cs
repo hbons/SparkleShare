@@ -217,6 +217,7 @@ namespace Sparkles.Git {
                     "git-lfs pre-push \"$@\"";
             }
 
+            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
             File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
 
             var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
