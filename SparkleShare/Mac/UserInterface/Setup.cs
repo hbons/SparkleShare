@@ -36,8 +36,10 @@ namespace SparkleShare {
         private NSButton ContinueButton, AddButton, TryAgainButton, CancelButton, FinishButton, ShowFilesButton;
 
         private NSTextField FullNameTextField, FullNameLabel, EmailLabel, EmailTextField;
+
         private NSTextField AddressTextField, AddressLabel, AddressHelpLabel;
         private NSTextField PathLabel, PathTextField, PathHelpLabel;
+
         private NSTextField ProgressLabel, PasswordTextField, VisiblePasswordTextField, PasswordLabel, WarningTextField;
 
         private NSImage WarningImage;
@@ -50,11 +52,9 @@ namespace SparkleShare {
         private NSScrollView ScrollView;
         private SparkleDataSource DataSource;
 
-
-
         private NSButtonCell ButtonCellProto;
-
         private NSMatrix Matrix;
+        List<NSTextField> storage_type_descriptions;
 
 
         public Setup () : base ()
@@ -220,13 +220,13 @@ namespace SparkleShare {
                 PathTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
                 PathHelpLabel = new SparkleLabel (Controller.SelectedPreset.PathExample, NSTextAlignment.Left) {
-                    TextColor       = NSColor.DisabledControlText,
-                    Frame           = new RectangleF (190 + 196 + 16, Frame.Height - 358, 204, 19)
+                    TextColor = NSColor.DisabledControlText,
+                    Frame     = new RectangleF (190 + 196 + 16, Frame.Height - 358, 204, 19)
                 };
 
                 AddressHelpLabel = new SparkleLabel (Controller.SelectedPreset.AddressExample, NSTextAlignment.Left) {
-                    TextColor       = NSColor.DisabledControlText,
-                    Frame           = new RectangleF (190, Frame.Height - 358, 204, 19)
+                    TextColor = NSColor.DisabledControlText,
+                    Frame     = new RectangleF (190, Frame.Height - 358, 204, 19)
                 };
 
                 if (TableView == null || TableView.RowCount != Controller.Presets.Count) {
@@ -462,30 +462,35 @@ namespace SparkleShare {
                 Buttons.Add (CancelButton);
             }
 
-
-
             if (type == PageType.StorageSetup) {
                 Header = string.Format ("Storage type for ‘{0}’", Controller.SyncingFolder);
                 Description = "What type of storage would you like to use?";
 
 
+                storage_type_descriptions = new List<NSTextField> ();
+
                 ButtonCellProto = new NSButtonCell ();
                 ButtonCellProto.SetButtonType (NSButtonType.Radio);
                 ButtonCellProto.Font = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
 
-
-                Matrix = new NSMatrix (new RectangleF (215, 0, 256, 256), NSMatrixMode.Radio,
+                Matrix = new NSMatrix (new RectangleF (202, Frame.Height - 256 - 128, 256, 256), NSMatrixMode.Radio,
                     ButtonCellProto, SparkleShare.Controller.FetcherAvailableStorageTypes.Count, 1);
-                Matrix.BackgroundColor = NSColor.Yellow;
-                Matrix.CellSize = new SizeF (256, 18);
-                Matrix.IntercellSpacing = new SizeF (12, 12);
+
+                Matrix.CellSize = new SizeF (256, 36);
+                Matrix.IntercellSpacing = new SizeF (32, 32);
 
                 int i = 0;
                 foreach (StorageTypeInfo storage_type in SparkleShare.Controller.FetcherAvailableStorageTypes) {
-                    Matrix.Cells [i].Title = storage_type.Name;
+                    Matrix.Cells [i].Title = " " + storage_type.Name;
 
-                    //  Matrix.IntercellSpacing = new SizeF (30, 30);
-                    // todo: description
+                    NSTextField storage_type_description = new SparkleLabel (storage_type.Description, NSTextAlignment.Left) {
+                        TextColor = NSColor.DisabledControlText,
+                        Frame = new RectangleF (223, Frame.Height - 190 - (68 * i), 256, 32)
+                    };
+
+                    storage_type_descriptions.Add (storage_type_description);
+                    ContentView.AddSubview (storage_type_description);
+
                     i++;
                 }
 
@@ -495,21 +500,17 @@ namespace SparkleShare {
                 CancelButton = new NSButton () { Title = "Cancel" };
                 ContinueButton = new NSButton () { Title = "Continue" };
 
-
                 ContinueButton.Activated += delegate {
-                    Console.WriteLine (Matrix.SelectedRow);
-
                     StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes [Matrix.SelectedRow];
                     Controller.StoragePageCompleted (selected_storage_type.Type);
                 };
 
                 CancelButton.Activated += delegate { Controller.SyncingCancelled (); };
 
-
                 Buttons.Add (ContinueButton);
                 Buttons.Add (CancelButton);
 
-                MakeFirstResponder ((NSResponder)PasswordTextField);
+
                 NSApplication.SharedApplication.RequestUserAttention (NSRequestUserAttentionType.CriticalRequest);
             }
 
