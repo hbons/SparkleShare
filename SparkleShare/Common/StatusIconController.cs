@@ -230,12 +230,10 @@ namespace SparkleShare {
                     progress_speed = SparkleShare.Controller.ProgressSpeedDown.ToSize () + "/s ";
 
                 if (progress_percentage > 0)
-                    StateText += string.Format (" {0}% {1} – {2}", progress_percentage, progress_speed);
+                    StateText += string.Format (" {0}% {1}", progress_percentage, progress_speed);
 
                 if (!string.IsNullOrEmpty (SparkleShare.Controller.ProgressInformation))
-                    StateText += string.Format (" {0} – {1}", StateText, SparkleShare.Controller.ProgressInformation);
-
-                SparkleShare.Controller.ProgressInformation)
+                    StateText += string.Format ("{0} – {1}", StateText, SparkleShare.Controller.ProgressInformation);
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);

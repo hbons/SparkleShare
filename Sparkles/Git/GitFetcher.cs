@@ -168,14 +168,14 @@ namespace Sparkles.Git {
 
         public override string Complete (StorageType selected_storage_type)
         {
+            string identifier = base.Complete (selected_storage_type);
+            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
+
             InstallConfiguration ();
             InstallGitLFS ();
 
             InstallAttributeRules ();
             InstallExcludeRules ();
-
-            string identifier = base.Complete (selected_storage_type);
-            string identifier_path = Path.Combine (TargetFolder, ".sparkleshare");
 
             if (IsFetchedRepoEmpty) {
                 File.WriteAllText (identifier_path, identifier);

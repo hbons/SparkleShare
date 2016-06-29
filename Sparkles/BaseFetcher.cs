@@ -176,6 +176,8 @@ namespace Sparkles {
 
         public virtual string Complete (StorageType storage_type)
         {
+            FetchedRepoStorageType = storage_type;
+
             if (IsFetchedRepoEmpty)
                 CreateInitialChangeSet ();
             
