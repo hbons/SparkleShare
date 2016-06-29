@@ -214,7 +214,12 @@ namespace SparkleShare {
         
         public virtual void Initialize ()
         {
-            Logger.LogInfo ("Environment", "SparkleShare " + InstallationInfo.Version);
+            string version = InstallationInfo.Version;
+
+            if (InstallationInfo.Directory.StartsWith ("/app", StringComparison.InvariantCulture))
+                version += " (Flatpak)";
+
+            Logger.LogInfo ("Environment", "SparkleShare " + version);
             Logger.LogInfo ("Environment", "Git LFS " + Sparkles.Git.GitCommand.GitLFSVersion);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
 
