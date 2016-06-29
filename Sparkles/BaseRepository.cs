@@ -65,7 +65,8 @@ namespace Sparkles {
         DiskSpaceExceeded,
         UnreadableFiles,
         NotFound,
-        IncompatibleClientServer
+        IncompatibleClientServer,
+        Unknown
     }
 
 
@@ -112,8 +113,10 @@ namespace Sparkles {
         public SyncStatus Status { get; set; }
         public ErrorStatus Error { get; protected set; }
         public bool IsBuffering { get; set; }
-        public double ProgressPercentage { get; set; }
-        public double ProgressSpeed { get; set; }
+
+        public double ProgressPercentage { get; private set; }
+        public double ProgressSpeed { get; private set; }
+        public string ProgressInformation { get; private set; }
 
         public DateTime LastSync {
             get {
@@ -163,7 +166,6 @@ namespace Sparkles {
         Watcher watcher;
         TimeSpan poll_interval        = PollInterval.Short;
         DateTime last_poll            = DateTime.Now;
-        DateTime progress_last_change = DateTime.Now;
         Timers.Timer remote_timer     = new Timers.Timer () { Interval = 5000 };
         DisconnectReason last_disconnect_reason = DisconnectReason.None;
 
@@ -365,21 +367,25 @@ namespace Sparkles {
         }
 
 
-        protected void OnProgressChanged (double progress_percentage, double progress_speed)
+        DateTime progress_last_change = DateTime.Now;
+
+        protected void OnProgressChanged (double percentage, double speed, string information)
         {
-            if (progress_percentage < 1)
+            if (percentage < 1)
                 return;
 
             // Only trigger the ProgressChanged event once per second
             if (DateTime.Compare (this.progress_last_change, DateTime.Now.Subtract (new TimeSpan (0, 0, 0, 1))) >= 0)
                 return;
 
-            if (progress_percentage == 100.0)
-                progress_percentage = 99.0;
+            if (percentage == 100.0)
+                percentage = 99.0;
 
-            ProgressPercentage        = progress_percentage;
-            ProgressSpeed             = progress_speed;
-            this.progress_last_change = DateTime.Now;
+			progress_last_change = DateTime.Now;
+
+            ProgressPercentage = percentage;
+            ProgressSpeed = speed;
+            ProgressInformation = information;
 
             ProgressChanged ();
         }
