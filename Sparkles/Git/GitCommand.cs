@@ -97,7 +97,8 @@ namespace Sparkles.Git {
 
 
         static Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        static Regex progress_regex_lfs = new Regex (@".*([0-9]+) of ([0-9]+) files.*", RegexOptions.Compiled);
+        static Regex progress_regex_lfs = new Regex (@".*\(([0-9]+) of ([0-9]+) files\).*", RegexOptions.Compiled);
+        static Regex progress_regex_lfs_skipped = new Regex (@".*\(([0-9]+) of ([0-9]+) files, ([0-9]+) skipped\).*", RegexOptions.Compiled);
         static Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
         public static ErrorStatus ParseProgress (string line, out double percentage, out double speed, out string information)
@@ -109,13 +110,33 @@ namespace Sparkles.Git {
             Match match;
 
             if (line.StartsWith ("Git LFS:")) {
-                match = progress_regex_lfs.Match (line);
+                match = progress_regex_lfs_skipped.Match (line);
 
-                if (!match.Success)
+                int current_file = 0;
+                int total_file_count = 0;
+                int skipped_file_count = 0;
+
+                if (match.Success) {
+                    // "skipped" files are objects that have already been transferred
+                    skipped_file_count = int.Parse (match.Groups [3].Value);
+
+                } else {
+
+                    match = progress_regex_lfs.Match (line);
+
+                    if (!match.Success)
+                        return ErrorStatus.None;
+                }
+
+                current_file = int.Parse (match.Groups [1].Value);
+
+                if (current_file == 0)
                     return ErrorStatus.None;
 
-                percentage = double.Parse (match.Groups [1].Value) / double.Parse (match.Groups [2].Value) * 100;
-                information = string.Format ("{0} of {1} files", match.Groups [1].Value, match.Groups [2].Value);
+                total_file_count = int.Parse (match.Groups [2].Value) - skipped_file_count;
+
+                percentage = Math.Round ((double) current_file / total_file_count * 100, 0);
+                information = string.Format ("{0} of {1} files", current_file, total_file_count);
 
                 return ErrorStatus.None;
             }
@@ -123,7 +144,9 @@ namespace Sparkles.Git {
             match = progress_regex.Match (line);
 
             if (!match.Success || string.IsNullOrWhiteSpace (line)) {
-                Logger.LogInfo ("Git", line);
+                if (!string.IsNullOrWhiteSpace (line))
+                    Logger.LogInfo ("Git", line);
+
                 return FindError (line);
             }
 
