@@ -106,7 +106,6 @@ namespace Sparkles.Git {
             if (FetchedRepoStorageType == StorageType.LargeFiles)
                 output_stream = git_clone.StandardOutput;
 
-            double previous_percentage = 0;
             double percentage = 0;
             double speed = 0;
             string information = "";
@@ -114,7 +113,6 @@ namespace Sparkles.Git {
             while (!output_stream.EndOfStream) {
                 string line = output_stream.ReadLine ();
 
-                previous_percentage = percentage;
                 ErrorStatus error = GitCommand.ParseProgress (line, out percentage, out speed, out information);
 
                 if (error != ErrorStatus.None) {
@@ -125,8 +123,7 @@ namespace Sparkles.Git {
                     return false;
                 }
 
-                if (percentage <= previous_percentage)
-                    continue;
+                OnProgressChanged (percentage, speed, information);
             }
 
             git_clone.WaitForExit ();
