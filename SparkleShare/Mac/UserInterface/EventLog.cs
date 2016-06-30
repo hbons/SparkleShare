@@ -66,6 +66,7 @@ namespace SparkleShare {
 
             MinSize        = new SizeF (min_width, min_height);
             HasShadow      = true;
+            IsOpaque       = false;
             BackingType    = NSBackingStore.Buffered;
             TitlebarHeight = Frame.Height - ContentView.Frame.Height;
             Level          = NSWindowLevel.Floating;

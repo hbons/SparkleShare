@@ -47,6 +47,7 @@ namespace SparkleShare {
             MaxSize     = new SizeF (640, 281);
             MinSize     = new SizeF (640, 281);
             HasShadow   = true;
+            IsOpaque    = false;
             BackingType = NSBackingStore.Buffered;
             Level       = NSWindowLevel.Floating;
 
