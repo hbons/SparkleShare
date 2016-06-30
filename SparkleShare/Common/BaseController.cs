@@ -610,7 +610,7 @@ namespace SparkleShare {
                 return;
             }
 
-            FinishFetcher ();
+            FinishFetcher (storage_type);
         }
 
 
@@ -640,12 +640,6 @@ namespace SparkleShare {
         public bool CheckPassword (string password)
         {
             return this.fetcher.IsFetchedRepoPasswordCorrect (password);
-        }
-
-
-        public void FinishFetcher ()
-        {
-            FinishFetcher (StorageType.Plain);
         }
 
 

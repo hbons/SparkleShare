@@ -228,34 +228,6 @@ namespace Sparkles.Git {
         }
 
 
-        void InstallConfiguration ()
-        {
-            string [] settings = {
-                "core.autocrlf input",
-                "core.quotepath false", // Don't quote "unusual" characters in path names
-                "core.ignorecase false", // Be case sensitive explicitly to work on Mac
-                "core.filemode false", // Ignore permission changes
-                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
-                "core.safecrlf false",
-                "core.excludesfile \"\"",
-                "core.packedGitLimit 128m", // Some memory limiting options
-                "core.packedGitWindowSize 128m",
-                "pack.deltaCacheSize 128m",
-                "pack.packSizeLimit 128m",
-                "pack.windowMemory 128m",
-                "push.default matching"
-            };
-
-            if (InstallationInfo.OperatingSystem == OS.Windows)
-                settings [0] = "core.autocrlf true";
-
-            foreach (string setting in settings) {
-                var git_config = new GitCommand (TargetFolder, "config " + setting);
-                git_config.StartAndWaitForExit ();
-            }
-        }
-
-
         public override void EnableFetchedRepoCrypto (string password)
         {
             string password_file = ".git/info/encryption_password";
@@ -349,6 +321,34 @@ namespace Sparkles.Git {
             }
 
             return StorageType.Plain;
+        }
+
+
+        void InstallConfiguration ()
+        {
+            string [] settings = {
+                "core.autocrlf input",
+                "core.quotepath false", // Don't quote "unusual" characters in path names
+                "core.ignorecase false", // Be case sensitive explicitly to work on Mac
+                "core.filemode false", // Ignore permission changes
+                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
+                "core.safecrlf false",
+                "core.excludesfile \"\"",
+                "core.packedGitLimit 128m", // Some memory limiting options
+                "core.packedGitWindowSize 128m",
+                "pack.deltaCacheSize 128m",
+                "pack.packSizeLimit 128m",
+                "pack.windowMemory 128m",
+                "push.default matching"
+            };
+
+            if (InstallationInfo.OperatingSystem == OS.Windows)
+                settings [0] = "core.autocrlf true";
+
+            foreach (string setting in settings) {
+                var git_config = new GitCommand (TargetFolder, "config " + setting);
+                git_config.StartAndWaitForExit ();
+            }
         }
 
 
