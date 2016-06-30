@@ -52,10 +52,13 @@ namespace SparkleShare {
                     status_message = string.Format ("✓ Synced – Last change {0}", repo.LastSync.ToPrettyDate ());
 
                 if (repo.Status == SyncStatus.SyncUp)
-                    status_message = "Sending changes… " + repo.ProgressPercentage + "%";
+                    status_message = "Sending… " + (int) repo.ProgressPercentage + "%";
             
                 if (repo.Status == SyncStatus.SyncDown)
-                    status_message = "Receiving changes… " + repo.ProgressPercentage + "%";
+                    status_message = "Receiving… " + (int) repo.ProgressPercentage + "%";
+
+                if (!string.IsNullOrWhiteSpace (repo.ProgressInformation))
+                    status_message += " – " + SparkleShare.Controller.ProgressInformation;
 
                 if (repo.Status == SyncStatus.SyncUp || repo.Status == SyncStatus.SyncDown) {
                     if (repo.ProgressSpeed > 0)
@@ -233,7 +236,7 @@ namespace SparkleShare {
                     StateText += string.Format (" {0}% {1}", progress_percentage, progress_speed);
 
                 if (!string.IsNullOrEmpty (SparkleShare.Controller.ProgressInformation))
-                    StateText += string.Format ("{0} – {1}", StateText, SparkleShare.Controller.ProgressInformation);
+                    StateText += " – " + SparkleShare.Controller.ProgressInformation;
 
                 UpdateIconEvent (CurrentState);
                 UpdateStatusItemEvent (StateText);
