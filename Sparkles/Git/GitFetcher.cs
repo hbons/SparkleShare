@@ -54,7 +54,7 @@ namespace Sparkles.Git {
 
                 AvailableStorageTypes.Add (
                     new StorageTypeInfo (StorageType.LargeFiles, "Large File Storage",
-                        "Trade off versioning for space;\ndoesn't keep a local history"));
+                        "Trade off versioning to save space;\nkeeps file history on the host only"));
 
                 uri_builder.Scheme   = "ssh";
                 uri_builder.UserName = "git";
