@@ -1,4 +1,4 @@
-SUBDIRS = Pixmaps
+SUBDIRS = Images
 
 ASSEMBLY = SparkleShare
 TARGET = exe
