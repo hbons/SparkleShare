@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,7 +29,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>Pixmaps\sparkleshare-app.ico</ApplicationIcon>
+    <ApplicationIcon>Images\sparkleshare-app.ico</ApplicationIcon>
     <ReleaseVersion>
     </ReleaseVersion>
   </PropertyGroup>
@@ -142,11 +142,11 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Common\Pixmaps\about.png">
-      <Link>Pixmaps\about.png</Link>
+    <EmbeddedResource Include="..\Common\Images\about.png">
+      <Link>Images\about.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\side-splash.png">
-      <Link>Pixmaps\side-splash.png</Link>
+    <EmbeddedResource Include="..\Common\Images\side-splash.png">
+      <Link>Images\side-splash.png</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
@@ -161,33 +161,33 @@
     <EmbeddedResource Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\user-icon-default.png">
-      <Link>Pixmaps\user-icon-default.png</Link>
+    <EmbeddedResource Include="..\Common\Images\user-icon-default.png">
+      <Link>Images\user-icon-default.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Pixmaps\icons\document-added-12.png">
-      <Link>Pixmaps\document-added-12.png</Link>
+    <EmbeddedResource Include="..\Linux\Images\icons\document-added-12.png">
+      <Link>Images\document-added-12.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Pixmaps\icons\document-deleted-12.png">
-      <Link>Pixmaps\document-deleted-12.png</Link>
+    <EmbeddedResource Include="..\Linux\Images\icons\document-deleted-12.png">
+      <Link>Images\document-deleted-12.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Pixmaps\icons\document-edited-12.png">
-      <Link>Pixmaps\document-edited-12.png</Link>
+    <EmbeddedResource Include="..\Linux\Images\icons\document-edited-12.png">
+      <Link>Images\document-edited-12.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Pixmaps\icons\document-moved-12.png">
-      <Link>Pixmaps\document-moved-12.png</Link>
+    <EmbeddedResource Include="..\Linux\Images\icons\document-moved-12.png">
+      <Link>Images\document-moved-12.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Pixmaps\icons\process-working-22.png">
-      <Link>Pixmaps\process-working-22.png</Link>
+    <EmbeddedResource Include="..\Linux\Images\icons\process-working-22.png">
+      <Link>Images\process-working-22.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pixmaps\process-syncing-down.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-idle.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-up.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing.png" />
-    <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-1.png">
-      <Link>Pixmaps\tutorial-slide-1.png</Link>
+    <EmbeddedResource Include="Images\process-syncing-down.png" />
+    <EmbeddedResource Include="Images\process-syncing-idle.png" />
+    <EmbeddedResource Include="Images\process-syncing-up.png" />
+    <EmbeddedResource Include="Images\process-syncing.png" />
+    <EmbeddedResource Include="..\Common\Images\tutorial-slide-1.png">
+      <Link>Images\tutorial-slide-1.png</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Common\Pixmaps\tutorial-slide-2.png">
-      <Link>Pixmaps\tutorial-slide-2.png</Link>
+    <EmbeddedResource Include="..\Common\Images\tutorial-slide-2.png">
+      <Link>Images\tutorial-slide-2.png</Link>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -243,19 +243,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pixmaps\folder.png" />
-    <EmbeddedResource Include="Pixmaps\process-syncing-error.png" />
-    <EmbeddedResource Include="Pixmaps\sparkleshare-app.ico" />
-    <EmbeddedResource Include="Pixmaps\sparkleshare-folder.png" />
+    <EmbeddedResource Include="Images\folder.png" />
+    <EmbeddedResource Include="Images\process-syncing-error.png" />
+    <EmbeddedResource Include="Images\sparkleshare-app.ico" />
+    <EmbeddedResource Include="Images\sparkleshare-folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pixmaps\tutorial-slide-3.png" />
+    <EmbeddedResource Include="Images\tutorial-slide-3.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Common\Pixmaps\text-balloon.png">
-      <Link>Pixmaps\text-balloon.png</Link>
+    <Resource Include="..\Common\Images\text-balloon.png">
+      <Link>Images\text-balloon.png</Link>
     </Resource>
-    <Content Include="Pixmaps\sparkleshare-folder.ico" />
+    <Content Include="Images\sparkleshare-folder.ico" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="SparkleEventLogWindow.xaml">

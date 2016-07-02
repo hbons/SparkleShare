@@ -1,4 +1,4 @@
-﻿//   SparkleShare, a collaboration and sharing tool.
+//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -145,7 +145,7 @@ namespace SparkleShare
 
         private void UpdateContent (string html)
         {
-            string pixmaps_path = Path.Combine (Sparkles.SparkleConfig.DefaultConfig.TmpPath, "Pixmaps");
+            string pixmaps_path = Path.Combine (Sparkles.SparkleConfig.DefaultConfig.TmpPath, "Images");
             pixmaps_path = pixmaps_path.Replace ("\\", "/");
 
 			html = html.Replace ("<a href=", "<a class='windows' href=");
@@ -208,7 +208,7 @@ namespace SparkleShare
         private void WriteOutImages ()
         {
             string tmp_path = Sparkles.SparkleConfig.DefaultConfig.TmpPath;
-			string pixmaps_path = Path.Combine (tmp_path, "Pixmaps");
+			string pixmaps_path = Path.Combine (tmp_path, "Images");
 
 			if (!Directory.Exists (pixmaps_path))
             {

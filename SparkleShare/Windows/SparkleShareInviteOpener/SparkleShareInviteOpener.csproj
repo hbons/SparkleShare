@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
@@ -11,7 +11,7 @@
     <RootNamespace>SparkleShareInviteOpener</RootNamespace>
     <AssemblyName>SparkleShareInviteOpener</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>..\Pixmaps\sparkleshare-app.ico</ApplicationIcon>
+    <ApplicationIcon>..\Images\sparkleshare-app.ico</ApplicationIcon>
     <ReleaseVersion />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

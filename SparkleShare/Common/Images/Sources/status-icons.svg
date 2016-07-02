@@ -1209,7 +1209,7 @@
          width="16"
          y="-135"
          x="42"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-idle@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-idle@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -1219,7 +1219,7 @@
          width="16"
          y="-135"
          x="72"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-error@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-error@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -1229,7 +1229,7 @@
          width="16"
          y="-135"
          x="102"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-up@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-up@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -1239,7 +1239,7 @@
          width="16"
          y="-135"
          x="132"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-down@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-down@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -1249,7 +1249,7 @@
          width="16"
          y="-135"
          x="162"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -2170,7 +2170,7 @@
          width="16"
          y="-115"
          x="102"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-up-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-up-active@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -2180,7 +2180,7 @@
          width="16"
          y="-115"
          x="132"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-down-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-down-active@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
@@ -2190,7 +2190,7 @@
          width="16"
          y="-115"
          x="162"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-active@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <g
@@ -2241,7 +2241,7 @@
          width="16"
          y="-114"
          x="41.96875"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-idle-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-idle-active@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <path
@@ -2249,13 +2249,13 @@
          style="text-indent:0;text-transform:none;block-progression:tb;color:#000000;fill-rule:evenodd;enable-background:new;fill:#ffffff;fill-opacity:1"
          d="m 44.4375,-113 c -0.82205,0.092 -1.4425,0.79783 -1.4375,1.625 l 0,4.375 -0.5,0 -0.5,0 0,0.5 -0.03125,5.59375 c 0,0.74984 0.1756,1.43675 0.5,1.96875 0.3244,0.5319 0.84191,0.9375 1.46875,0.9375 L 56,-98 c 0.62679,0 1.14435,-0.4056 1.46875,-0.9375 0.3244,-0.5319 0.5,-1.21885 0.5,-1.96875 l 0.0625,-7.59375 0,-0.5 -0.5,0 -0.5625,0 0,-0.34375 -0.03125,-1.125 0,-0.5 -0.5,0 -5.71875,0 -2.15625,-1.90625 -0.15625,-0.125 -0.1875,0 -3.5625,0 c -0.01,-4.6e-4 -0.02175,3.1e-4 -0.03125,0 -0.0385,-0.001 -0.0865,-0.001 -0.125,0 l -0.03125,0 -0.03125,0 z M 50,-108.84375 a 0.58589994,0.58589994 0 0 1 0.5625,0.375 l 1.0625,2.375 2.46875,0.25 a 0.58589994,0.58589994 0 0 1 0.3125,1.03125 l -1.875,1.78125 0.46875,2.375 a 0.58589994,0.58589994 0 0 1 -0.84375,0.625 l -2.15625,-1.125 -2.3125,1.09375 a 0.58589994,0.58589994 0 0 1 -0.84375,-0.6875 l 0.5625,-2.3125 -1.875,-1.90625 a 0.58589994,0.58589994 0 0 1 0.375,-1 l 2.375,-0.125 L 49.5,-108.5 a 0.58589994,0.58589994 0 0 1 0.375,-0.3125 0.58589994,0.58589994 0 0 1 0.125,-0.0312 z m 0,1.96875 -0.84375,1.625 a 0.58589994,0.58589994 0 0 1 -0.46875,0.3125 l -1.40625,0.0937 1.1875,1.1875 a 0.58589994,0.58589994 0 0 1 0.15625,0.5625 l -0.34375,1.4375 1.46875,-0.6875 a 0.58589994,0.58589994 0 0 1 0.53125,0.0312 l 1.3125,0.6875 -0.28125,-1.5 a 0.58589994,0.58589994 0 0 1 0.15625,-0.53115 l 1.1875,-1.125 -1.5,-0.15625 a 0.58589994,0.58589994 0 0 1 -0.46875,-0.34375 L 50,-106.875 z"
          id="path4857-0"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-idle-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-idle-active@2x.png"
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180" />
       <rect
          inkscape:export-ydpi="180"
          inkscape:export-xdpi="180"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Pixmaps/process-syncing-error-active@2x.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Mac/Images/process-syncing-error-active@2x.png"
          x="72"
          y="-115"
          width="16"
@@ -2269,14 +2269,14 @@
          width="48"
          id="rect7635"
          style="opacity:0;fill:#f57900;fill-opacity:1;stroke:none;enable-background:new"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-up-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-up-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <g
          transform="matrix(1.0414,0,0,0.92475,-101.77499,-255.97)"
          style="opacity:0.7;fill-rule:evenodd;enable-background:new"
          id="g7637"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-up-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-up-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -2304,7 +2304,7 @@
          transform="translate(-87.999989,-264)"
          style="enable-background:new"
          id="g7643"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-up-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-up-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2354,7 +2354,7 @@
          transform="matrix(0.95581,0,0,0.96875,-73.859989,-261.12)"
          style="enable-background:new"
          id="g7659"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-up-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-up-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2397,14 +2397,14 @@
          height="48"
          x="258"
          y="-214"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-down-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-down-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <g
          id="g7701"
          style="opacity:0.7;fill-rule:evenodd;enable-background:new"
          transform="matrix(1.0414,0,0,0.92475,-51.774989,-255.97)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-down-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-down-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -2432,7 +2432,7 @@
          id="g7707"
          style="enable-background:new"
          transform="translate(-37.999989,-264)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-down-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-down-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2482,7 +2482,7 @@
          id="g7723"
          style="enable-background:new"
          transform="matrix(0.95581,0,0,0.96875,-23.859989,-261.12)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-down-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-down-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2525,7 +2525,7 @@
          width="48"
          id="rect7763"
          style="opacity:0;fill:#f57900;fill-opacity:1;stroke:none;enable-background:new"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <g
@@ -2557,7 +2557,7 @@
          transform="translate(12.000011,-264)"
          style="enable-background:new"
          id="g7771"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2607,7 +2607,7 @@
          transform="matrix(0.95581,0,0,0.96875,26.140011,-261.12)"
          style="enable-background:new"
          id="g7787"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
@@ -2647,7 +2647,7 @@
          transform="translate(-192.99999,-13.999996)"
          style="enable-background:new"
          id="g7833"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-up-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-up-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2667,7 +2667,7 @@
          style="enable-background:new"
          id="g7837"
          transform="matrix(1,0,0,-1,-142.99999,-361)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-down-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-down-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2687,7 +2687,7 @@
          style="enable-background:new"
          transform="matrix(1,0,0,-1,-91.999989,-361)"
          id="g7843"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2707,7 +2707,7 @@
          style="enable-background:new"
          id="g7849"
          transform="translate(-93.999989,-13.999996)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2739,7 +2739,7 @@
            id="flowPara8732">GNOME 3</flowPara></flowRoot>      <rect
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          style="opacity:0;fill:#f57900;fill-opacity:1;stroke:none;enable-background:new"
          id="rect8734"
          width="48"
@@ -2774,7 +2774,7 @@
       <g
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          id="g8742"
          style="enable-background:new"
          transform="translate(62.000011,-264)">
@@ -2824,7 +2824,7 @@
       <g
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          id="g8758"
          style="enable-background:new"
          transform="matrix(0.95581,0,0,0.96875,76.140011,-261.12)">
@@ -2865,7 +2865,7 @@
          id="g5833-3-4-4"
          style="stroke:#c36e11;stroke-width:2;enable-background:new"
          transform="matrix(2.2594,0,0,2.2594,-3935.313,-2059.767)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2878,7 +2878,7 @@
          id="g5833-3-4"
          style="stroke:#fde2c0;stroke-width:2;enable-background:new"
          transform="matrix(2.2594,0,0,2.2594,-3935.313,-2060.767)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -2891,7 +2891,7 @@
          style="display:inline;enable-background:new"
          id="g20371"
          transform="translate(-338,-571)"
-         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Pixmaps/icons/process-syncing-error-48.png"
+         inkscape:export-filename="/Users/hbons/Projects/SparkleShare/SparkleShare/Linux/Images/icons/process-syncing-error-48.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
