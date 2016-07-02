@@ -155,22 +155,22 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\Common\Pixmaps\side-splash.png">
+    <BundleResource Include="..\Common\Images\side-splash.png">
       <Link>Resources\side-splash.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-added-12.png">
+    <BundleResource Include="..\Linux\Images\icons\hicolor\document-added-12.png">
       <Link>Resources\document-added-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-edited-12.png">
+    <BundleResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
       <Link>Resources\document-edited-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-deleted-12.png">
+    <BundleResource Include="..\Linux\Images\icons\hicolor\document-deleted-12.png">
       <Link>Resources\document-deleted-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Pixmaps\icons\hicolor\document-moved-12.png">
+    <BundleResource Include="..\Linux\Images\icons\hicolor\document-moved-12.png">
       <Link>Resources\document-moved-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\about.png">
+    <BundleResource Include="..\Common\Images\about.png">
       <Link>Resources\about.png</Link>
     </BundleResource>
     <BundleResource Include="Resources\tutorial-slide-3.png">
@@ -181,10 +181,10 @@
     <BundleResource Include="Resources\process-syncing-idle.png" />
     <BundleResource Include="Resources\process-syncing-up.png" />
     <BundleResource Include="Resources\process-syncing.png" />
-    <BundleResource Include="..\Common\Pixmaps\user-icon-default.png">
+    <BundleResource Include="..\Common\Images\user-icon-default.png">
       <Link>Resources\user-icon-default.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\side-splash%402x.png">
+    <BundleResource Include="..\Common\Images\side-splash%402x.png">
       <Link>Resources\side-splash%402x.png</Link>
     </BundleResource>
     <BundleResource Include="Resources\process-syncing-down%402x.png" />
@@ -192,19 +192,19 @@
     <BundleResource Include="Resources\process-syncing-idle%402x.png" />
     <BundleResource Include="Resources\process-syncing-up%402x.png" />
     <BundleResource Include="Resources\process-syncing%402x.png" />
-    <BundleResource Include="..\Common\Pixmaps\about%402x.png">
+    <BundleResource Include="..\Common\Images\about%402x.png">
       <Link>Resources\about%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-1.png">
+    <BundleResource Include="..\Common\Images\tutorial-slide-1.png">
       <Link>Resources\tutorial-slide-1.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-1%402x.png">
+    <BundleResource Include="..\Common\Images\tutorial-slide-1%402x.png">
       <Link>Resources\tutorial-slide-1%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-2.png">
+    <BundleResource Include="..\Common\Images\tutorial-slide-2.png">
       <Link>Resources\tutorial-slide-2.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\tutorial-slide-2%402x.png">
+    <BundleResource Include="..\Common\Images\tutorial-slide-2%402x.png">
       <Link>Resources\tutorial-slide-2%402x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Presets\bitbucket%402x.png">
@@ -244,10 +244,10 @@
     <BundleResource Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\text-balloon.png">
+    <BundleResource Include="..\Common\Images\text-balloon.png">
       <Link>Resources\text-balloon.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Pixmaps\text-balloon%402x.png">
+    <BundleResource Include="..\Common\Images\text-balloon%402x.png">
       <Link>Resources\text-balloon%402x.png</Link>
     </BundleResource>
     <BundleResource Include="Resources\sparkleshare-app.icns">

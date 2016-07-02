@@ -2,7 +2,7 @@
 
 SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It's available for Linux distributions, Mac, and Windows.
 
-![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Pixmaps/tutorial-slide-2%402x.png)
+![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/tutorial-slide-2%402x.png)
 
 
 ## How does it work?

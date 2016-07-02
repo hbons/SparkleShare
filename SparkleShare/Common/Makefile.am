@@ -1,3 +1,3 @@
 SUBDIRS = HTML \
 	Presets \
-	Pixmaps
+	Images
