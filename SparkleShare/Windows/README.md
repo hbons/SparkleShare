@@ -34,7 +34,7 @@ This will create `SparkleShare.msi` in the same directory.
 
 ### Resetting SparkleShare settings
 
-Remove `My Documents\SparkleShare` and `AppData\Roaming\sparkleshare` (`AppData` is hidden by default).
+Remove `My Documents\SparkleShare` and `AppData\Roaming\org.sparkleshare.SparkleShare` (`AppData` is hidden by default).
 
 
 ### Uninstalling

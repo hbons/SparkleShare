@@ -48,7 +48,7 @@ To build SparkleShare from a command line (e.g. for using a CI system), use this
 
 ```
 rm -Rf ~/SparkleShare
-rm -Rf ~/.config/sparkleshare
+rm -Rf ~/.config/org.sparkleshare.SparkleShare
 ```
 
 

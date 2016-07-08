@@ -86,5 +86,6 @@ sudo make uninstall
 
 ```bash
 rm -Rf ~/SparkleShare
-rm -Rf ~/.config/sparkleshare
+rm -Rf ~/.config/org.sparkleshare.SparkleShare
 ```
+
