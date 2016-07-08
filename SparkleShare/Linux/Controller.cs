@@ -100,7 +100,7 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-            new Command ("xdg-open", "\"" + path + "\"").Start ();
+            Global.ShowUri (Gdk.Screen.Default, path);
         }
 
 
