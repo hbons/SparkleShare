@@ -31,9 +31,9 @@ namespace SparkleShare {
         public event UpdateLabelEventDelegate UpdateLabelEvent = delegate { };
         public delegate void UpdateLabelEventDelegate (string text);
 
-        public readonly string WebsiteLinkAddress       = "http://www.sparkleshare.org/";
-        public readonly string CreditsLinkAddress       = "http://github.com/hbons/SparkleShare/blob/master/legal/Authors.txt";
-        public readonly string ReportProblemLinkAddress = "http://www.github.com/hbons/SparkleShare/issues";
+        public readonly string WebsiteLinkAddress       = "https://www.sparkleshare.org/";
+        public readonly string CreditsLinkAddress       = "https://github.com/hbons/SparkleShare/blob/master/legal/Authors.txt";
+        public readonly string ReportProblemLinkAddress = "https://www.github.com/hbons/SparkleShare/issues";
         public readonly string DebugLogLinkAddress      = "file://" + SparkleShare.Controller.Config.LogFilePath;
 
         public string RunningVersion;
