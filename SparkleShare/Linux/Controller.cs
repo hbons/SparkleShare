@@ -63,9 +63,9 @@ namespace SparkleShare {
                 "applications", "SparkleShare.Autostart.desktop");
             
             string autostart_file_dest = Path.Combine (Config.HomePath, ".config", "autostart", "SparkleShare.Autostart.desktop");
-			string autostart_path = Path.GetDirectoryName (autostart_file_dest);
+            string autostart_path = Path.GetDirectoryName (autostart_file_dest);
 
-			if (!Directory.Exists (autostart_path))
+            if (!Directory.Exists (autostart_path))
                 Directory.CreateDirectory (autostart_path);
 
             if (File.Exists (autostart_file_dest))
@@ -86,9 +86,9 @@ namespace SparkleShare {
         }
         
 
-		public override void CopyToClipboard (string text)
+        public override void CopyToClipboard (string text)
         {
-			Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false)).Text = text;
+            Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false)).Text = text;
         }
 
 
