@@ -5,7 +5,7 @@ To run SparkleShare, you'll need these packages:
 ```
 curl
 git >= 2.3
-git-lfs >= 1.2.2
+git-lfs >= 1.3.0
 gtk-sharp3
 gvfs
 mono-core >= 4.0
