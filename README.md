@@ -1,6 +1,6 @@
 # [SparkleShare](https://www.sparkleshare.org/)
 
-SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It's available for Linux distributions, Mac, and Windows.
+SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It's available for Linux distributions, macOS, and Windows.
 
 ![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/tutorial-slide-2%402x.png)
 
@@ -21,7 +21,7 @@ SparkleShare uses the version control system [Git](https://git-scm.com/) under t
 
 ## Compiling from source
 
-Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [Mac](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md). Make sure to have the `git` package installed when you're building on Linux.
+Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [macOS](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md). Make sure to have the `git` package installed when you're building on Linux.
 
 
 ## Useful links
