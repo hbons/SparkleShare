@@ -25,10 +25,8 @@ then
   file_hash=$(shasum -a 256 git.tar.gz | cut -c 1-64)
 
   curl -s https://www.kernel.org/pub/software/scm/git/git-${gitVersion}.tar.gz > git.tar.gz
-  curl -s https://www.kernel.org/pub/software/scm/git/sha256sums.asc > sha256sums.asc
 
   test -e git.tar.gz || {echo "Failed to download git"; exit 1}
-  test -e sha256sums.asc || {echo "Failed to download hash list"; exit 1}
 
   test "$file_hash" = "$list_hash" || {echo "SHA256 Mistmatch" ;exit 1}
 
