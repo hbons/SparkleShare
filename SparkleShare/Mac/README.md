@@ -33,9 +33,10 @@ There are three build configurations available:
 
 To build any of these configurations,
 
-* open `./SparkleShare/Mac/SparkleShare.sln`
+* open `./SparkleShare.sln` in Xamarin Studio
+* select the SparkleShare.Mac project in the Solution view
 * select the required configuration
-* select `Build`, then `"Build SparkleShare"` from the menu
+* select `Build`, then `"Build SparkleShare.Mac"` from the menu
 
 To build SparkleShare from a command line (e.g. for using a CI system), use this command:
 
