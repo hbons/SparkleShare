@@ -15,31 +15,37 @@ export projectFolder=$(dirname $0)
 export projectFolder=$(abspath ${projectFolder})
 
 export gitVersion=$(cat ${projectFolder}/git.version)
+export gitLfsVersion=$(cat ${projectFolder}/git-lfs.version)
 
 set -e
 
 if [ ! -f ${projectFolder}/git-${gitVersion}.tar.gz ]
 then
-
-  list_hash=$(sed -n -e "/git-${gitVersion}.tar.gz/p" sha256sums.asc | cut -c 1-64)
-  file_hash=$(shasum -a 256 git.tar.gz | cut -c 1-64)
-
-  curl -s https://www.kernel.org/pub/software/scm/git/git-${gitVersion}.tar.gz > git.tar.gz
+  curl -s -L https://www.kernel.org/pub/software/scm/git/git-${gitVersion}.tar.gz > git.tar.gz
+  curl -s -L https://github.com/github/git-lfs/releases/download/v${gitLfsVersion}/git-lfs-darwin-amd64-${gitLfsVersion}.tar.gz > git-lfs.tar.gz
 
   test -e git.tar.gz || { echo "Failed to download git"; exit 1; }
+  test -e git-lfs.tar.gz || { echo "Failed to download git-lfs"; exit 1; }
 
-  test "$file_hash" = "$list_hash" || { echo "SHA256 Mistmatch"; exit 1; }
+  tar xzf git.tar.gz
+  tar xzf git-lfs.tar.gz
 
-    tar xf git.tar.gz
-    cd git-${gitVersion}
+  cd git-${gitVersion}
+  make configure
+  ./configure --prefix=${projectFolder}/git --with-openssl=no
+  make install
+  cd ..
 
-    make configure
-    ./configure --prefix=${projectFolder}/git --with-openssl=no
-    make install
-    cd ..
+  cd git-lfs-${gitLfsVersion}
+  cp git-lfs ${projectFolder}/git/libexec/git-core
+  cd ..
 
-    tar cfz git-${gitVersion}.tar.gz git
-    rm -rf git
-    rm -rf git-${gitVersion}
-    rm git.tar.gz
+  tar czf git-${gitVersion}.tar.gz git
+
+  rm -rf git
+  rm -rf git-${gitVersion}
+  rm -rf git-lfs-${gitLfsVersion}
+
+  rm git.tar.gz
+  rm git-lfs.tar.gz
 fi
