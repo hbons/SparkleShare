@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave
+
 basedirs = build Sparkles Sparkles/Git
 
 SUBDIRS = $(basedirs) $(GUISUBDIRS)

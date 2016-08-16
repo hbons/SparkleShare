@@ -1,9 +1,10 @@
 theme = hicolor
-system_themedir = $(datadir)/icons/$(theme)
 app_themedir = $(pkgdatadir)/icons/$(theme)
 
 if BUILD_XDG_APP
 system_themedir = $(app_themedir)
+else
+system_themedir = $(datadir)/icons/$(theme)
 endif
 
 system_theme_icons = \
