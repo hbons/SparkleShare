@@ -115,13 +115,13 @@ SparkleShare/Makefile
 SparkleShare/Common/Makefile
 SparkleShare/Common/HTML/Makefile
 SparkleShare/Common/Presets/Makefile
-SparkleShare/Common/Pixmaps/Makefile
+SparkleShare/Common/Images/Makefile
 SparkleShare/Linux/Makefile
-SparkleShare/Linux/Pixmaps/Makefile
-SparkleShare/Linux/Pixmaps/icons/Makefile
-SparkleShare/Linux/Pixmaps/icons/hicolor/Makefile
-SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
-SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
+SparkleShare/Linux/Images/Makefile
+SparkleShare/Linux/Images/icons/Makefile
+SparkleShare/Linux/Images/icons/hicolor/Makefile
+SparkleShare/Linux/Images/icons/ubuntu-mono-dark/Makefile
+SparkleShare/Linux/Images/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
 ])
 
