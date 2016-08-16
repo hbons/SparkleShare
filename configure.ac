@@ -5,6 +5,9 @@ AC_PREREQ([2.54])
 AC_INIT([SparkleShare], sparkleshare_version)
 AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-zip foreign tar-pax])
 AM_MAINTAINER_MODE
+LT_INIT
+
+AC_CONFIG_MACRO_DIRS([build/m4/sparkleshare build/m4/shamrock build/m4/shave])
 
 dnl Export Version Info
 AC_SUBST([ASM_VERSION], [sparkleshare_version])
@@ -15,20 +18,18 @@ if test "x$PKG_CONFIG" = "xno"; then
         AC_MSG_ERROR([pkg-config is not installed])
 fi
 
-AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/sparkleshare -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
-
 SHAMROCK_EXPAND_LIBDIR
 SHAMROCK_EXPAND_BINDIR
 SHAMROCK_EXPAND_DATADIR
 
 AC_PROG_INSTALL
 
-dnl Mono and gmcs
-SHAMROCK_CHECK_MONO_MODULE(2.8)
+dnl Mono and mcs
+SHAMROCK_CHECK_MONO_MODULE(3.2.8)
 SHAMROCK_FIND_MONO_RUNTIME
     
-PKG_CHECK_EXISTS([mono >= 2.8],
-[SHAMROCK_FIND_MONO_4_0_COMPILER
+PKG_CHECK_EXISTS([mono >= 3.2.8],
+[SHAMROCK_FIND_MONO_4_5_COMPILER
 SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES([
     System
 ])]
@@ -114,13 +115,13 @@ SparkleShare/Makefile
 SparkleShare/Common/Makefile
 SparkleShare/Common/HTML/Makefile
 SparkleShare/Common/Presets/Makefile
-SparkleShare/Common/Pixmaps/Makefile
+SparkleShare/Common/Images/Makefile
 SparkleShare/Linux/Makefile
-SparkleShare/Linux/Pixmaps/Makefile
-SparkleShare/Linux/Pixmaps/icons/Makefile
-SparkleShare/Linux/Pixmaps/icons/hicolor/Makefile
-SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-dark/Makefile
-SparkleShare/Linux/Pixmaps/icons/ubuntu-mono-light/Makefile
+SparkleShare/Linux/Images/Makefile
+SparkleShare/Linux/Images/icons/Makefile
+SparkleShare/Linux/Images/icons/hicolor/Makefile
+SparkleShare/Linux/Images/icons/ubuntu-mono-dark/Makefile
+SparkleShare/Linux/Images/icons/ubuntu-mono-light/Makefile
 SparkleShare/Linux/sparkleshare
 ])
 
