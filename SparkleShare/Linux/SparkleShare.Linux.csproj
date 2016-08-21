@@ -117,6 +117,15 @@
     <None Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </None>
+    <BundleResource Include="..\Common\Presets\subversion.png">
+      <Link>Presets\subversion.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.xml">
+      <Link>Presets\subversion.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion%402x.png">
+      <Link>Presets\subversion%402x.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Common\Avatars.cs">

@@ -56,6 +56,7 @@
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
     <Profiling>false</Profiling>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDist|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -244,6 +245,15 @@
     <BundleResource Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.png">
+      <Link>Presets\subversion.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.xml">
+      <Link>Presets\subversion.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion%402x.png">
+      <Link>Presets\subversion%402x.png</Link>
+    </BundleResource>    
     <BundleResource Include="..\Common\Images\text-balloon.png">
       <Link>Resources\text-balloon.png</Link>
     </BundleResource>
