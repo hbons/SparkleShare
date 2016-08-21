@@ -35,7 +35,8 @@ build/m4/*.m4
 build/m4/shave/shave-libtool
 Sparkles/InstallationInfo.Directory.cs
 SparkleShare/Linux/sparkleshare
-SparkleShare/Mac/git*
+SparkleShare/Mac/git/*
+SparkleShare/Mac/git*.gz
 gnome-doc-utils.make
 /sparkleshare-*
 desktop.ini
@@ -45,4 +46,3 @@ _ReSharper.*
 *.wixpdb
 *.wxs
 *.dotCover
-
