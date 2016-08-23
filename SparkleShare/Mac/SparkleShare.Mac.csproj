@@ -253,7 +253,7 @@
     </BundleResource>
     <BundleResource Include="..\Common\Presets\subversion%402x.png">
       <Link>Presets\subversion%402x.png</Link>
-    </BundleResource>    
+    </BundleResource>
     <BundleResource Include="..\Common\Images\text-balloon.png">
       <Link>Resources\text-balloon.png</Link>
     </BundleResource>
@@ -287,6 +287,10 @@
     <ProjectReference Include="..\..\Sparkles\Git\Sparkles.Git.csproj">
       <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
       <Name>Sparkles.Git</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sparkles\Subversion\Sparkles.Subversion.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}</Project>
+      <Name>Sparkles.Subversion</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

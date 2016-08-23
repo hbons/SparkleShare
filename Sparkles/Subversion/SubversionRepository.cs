@@ -1,5 +1,7 @@
 //   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//   Portions Copyright (C) 2016 Paul Hammant <paul@hammant.org>
+
 //
 //   This program is free software: you can redistribute it and/or modify
 //   it under the terms of the GNU Lesser General Public License as 
@@ -27,43 +29,10 @@ namespace Sparkles.Subversion {
     public class SubversionRepository : BaseRepository {
 
         SSHAuthenticationInfo auth_info;
-        bool user_is_set;
-
-
-        string cached_branch;
-
-        string branch {
-            get {
-                if (!string.IsNullOrEmpty (this.cached_branch)) 
-                    return this.cached_branch;
-
-                var git = new SubversionCommand (LocalPath, "config core.ignorecase true");
-                git.StartAndWaitForExit ();
-
-                // TODO: ugly
-                while (this.in_merge && HasLocalChanges) {
-                    try {
-                        ResolveConflict ();
-                        
-                    } catch (IOException e) {
-                        Logger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
-                    }
-                }
-
-                git = new SubversionCommand (LocalPath, "config core.ignorecase false");
-                git.StartAndWaitForExit ();
-
-                git = new SubversionCommand (LocalPath, "rev-parse --abbrev-ref HEAD");
-                this.cached_branch = git.StartAndReadStandardOutput ();
-
-                return this.cached_branch;
-            }
-        }
-
 
         bool in_merge {
             get {
-                string merge_file_path = Path.Combine (LocalPath, ".git", "MERGE_HEAD");
+                string merge_file_path = Path.Combine (LocalPath, ".svn", "MERGE_HEAD");
                 return File.Exists (merge_file_path);
             }
         }
@@ -72,19 +41,13 @@ namespace Sparkles.Subversion {
         public SubversionRepository (string path, Configuration config, SSHAuthenticationInfo auth_info) : base (path, config)
         {
             this.auth_info = auth_info;
-
-            var git_config = new SubversionCommand (LocalPath, "config core.ignorecase false");
-            git_config.StartAndWaitForExit ();
-
-            git_config = new SubversionCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
-            git_config.StartAndWaitForExit ();
         }
 
 
         public override List<string> ExcludePaths {
             get {
                 List<string> rules = new List<string> ();
-                rules.Add (".git");
+                rules.Add (".svn");
 
                 return rules;
             }
@@ -93,53 +56,26 @@ namespace Sparkles.Subversion {
 
         public override double Size {
             get {
-                string file_path = Path.Combine (LocalPath, ".git", "info", "size");
-
-                try {
-                    string size = File.ReadAllText (file_path);
-                    return double.Parse (size);
-
-                } catch {
-                    return 0;
-                }
+                // TODO
+                return 0;
             }
         }
 
 
         public override double HistorySize {
             get {
-                string file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
-
-                try {
-                    string size = File.ReadAllText (file_path);
-                    return double.Parse (size);
-
-                } catch {
-                    return 0;
-                }
+                // TODO
+                return 0;
             }
-        }
-
-
-        void UpdateSizes ()
-        {
-            double size         = CalculateSizes (new DirectoryInfo (LocalPath));
-            double history_size = CalculateSizes (new DirectoryInfo (Path.Combine (LocalPath, ".git")));
-
-            string size_file_path = Path.Combine (LocalPath, ".git", "info", "size");
-            string history_size_file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
-
-            File.WriteAllText (size_file_path, size.ToString ());
-            File.WriteAllText (history_size_file_path, history_size.ToString ());
         }
 
 
         public override string CurrentRevision {
             get {
-                var git = new SubversionCommand (LocalPath, "rev-parse HEAD");
-                string output  = git.StartAndReadStandardOutput ();
+                var svn = new SubversionCommand (LocalPath, "info --show-item revision");
+                string output  = svn.StartAndReadStandardOutput ();
 
-                if (git.ExitCode == 0)
+                if (svn.ExitCode == 0)
                     return output;
 
                 return null;
@@ -149,37 +85,24 @@ namespace Sparkles.Subversion {
 
         public override bool HasRemoteChanges {
             get {
-                Logger.LogInfo ("Git", Name + " | Checking for remote changes...");
+                Logger.LogInfo ("Svn", Name + " | Checking for remote changes...");
                 string current_revision = CurrentRevision;
 
-                var git = new SubversionCommand (LocalPath,
-                    "ls-remote --heads --exit-code origin " + this.branch, auth_info);
+                var svn = new SubversionCommand (LocalPath,
+                    "info --show-item revision " + RemoteUrl, auth_info);
 
-                string output = git.StartAndReadStandardOutput ();
+                string output = svn.StartAndReadStandardOutput ();
 
-                if (git.ExitCode != 0)
+                if (svn.ExitCode != 0)
                     return false;
 
-                string remote_revision = "" + output.Substring (0, 40);
+                string remote_revision = output;
 
                 if (!remote_revision.Equals (current_revision)) {
-                    git = new SubversionCommand (LocalPath, "merge-base " + remote_revision + " master");
-                    git.StartAndWaitForExit ();
-
-                    if (git.ExitCode != 0) {
-                        Logger.LogInfo ("Git", Name + " | Remote changes found, local: " +
-                            current_revision + ", remote: " + remote_revision);
-
-                        Error = ErrorStatus.None;
-                        return true;
-                    
-                    } else {
-                        Logger.LogInfo ("Git", Name + " | Remote " + remote_revision + " is already in our history");
-                        return false;
-                    }
+                    return true;
                 }
 
-                Logger.LogInfo ("Git", Name + " | No remote changes, local+remote: " + current_revision);
+                Logger.LogInfo ("Svn", Name + " | No remote changes, local+remote: " + current_revision);
                 return false;
             }
         }
@@ -200,38 +123,16 @@ namespace Sparkles.Subversion {
             if (message != null)
                 Commit (message);
 
-            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
-            string pre_push_hook_content;
+            var svn_push = new SubversionCommand (LocalPath, string.Format ("commit", RemoteUrl), auth_info);
+            svn_push.StartInfo.RedirectStandardError = true;
+            svn_push.Start ();
 
-            // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
-            if (InstallationInfo.OperatingSystem == OS.Mac) {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + SubversionCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " pre-push \"$@\"";
-
-            } else {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + SubversionCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    "git-lfs pre-push \"$@\"";
-            }
-
-            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
-            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
-
-            var git_push = new SubversionCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
-            git_push.StartInfo.RedirectStandardError = true;
-            git_push.Start ();
-
-            if (!ReadStream (git_push))
+            if (!ReadStream (svn_push))
                 return false;
 
-            git_push.WaitForExit ();
+            svn_push.WaitForExit ();
 
-            UpdateSizes ();
-
-            if (git_push.ExitCode == 0)
+            if (svn_push.ExitCode == 0)
                 return true;
 
             Error = ErrorStatus.HostUnreachable;
@@ -241,46 +142,23 @@ namespace Sparkles.Subversion {
 
         public override bool SyncDown ()
         {
-            string lfs_is_behind_file_path = Path.Combine (LocalPath, ".git", "lfs", "is_behind");
 
-            if (StorageType == StorageType.LargeFiles)
-                File.Create (lfs_is_behind_file_path);
+            var svn_up = new SubversionCommand (LocalPath, "up", auth_info);
 
-            var git_fetch = new SubversionCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
+            svn_up.StartInfo.RedirectStandardError = true;
+            svn_up.Start ();
 
-            git_fetch.StartInfo.RedirectStandardError = true;
-            git_fetch.Start ();
-
-            if (!ReadStream (git_fetch))
+            if (!ReadStream (svn_up))
                 return false;
 
-            git_fetch.WaitForExit ();
+            svn_up.WaitForExit ();
 
-            if (git_fetch.ExitCode != 0) {
+            if (svn_up.ExitCode != 0) {
                 Error = ErrorStatus.HostUnreachable;
                 return false;
             }
 
-            if (Merge ()) {
-                if (StorageType == StorageType.LargeFiles) {
-                    // Pull LFS files manually to benefit from concurrency
-                    var git_lfs_pull = new SubversionCommand (LocalPath, "lfs pull origin", auth_info);
-                    git_lfs_pull.StartAndWaitForExit ();
-
-                    if (git_lfs_pull.ExitCode != 0) {
-                        Error = ErrorStatus.HostUnreachable;
-                        return false;
-                    }
-
-                    if (File.Exists (lfs_is_behind_file_path))
-                        File.Delete (lfs_is_behind_file_path);
-                }
-
-                UpdateSizes ();
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
 
@@ -305,7 +183,7 @@ namespace Sparkles.Subversion {
 
                     command.Kill ();
                     command.Dispose ();
-                    Logger.LogInfo ("Git", Name + " | Error status changed to " + Error);
+                    Logger.LogInfo ("Svn", Name + " | Error status changed to " + Error);
 
                     return false;
                 }
@@ -321,8 +199,8 @@ namespace Sparkles.Subversion {
             get {
                 PrepareDirectories (LocalPath);
 
-                var git = new SubversionCommand (LocalPath, "status --porcelain");
-                string output  = git.StartAndReadStandardOutput ();
+                var svn = new SubversionCommand (LocalPath, "status");
+                string output  = svn.StartAndReadStandardOutput ();
 
                 return !string.IsNullOrEmpty (output);
             }
@@ -330,252 +208,36 @@ namespace Sparkles.Subversion {
 
 
         public override bool HasUnsyncedChanges {
+            // TODO
             get {
-                if (StorageType == StorageType.LargeFiles) {
-                    string lfs_is_behind_file_path = Path.Combine (LocalPath, ".git", "lfs", "is_behind");
-
-                    if (File.Exists (lfs_is_behind_file_path))
-                        return true;
-                }
-
-                string unsynced_file_path =  Path.Combine (LocalPath, ".git", "has_unsynced_changes");
-                return File.Exists (unsynced_file_path);
+                return false;
             }
-
             set {
-                string unsynced_file_path = Path.Combine (LocalPath, ".git", "has_unsynced_changes");
-
-                if (value)
-                    File.WriteAllText (unsynced_file_path, "");
-                else
-                    File.Delete (unsynced_file_path);
             }
         }
-
 
         // Stages the made changes
         bool Add ()
         {
-            var git = new SubversionCommand (LocalPath, "add --all");
-            git.StartAndWaitForExit ();
+            var svn = new SubversionCommand (LocalPath, "add --depth infinity -q *");
+            string output = svn.StartAndReadStandardError()
+                               .Replace("svn: E200009: Could not add all targets because some targets are already versioned", "")
+                               .Replace ("svn: E200009: Illegal target for the requested operation", "");
 
-            return (git.ExitCode == 0);
+            return !string.IsNullOrEmpty (output);
         }
 
 
         // Commits the made changes
         void Commit (string message)
         {
-            SubversionCommand git;
+            SubversionCommand svn;
 
-            if (!this.user_is_set) {
-                git = new SubversionCommand (LocalPath, "config user.name \"" + base.local_config.User.Name + "\"");
-                git.StartAndWaitForExit ();
+            svn = new SubversionCommand (LocalPath, "commit -m=\"" + message + "\" " +
+                "--username=\"" + base.local_config.User.Name + "\"");
 
-                git = new SubversionCommand (LocalPath, "config user.email \"" + base.local_config.User.Email + "\"");
-                git.StartAndWaitForExit ();
-
-                this.user_is_set = true;
-            }
-
-            git = new SubversionCommand (LocalPath, "commit --all --message=\"" + message + "\" " +
-                "--author=\"" + base.local_config.User.Name + " <" + base.local_config.User.Email + ">\"");
-
-            git.StartAndReadStandardOutput ();
+            svn.StartAndReadStandardOutput ();
         }
-
-
-        // Merges the fetched changes
-        bool Merge ()
-        {
-            string message = FormatCommitMessage ();
-            
-            if (message != null) {
-                Add ();
-                Commit (message);
-            }
-
-            SubversionCommand git;
-
-            // Stop if we're already in a merge because something went wrong
-            if (this.in_merge) {
-                 git = new SubversionCommand (LocalPath, "merge --abort");
-                 git.StartAndWaitForExit ();
-            
-                 return false;
-            }
-
-            // Temporarily change the ignorecase setting to true to avoid
-            // conflicts in file names due to letter case changes
-            git = new SubversionCommand (LocalPath, "config core.ignorecase true");
-            git.StartAndWaitForExit ();
-
-            git = new SubversionCommand (LocalPath, "merge FETCH_HEAD");
-            git.StartInfo.RedirectStandardOutput = false;
-
-            string error_output = git.StartAndReadStandardError ();
-
-            if (git.ExitCode != 0) {
-                // Stop when we can't merge due to locked local files
-                // error: cannot stat 'filename': Permission denied
-                if (error_output.Contains ("error: cannot stat")) {
-                    Error = ErrorStatus.UnreadableFiles;
-                    Logger.LogInfo ("Git", Name + " | Error status changed to " + Error);
-
-                    git = new SubversionCommand (LocalPath, "merge --abort");
-                    git.StartAndWaitForExit ();
-
-                    git = new SubversionCommand (LocalPath, "config core.ignorecase false");
-                    git.StartAndWaitForExit ();
-
-                    return false;
-                
-                } else {
-                    Logger.LogInfo ("Git", error_output);
-                    Logger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-                    
-                    while (this.in_merge && HasLocalChanges) {
-                        try {
-                            ResolveConflict ();
-
-                        } catch (Exception e) {
-                            Logger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
-                        }
-                    }
-
-                    Logger.LogInfo ("Git", Name + " | Conflict resolved");
-                }
-            }
-
-            git = new SubversionCommand (LocalPath, "config core.ignorecase false");
-            git.StartAndWaitForExit ();
-
-            return true;
-        }
-
-
-        void ResolveConflict ()
-        {
-            // This is a list of conflict status codes that Git uses, their
-            // meaning, and how SparkleShare should handle them.
-            //
-            // DD    unmerged, both deleted    -> Do nothing
-            // AU    unmerged, added by us     -> Use server's, save ours as a timestamped copy
-            // UD    unmerged, deleted by them -> Use ours
-            // UA    unmerged, added by them   -> Use server's, save ours as a timestamped copy
-            // DU    unmerged, deleted by us   -> Use server's
-            // AA    unmerged, both added      -> Use server's, save ours as a timestamped copy
-            // UU    unmerged, both modified   -> Use server's, save ours as a timestamped copy
-            // ??    unmerged, new files       -> Stage the new files
-
-            var git_status = new SubversionCommand (LocalPath, "status --porcelain");
-            string output         = git_status.StartAndReadStandardOutput ();
-
-            string [] lines = output.Split ("\n".ToCharArray ());
-            bool trigger_conflict_event = false;
-
-            foreach (string line in lines) {
-                string conflicting_path = line.Substring (3);
-                conflicting_path        = EnsureSpecialCharacters (conflicting_path);
-                conflicting_path        = conflicting_path.Trim ("\"".ToCharArray ());
-
-                // Remove possible rename indicators
-                string [] separators = {" -> \"", " -> "};
-                foreach (string separator in separators) {
-                    if (conflicting_path.Contains (separator)) {
-                        conflicting_path = conflicting_path.Substring (
-                            conflicting_path.IndexOf (separator) + separator.Length);
-                    }
-                }
-
-                Logger.LogInfo ("Git", Name + " | Conflict type: " + line);
-
-                // Ignore conflicts in hidden files and use the local versions
-                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
-                    Logger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
-
-                    // Recover local version
-                    var git_ours = new SubversionCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
-                    git_ours.StartAndWaitForExit ();
-
-                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-
-                    if (File.Exists (abs_conflicting_path))
-                        File.SetAttributes (abs_conflicting_path, FileAttributes.Hidden);
-            
-                    continue;
-                }
-
-                Logger.LogInfo ("Git", Name + " | Resolving: " + conflicting_path);
-
-                // Both the local and server version have been modified
-                if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
-                    line.StartsWith ("AU") || line.StartsWith ("UA")) {
-
-                    // Recover local version
-                    var git_ours = new SubversionCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
-                    git_ours.StartAndWaitForExit ();
-
-                    // Append a timestamp to local version.
-                    // Windows doesn't allow colons in the file name, so
-                    // we use "h" between the hours and minutes instead.
-                    string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
-                    string our_path = Path.GetFileNameWithoutExtension (conflicting_path) +
-                        " (" + base.local_config.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
-
-                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-                    string abs_our_path         = Path.Combine (LocalPath, our_path);
-
-                    if (File.Exists (abs_conflicting_path) && !File.Exists (abs_our_path))
-                        File.Move (abs_conflicting_path, abs_our_path);
-
-                    // Recover server version
-                    var git_theirs = new SubversionCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
-                    git_theirs.StartAndWaitForExit ();
-
-                    trigger_conflict_event = true;
-
-            
-                // The server version has been modified, but the local version was removed
-                } else if (line.StartsWith ("DU")) {
-
-                    // The modified local version is already in the checkout, so it just needs to be added.
-                    // We need to specifically mention the file, so we can't reuse the Add () method
-                    var git_add = new SubversionCommand (LocalPath, "add \"" + conflicting_path + "\"");
-                    git_add.StartAndWaitForExit ();
-
-                
-                // The local version has been modified, but the server version was removed
-                } else if (line.StartsWith ("UD")) {
-                    
-                    // Recover server version
-                    var git_theirs = new SubversionCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
-                    git_theirs.StartAndWaitForExit ();
-
-            
-                // Server and local versions were removed
-                } else if (line.StartsWith ("DD")) {
-                    Logger.LogInfo ("Git", Name + " | No need to resolve: " + line);
-
-                // New local files
-                } else if (line.StartsWith ("??")) {
-                    Logger.LogInfo ("Git", Name + " | Found new file, no need to resolve: " + line);
-                
-                } else {
-                    Logger.LogInfo ("Git", Name + " | Don't know what to do with: " + line);
-                }
-            }
-
-            Add ();
-
-            var git = new SubversionCommand (LocalPath, "commit --message \"Conflict resolution by SparkleShare\"");
-            git.StartInfo.RedirectStandardOutput = false;
-            git.StartAndWaitForExit ();
-
-            if (trigger_conflict_event)
-                OnConflictResolved ();
-        }
-
 
         public override void RestoreFile (string path, string revision, string target_file_path)
         {
@@ -585,11 +247,11 @@ namespace Sparkles.Subversion {
             if (revision == null)
                 throw new ArgumentNullException ("revision");
 
-            Logger.LogInfo ("Git", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
+            Logger.LogInfo ("Svn", Name + " | Restoring \"" + path + "\" (revision " + revision + ")");
 
             // Restore the older file...
-            var git = new SubversionCommand (LocalPath, "checkout " + revision + " \"" + path + "\"");
-            git.StartAndWaitForExit ();
+            var svn = new SubversionCommand (LocalPath, "checkout -r" + revision + " \"" + path + "\"");
+            svn.StartAndWaitForExit ();
 
             string local_file_path = Path.Combine (LocalPath, path);
 
@@ -598,13 +260,13 @@ namespace Sparkles.Subversion {
                 File.Move (local_file_path, target_file_path);
             
             } catch {
-                Logger.LogInfo ("Git",
+                Logger.LogInfo ("Svn",
                     Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
             }
 
             // ...and restore the most recent revision
-            git = new SubversionCommand (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
-            git.StartAndWaitForExit ();
+            svn = new SubversionCommand (LocalPath, "checkout -r" + CurrentRevision + " \"" + path + "\"");
+            svn.StartAndWaitForExit ();
 
 
             if (target_file_path.StartsWith (LocalPath))
@@ -632,55 +294,30 @@ namespace Sparkles.Subversion {
         List<ChangeSet> GetChangeSetsInternal (string path)
         {
             var change_sets = new List <ChangeSet> ();
-            SubversionCommand git;
+            SubversionCommand svn;
 
-            if (path == null) {
-                git = new SubversionCommand (LocalPath, "--no-pager log --since=1.month --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
+            svn = new SubversionCommand (LocalPath, "log -l 100");
 
-            } else {
-                path = path.Replace ("\\", "/");
-
-                git = new SubversionCommand (LocalPath, "--no-pager log --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges -- \"" + path + "\"");
-            }
-
-            string output = git.StartAndReadStandardOutput ();
-
-            if (path == null && string.IsNullOrWhiteSpace (output)) {
-                git = new SubversionCommand (LocalPath, "--no-pager log -n 75 --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
-
-                output = git.StartAndReadStandardOutput ();
-            }
+            string output = svn.StartAndReadStandardOutput ();
 
             string [] lines      = output.Split ("\n".ToCharArray ());
             List<string> entries = new List <string> ();
 
             // Split up commit entries
             int line_number = 0;
-            bool first_pass = true;
-            string entry = "", last_entry = "";
-            foreach (string line in lines) {
-                if (line.StartsWith ("commit") && !first_pass) {
-                    entries.Add (entry);
-                    entry = "";
-                    line_number = 0;
+            string entry = "";
 
-                } else {
-                    first_pass = false;
+            while (lines.Length <= line_number) {
+                if (lines [line_number].StartsWith ("-------")) {
+                    if (lines [line_number + 1].StartsWith ("r")) {
+                        entry = lines [line_number + 1];
+                        entry = entry + " <###> " + lines [line_number + 3];
+                        line_number += 3;
+                        entries.Add (entry);
+                    }
+                    line_number += 1;
                 }
-
-                // Only parse first 250 files to prevent memory issues
-                if (line_number < 250) {
-                    entry += line + "\n";
-                    line_number++;
-                }
-
-                last_entry = entry;
             }
-
-            entries.Add (last_entry);
 
             // Parse commit entries
             foreach (string log_entry in entries) {
@@ -896,15 +533,15 @@ namespace Sparkles.Subversion {
                     if (IsSymlink (child_path))
                         continue;
 
-                    if (child_path.EndsWith (".git")) {
-                        if (child_path.Equals (Path.Combine (LocalPath, ".git")))
+                    if (child_path.EndsWith (".svn")) {
+                        if (child_path.Equals (Path.Combine (LocalPath, ".svn")))
                             continue;
 
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
     
                         if (File.Exists (HEAD_file_path)) {
                             File.Move (HEAD_file_path, HEAD_file_path + ".backup");
-                            Logger.LogInfo ("Git", Name + " | Renamed " + HEAD_file_path);
+                            Logger.LogInfo ("Svn", Name + " | Renamed " + HEAD_file_path);
                         }
     
                         continue;
@@ -923,13 +560,13 @@ namespace Sparkles.Subversion {
                             File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
 
                         } catch {
-                            Logger.LogInfo ("Git", Name + " | Failed adding empty folder " + path);
+                            Logger.LogInfo ("Svn", Name + " | Failed adding empty folder " + path);
                         }
                     }
                 }
 
             } catch (IOException e) {
-                Logger.LogInfo ("Git", "Failed preparing directory", e);
+                Logger.LogInfo ("Svn", "Failed preparing directory", e);
             }
         }
 
@@ -939,11 +576,11 @@ namespace Sparkles.Subversion {
         {
             List<Change> changes = new List<Change> ();
 
-            var git_status = new SubversionCommand (LocalPath, "status --porcelain");
-            git_status.Start ();
+            var svn_status = new SubversionCommand (LocalPath, "status --porcelain");
+            svn_status.Start ();
             
-            while (!git_status.StandardOutput.EndOfStream) {
-                string line = git_status.StandardOutput.ReadLine ();
+            while (!svn_status.StandardOutput.EndOfStream) {
+                string line = svn_status.StandardOutput.ReadLine ();
                 line        = line.Trim ();
                 
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
@@ -977,8 +614,8 @@ namespace Sparkles.Subversion {
                 changes.Add (change);
             }
             
-            git_status.StandardOutput.ReadToEnd ();
-            git_status.WaitForExit ();
+            svn_status.StandardOutput.ReadToEnd ();
+            svn_status.WaitForExit ();
 
             return changes;
         }
@@ -1026,8 +663,7 @@ namespace Sparkles.Subversion {
             try {
                 foreach (DirectoryInfo directory in parent.GetDirectories ()) {
                     if (directory.FullName.IsSymlink () ||
-                        directory.Name.Equals (".git") || 
-                        directory.Name.Equals ("rebase-apply")) {
+                        directory.Name.Equals (".svn")) {
 
                         continue;
                     }

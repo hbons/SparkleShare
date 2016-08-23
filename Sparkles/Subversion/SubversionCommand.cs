@@ -1,5 +1,6 @@
 //   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hylkebons@gmail.com>
+//   Portions Copyright (C) 2016 Paul Hammant <paul@hammant.org>
 //
 //   This program is free software: you can redistribute it and/or modify
 //   it under the terms of the GNU Lesser General Public License as 
@@ -21,84 +22,57 @@ namespace Sparkles.Subversion {
 
     public class SubversionCommand : Command {
 
-        public static string SSHPath = "ssh";
         public static string ExecPath;
 
 
-        static string git_path;
+        static string svn_path;
 
-        public static string GitPath {
+        public static string SvnPath {
             get {
-                if (git_path == null)
-                    git_path = LocateCommand ("svn");
+                if (svn_path == null)
+                    svn_path = LocateCommand ("svn");
 
-                return git_path;
+                return svn_path;
             }
 
             set {
-                git_path = value;
+                svn_path = value;
             }
         }
 
 
-        public static string GitVersion {
+        public static string SvnVersion {
             get {
-                if (GitPath == null)
-                    GitPath = LocateCommand ("svn");
+                if (SvnPath == null)
+                    SvnPath = LocateCommand ("svn");
 
-                var git_version = new Command (GitPath, "--version", false);
+                var svn_version = new Command (SvnPath, "--version", false);
 
                 if (ExecPath != null)
-                    git_version.SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
+                    svn_version.SetEnvironmentVariable ("SVN_EXEC_PATH", ExecPath);
 
-                string version = git_version.StartAndReadStandardOutput ();
-                return version.Replace ("svn version ", "");
+                string version = svn_version.StartAndReadStandardOutput ();
+                return version.Substring(0, version.IndexOf("\n")).Replace ("svn, version ", "");
             }
         }
-
-
-        public static string GitLFSVersion {
-            get {
-                if (GitPath == null)
-                    GitPath = LocateCommand ("git");
-
-                var git_lfs_version = new Command (GitPath, "lfs version", false);
-
-                if (ExecPath != null)
-                    git_lfs_version.SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
-
-                string version = git_lfs_version.StartAndReadStandardOutput ();
-                return version.Replace ("git-lfs/", "").Split (' ') [0];
-            }
-        }
-
 
         public SubversionCommand (string working_dir, string args) : this (working_dir, args, null)
         {
         }
 
 
-        public SubversionCommand (string working_dir, string args, SSHAuthenticationInfo auth_info) : base (GitPath, args)
+        public SubversionCommand (string working_dir, string args, SSHAuthenticationInfo auth_info) : base (SvnPath, args)
         {
             StartInfo.WorkingDirectory = working_dir;
 
-            string GIT_SSH_COMMAND = SSHPath;
-
-            if (auth_info != null)
-                GIT_SSH_COMMAND = FormatGitSSHCommand (auth_info);
-
             if (ExecPath != null)
-                SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
+                SetEnvironmentVariable ("SVN_EXEC_PATH", ExecPath);
 
-			SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
-            SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
 			SetEnvironmentVariable ("LANG", "en_US");
         }
 
 
         static Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
-        static Regex progress_regex_lfs = new Regex (@".*\(([0-9]+) of ([0-9]+) files\).*", RegexOptions.Compiled);
-        static Regex progress_regex_lfs_skipped = new Regex (@".*\(([0-9]+) of ([0-9]+) files, ([0-9]+) skipped\).*", RegexOptions.Compiled);
         static Regex speed_regex = new Regex (@"([0-9\.]+) ([KM])iB/s", RegexOptions.Compiled);
 
         public static ErrorStatus ParseProgress (string line, out double percentage, out double speed, out string information)
@@ -109,43 +83,11 @@ namespace Sparkles.Subversion {
 
             Match match;
 
-            if (line.StartsWith ("Git LFS:")) {
-                match = progress_regex_lfs_skipped.Match (line);
-
-                int current_file = 0;
-                int total_file_count = 0;
-                int skipped_file_count = 0;
-
-                if (match.Success) {
-                    // "skipped" files are objects that have already been transferred
-                    skipped_file_count = int.Parse (match.Groups [3].Value);
-
-                } else {
-
-                    match = progress_regex_lfs.Match (line);
-
-                    if (!match.Success)
-                        return ErrorStatus.None;
-                }
-
-                current_file = int.Parse (match.Groups [1].Value);
-
-                if (current_file == 0)
-                    return ErrorStatus.None;
-
-                total_file_count = int.Parse (match.Groups [2].Value) - skipped_file_count;
-
-                percentage = Math.Round ((double) current_file / total_file_count * 100, 0);
-                information = string.Format ("{0} of {1} files", current_file, total_file_count);
-
-                return ErrorStatus.None;
-            }
-
             match = progress_regex.Match (line);
 
             if (!match.Success || string.IsNullOrWhiteSpace (line)) {
                 if (!string.IsNullOrWhiteSpace (line))
-                    Logger.LogInfo ("Git", line);
+                    Logger.LogInfo ("Svn", line);
 
                 return FindError (line);
             }
@@ -208,17 +150,6 @@ namespace Sparkles.Subversion {
             }
 
             return error;
-        }
-
-
-        public static string FormatGitSSHCommand (SSHAuthenticationInfo auth_info)
-        {
-            return SSHPath + " " +
-                "-i " + auth_info.PrivateKeyFilePath.Replace (" ", "\\ ") + " " +
-                "-o UserKnownHostsFile=" + auth_info.KnownHostsFilePath.Replace (" ", "\\ ") + " " +
-                "-o IdentitiesOnly=yes" + " " + // Don't fall back to other keys on the system
-                "-o PasswordAuthentication=no" + " " + // Don't hang on possible password prompts
-                "-F /dev/null"; // Ignore the system's SSH config file
         }
     }
 }
