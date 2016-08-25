@@ -576,7 +576,7 @@ namespace Sparkles.Subversion {
         {
             List<Change> changes = new List<Change> ();
 
-            var svn_status = new SubversionCommand (LocalPath, "status --porcelain");
+            var svn_status = new SubversionCommand (LocalPath, "status");
             svn_status.Start ();
             
             while (!svn_status.StandardOutput.EndOfStream) {
