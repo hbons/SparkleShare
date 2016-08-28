@@ -89,16 +89,6 @@ namespace Sparkles.Subversion {
             while (!output_stream.EndOfStream) {
                 string line = output_stream.ReadLine ();
 
-                ErrorStatus error = SubversionCommand.ParseProgress (line, out percentage, out speed, out information);
-
-                if (error != ErrorStatus.None) {
-                    IsActive = false;
-                    svn_checkout.Kill ();
-                    svn_checkout.Dispose ();
-
-                    return false;
-                }
-
                 OnProgressChanged (percentage, speed, information);
             }
 

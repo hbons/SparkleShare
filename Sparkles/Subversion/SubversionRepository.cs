@@ -120,19 +120,16 @@ namespace Sparkles.Subversion {
             if (string.IsNullOrEmpty (message))
                 message = FormatCommitMessage ();
 
-            if (message != null)
-                Commit (message);
+            var svn_commit = new SubversionCommand (LocalPath, string.Format ("commit -m=\"" + message + "\" ", RemoteUrl), auth_info);
+            svn_commit.StartInfo.RedirectStandardError = true;
+            svn_commit.Start ();
 
-            var svn_push = new SubversionCommand (LocalPath, string.Format ("commit", RemoteUrl), auth_info);
-            svn_push.StartInfo.RedirectStandardError = true;
-            svn_push.Start ();
-
-            if (!ReadStream (svn_push))
+            if (!ReadStream (svn_commit))
                 return false;
 
-            svn_push.WaitForExit ();
+            svn_commit.WaitForExit ();
 
-            if (svn_push.ExitCode == 0)
+            if (svn_commit.ExitCode == 0)
                 return true;
 
             Error = ErrorStatus.HostUnreachable;
@@ -164,31 +161,15 @@ namespace Sparkles.Subversion {
 
         bool ReadStream (SubversionCommand command)
         {
+
             StreamReader output_stream = command.StandardError;
 
-            if (StorageType == StorageType.LargeFiles)
-                output_stream = command.StandardOutput;
-
-            double percentage = 0;
-            double speed = 0;
             string information = "";
 
             while (!output_stream.EndOfStream) {
                 string line = output_stream.ReadLine ();
-                ErrorStatus error = SubversionCommand.ParseProgress (line, out percentage, out speed, out information);
 
-                if (error != ErrorStatus.None) {
-                    Error = error;
-                    information = line;
-
-                    command.Kill ();
-                    command.Dispose ();
-                    Logger.LogInfo ("Svn", Name + " | Error status changed to " + Error);
-
-                    return false;
-                }
-
-                OnProgressChanged (percentage, speed, information);
+                OnProgressChanged (0, 0, information);
             }
 
             return true;
@@ -219,25 +200,23 @@ namespace Sparkles.Subversion {
         // Stages the made changes
         bool Add ()
         {
-            var svn = new SubversionCommand (LocalPath, "add --depth infinity -q *");
-            string output = svn.StartAndReadStandardError()
-                               .Replace("svn: E200009: Could not add all targets because some targets are already versioned", "")
-                               .Replace ("svn: E200009: Illegal target for the requested operation", "");
 
-            return !string.IsNullOrEmpty (output);
+            var svn = new SubversionCommand (LocalPath, "status " + LocalPath);
+            string output = svn.StartAndReadStandardOutput ();
+            int count = 0;
+            using (StringReader reader = new StringReader (output)) {
+                string line;
+                while ((line = reader.ReadLine ()) != null) {
+                    if (line.StartsWith ("?      ")) {
+                        new SubversionCommand (LocalPath, "add " + line.Substring(7)).Start();
+                        count++;
+                    }
+                }
+            }
+
+            return count > 0;
         }
 
-
-        // Commits the made changes
-        void Commit (string message)
-        {
-            SubversionCommand svn;
-
-            svn = new SubversionCommand (LocalPath, "commit -m=\"" + message + "\" " +
-                "--username=\"" + base.local_config.User.Name + "\"");
-
-            svn.StartAndReadStandardOutput ();
-        }
 
         public override void RestoreFile (string path, string revision, string target_file_path)
         {
@@ -581,6 +560,7 @@ namespace Sparkles.Subversion {
             
             while (!svn_status.StandardOutput.EndOfStream) {
                 string line = svn_status.StandardOutput.ReadLine ();
+
                 line        = line.Trim ();
                 
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
