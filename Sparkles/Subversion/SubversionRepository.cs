@@ -208,9 +208,16 @@ namespace Sparkles.Subversion {
                 string line;
                 while ((line = reader.ReadLine ()) != null) {
                     if (line.StartsWith ("?      ")) {
-                        new SubversionCommand (LocalPath, "add " + line.Substring(7)).Start();
+                        new SubversionCommand (LocalPath, "add " + line.Substring (7)).Start ();
+                        count++;
+                    } else if (line.StartsWith ("M      ")) {
+                        // Subversion is going to act on this by default
+                        count++;
+                    } else if (line.StartsWith ("!      ")) {
+                        new SubversionCommand (LocalPath, "delete " + line.Substring (7)).Start ();
                         count++;
                     }
+                    //TODO see if Add and Delete are on the same item, and do a 'move --force' instead
                 }
             }
 
@@ -550,21 +557,18 @@ namespace Sparkles.Subversion {
         }
 
 
-
         List<Change> ParseStatus ()
         {
             List<Change> changes = new List<Change> ();
 
-            var svn_status = new SubversionCommand (LocalPath, "status");
+            var svn_status = new SubversionCommand (LocalPath, "status " + LocalPath);
             svn_status.Start ();
             
             while (!svn_status.StandardOutput.EndOfStream) {
                 string line = svn_status.StandardOutput.ReadLine ();
 
                 line        = line.Trim ();
-                
-                if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
-                    line = line.Replace (".empty", "");
+                Console.WriteLine ("LL " + line);
 
                 Change change;
                 
