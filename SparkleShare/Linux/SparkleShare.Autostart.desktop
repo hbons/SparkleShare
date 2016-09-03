@@ -1,8 +1,7 @@
 [Desktop Entry]
 Name=SparkleShare
 Type=Application
-Exec=sh -c "type -P sparkleshare &>/dev/null && sparkleshare || xdg-app run org.sparkleshare.SparkleShare"
+Exec=sh -c "type -P sparkleshare &>/dev/null && sparkleshare || flatpak run org.sparkleshare.SparkleShare"
 Icon=org.sparkleshare.SparkleShare
 Terminal=false
 X-GNOME-Autostart-enabled=true
-
