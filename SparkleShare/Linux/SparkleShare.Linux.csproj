@@ -49,6 +49,10 @@
       <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
       <Name>Sparkles.Git</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Sparkles\Subversion\Sparkles.Subversion.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}</Project>
+      <Name>Sparkles.Subversion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Sparkles\Sparkles.csproj">
       <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
       <Name>Sparkles</Name>
@@ -117,6 +121,15 @@
     <None Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </None>
+    <BundleResource Include="..\Common\Presets\subversion.png">
+      <Link>Presets\subversion.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.xml">
+      <Link>Presets\subversion.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion%402x.png">
+      <Link>Presets\subversion%402x.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Common\Avatars.cs">

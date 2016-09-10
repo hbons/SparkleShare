@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <preset>
+    <info>
+        <name>Subversion Server</name>
+        <description>Subversion Server</description>
+        <icon>subversion.png</icon>
+        <backend>Subversion</backend>
+    </info>
+    <address>
+      <value/>
+      <example>svn://subversion.somewhere.com</example>
+    </address>
+    <path>
+      <value/>
+      <example>path/to/folder/you/want/as/root</example>
+    </path>
+  </preset>
+</sparkleshare>

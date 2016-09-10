@@ -215,6 +215,10 @@
       <Link>Presets\planio.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\Common\Presets\subversion.png">
+      <Link>Presets\subversion.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Presets\ssnet.xml">
@@ -239,6 +243,10 @@
     </None>
     <None Include="..\Common\Presets\planio.xml">
       <Link>Presets\planio.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Common\Presets\subversion.xml">
+      <Link>Presets\subversion.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

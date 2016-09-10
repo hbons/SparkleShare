@@ -237,6 +237,10 @@ namespace Sparkles {
                 return char.ToUpper (backend [0]) + backend.Substring (1);
             }
 
+            if (address.StartsWith ("svn", StringComparison.InvariantCultureIgnoreCase)) {
+                return "Subversion";
+            }
+
             return "Git";
         }
 

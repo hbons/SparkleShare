@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare.Windows", "Spa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare.Linux", "SparkleShare\Linux\SparkleShare.Linux.csproj", "{5714D3CA-88A6-4330-A29D-4CA90D1D193C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparkles.Subversion", "Sparkles\Subversion\Sparkles.Subversion.csproj", "{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|Any CPU = Release|Any CPU
@@ -48,6 +50,12 @@ Global
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.ReleaseDist|Any CPU.ActiveCfg = ReleaseDist|Any CPU
 		{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}.ReleaseDist|Any CPU.Build.0 = ReleaseDist|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
+		{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

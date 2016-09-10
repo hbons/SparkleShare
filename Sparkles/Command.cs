@@ -54,7 +54,7 @@ namespace Sparkles {
 
             if (!string.IsNullOrEmpty (StartInfo.WorkingDirectory))
                 folder = Path.GetFileName (StartInfo.WorkingDirectory) + " | ";
-                
+
             if (write_output)
                 Logger.LogInfo ("Cmd", folder + Path.GetFileName (StartInfo.FileName) + " " + StartInfo.Arguments);
 

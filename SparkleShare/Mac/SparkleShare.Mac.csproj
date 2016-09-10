@@ -56,6 +56,7 @@
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
     <Profiling>false</Profiling>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseDist|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -244,6 +245,15 @@
     <BundleResource Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.png">
+      <Link>Presets\subversion.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion.xml">
+      <Link>Presets\subversion.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\subversion%402x.png">
+      <Link>Presets\subversion%402x.png</Link>
+    </BundleResource>
     <BundleResource Include="..\Common\Images\text-balloon.png">
       <Link>Resources\text-balloon.png</Link>
     </BundleResource>
@@ -277,6 +287,10 @@
     <ProjectReference Include="..\..\Sparkles\Git\Sparkles.Git.csproj">
       <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
       <Name>Sparkles.Git</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sparkles\Subversion\Sparkles.Subversion.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6AAAA}</Project>
+      <Name>Sparkles.Subversion</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
