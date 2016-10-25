@@ -167,7 +167,7 @@ namespace SparkleShare {
         public abstract void SetFolderIcon ();
 
         // Creates the SparkleShare folder in the user's home folder
-        public abstract bool CreateSparkleShareFolder ();
+        public abstract void CreateSparkleShareFolder ();
         
         // Opens the SparkleShare folder or an (optional) subfolder
         public abstract void OpenFolder (string path);
@@ -206,9 +206,6 @@ namespace SparkleShare {
             Config = new Configuration (config_path, "projects.xml");
             Configuration.DefaultConfiguration = Config;
 
-            UserAuthenticationInfo = new SSHAuthenticationInfo ();
-            SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
-
             FoldersPath = Config.FoldersPath;
         }
         
@@ -226,6 +223,9 @@ namespace SparkleShare {
 
             // TODO: ToString() with nice os version names (Mac OS X Yosemite, Fedora 24, Ubuntu 16.04, etc.)
             Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
+
+            UserAuthenticationInfo = new SSHAuthenticationInfo();
+            SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
 
             Preset.PresetsPath = PresetsPath;
             InstallProtocolHandler ();
