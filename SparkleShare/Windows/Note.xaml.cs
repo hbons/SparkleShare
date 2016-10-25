@@ -26,13 +26,13 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public partial class SparkleNote : Window {
+    public partial class Note : Window {
 
-        public SparkleNoteController Controller = new SparkleNoteController ();
+        public NoteController Controller = new NoteController ();
 
         private readonly string default_text = "Anything to add?";
 
-        public SparkleNote()
+        public Note ()
         {
             InitializeComponent();
 

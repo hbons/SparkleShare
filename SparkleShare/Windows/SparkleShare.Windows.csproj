@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,6 +44,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DefineConstants>TRACE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>..\..\bin\</OutputPath>
@@ -53,6 +54,26 @@
     <DebugSymbols>true</DebugSymbols>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Windows-Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWindows|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
     <OutputPath>..\..\bin\</OutputPath>
@@ -80,53 +101,42 @@
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SparkleBubblesController.cs">
-      <Link>SparkleBubblesController.cs</Link>
+    <Compile Include="..\Common\BubblesController.cs">
+      <Link>BubblesController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleControllerBase.cs">
-      <Link>SparkleControllerBase.cs</Link>
+    <Compile Include="..\Common\BaseController.cs">
+      <Link>BaseController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleExtensions.cs">
-      <Link>SparkleExtensions.cs</Link>
+    <Compile Include="..\Common\NoteController.cs">
+      <Link>NoteController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleInvite.cs">
-      <Link>SparkleInvite.cs</Link>
+    <Compile Include="..\Common\StatusIconController.cs">
+      <Link>StatusIconController.cs</Link>
     </Compile>
-    <Compile Include="..\SparkleNoteController.cs">
-      <Link>SparkleNoteController.cs</Link>
+    <Compile Include="..\Common\SetupController.cs" />
+    <Compile Include="EventLog.cs" />
+    <Compile Include="Note.xaml.cs">
+      <DependentUpon>Note.xaml</DependentUpon>
     </Compile>
-    <Compile Include="..\SparklePlugin.cs">
-      <Link>SparklePlugin.cs</Link>
-    </Compile>
-    <Compile Include="..\SparkleStatusIconController.cs">
-      <Link>SparkleStatusIconController.cs</Link>
-    </Compile>
-    <Compile Include="..\SparkleSetupController.cs" />
-    <Compile Include="SparkleEventLogWindow.xaml.cs">
-      <DependentUpon>SparkleEventLogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SparkleNote.xaml.cs">
-      <DependentUpon>SparkleNote.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SparkleShortcut.cs" />
-    <Compile Include="SparkleUI.cs" />
-    <Compile Include="..\SparkleAboutController.cs" />
-    <Compile Include="..\SparkleAvatars.cs" />
-    <Compile Include="SparkleBubbles.cs" />
-    <Compile Include="SparkleAbout.cs" />
-    <Compile Include="SparkleController.cs" />
-    <Compile Include="SparkleSetup.cs" />
-    <Compile Include="SparkleStatusIcon.cs" />
+    <Compile Include="Shortcut.cs" />
+    <Compile Include="UserInterface.cs" />
+    <Compile Include="..\Common\AboutController.cs" />
+    <Compile Include="..\Common\Avatars.cs" />
+    <Compile Include="Bubbles.cs" />
+    <Compile Include="About.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="StatusIcon.cs" />
     <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="..\SparkleEventLogController.cs">
+    <Compile Include="..\Common\EventLogController.cs">
       <Link>SparkleEventLogController.cs</Link>
     </Compile>
-    <Compile Include="SparkleSetupWindow.cs" />
-    <Compile Include="..\Program.cs">
-      <Link>Program.cs</Link>
+    <Compile Include="SetupWindow.cs" />
+    <Compile Include="..\Common\SparkleShare.cs">
+      <Link>SparkleShare.cs</Link>
     </Compile>
-    <Compile Include="SparkleNotifyIcon.cs" />
-    <Compile Include="SparkleSpinner.cs" />
+    <Compile Include="NotifyIcon.cs" />
+    <Compile Include="Spinner.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio />
@@ -155,9 +165,11 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Common\Images\about.png">
       <Link>Images\about.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\Images\side-splash.png">
       <Link>Images\side-splash.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
@@ -174,40 +186,52 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\Images\user-icon-default.png">
       <Link>Images\user-icon-default.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\document-added-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-added-12.png">
       <Link>Images\document-added-12.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\document-deleted-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-deleted-12.png">
       <Link>Images\document-deleted-12.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\document-edited-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
       <Link>Images\document-edited-12.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\document-moved-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-moved-12.png">
       <Link>Images\document-moved-12.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\process-working-22.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\process-working-22.png">
       <Link>Images\process-working-22.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Images\process-syncing-down.png" />
-    <EmbeddedResource Include="Images\process-syncing-idle.png" />
-    <EmbeddedResource Include="Images\process-syncing-up.png" />
-    <EmbeddedResource Include="Images\process-syncing.png" />
+    <EmbeddedResource Include="Images\process-syncing-down.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\process-syncing-idle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\process-syncing-up.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\process-syncing.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\Common\Images\tutorial-slide-1.png">
       <Link>Images\tutorial-slide-1.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Common\Images\tutorial-slide-2.png">
       <Link>Images\tutorial-slide-2.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Presets\github.png">
       <Link>Presets\github.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Common\Presets\gitorious.png">
-      <Link>Presets\gitorious.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\Common\Presets\own-server.png">
@@ -218,30 +242,19 @@
       <Link>Presets\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\ssnet.png">
-      <Link>Presets\ssnet.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\Common\Presets\planio.png">
       <Link>Presets\planio.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Presets\ssnet.xml">
-      <Link>Presets\ssnet.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\Common\Presets\bitbucket.xml">
       <Link>Presets\bitbucket.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\Common\Presets\github.xml">
       <Link>Presets\github.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Common\Presets\gitorious.xml">
-      <Link>Presets\gitorious.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\Common\Presets\own-server.xml">
@@ -254,26 +267,35 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\folder.png" />
-    <EmbeddedResource Include="Images\process-syncing-error.png" />
-    <EmbeddedResource Include="Images\sparkleshare-app.ico" />
-    <EmbeddedResource Include="Images\sparkleshare-folder.png" />
+    <EmbeddedResource Include="Images\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\process-syncing-error.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\sparkleshare-app.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\sparkleshare-folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\tutorial-slide-3.png" />
+    <EmbeddedResource Include="Images\tutorial-slide-3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\Common\Images\text-balloon.png">
       <Link>Images\text-balloon.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Images\sparkleshare-folder.ico" />
+    <Content Include="Images\sparkleshare-folder.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SparkleEventLogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SparkleNote.xaml">
+    <Page Include="Note.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

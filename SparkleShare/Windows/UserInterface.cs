@@ -23,33 +23,33 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public class SparkleUI {
+    public class UserInterface {
 
-        public SparkleSetup Setup;
-        public SparkleEventLogWindow EventLog;
-        public SparkleBubbles Bubbles;
-        public SparkleStatusIcon StatusIcon;
-        public SparkleAbout About;
-        public SparkleNote Note;
+        public Setup Setup;
+        public EventLog EventLog;
+        public Bubbles Bubbles;
+        public StatusIcon StatusIcon;
+        public About About;
+        public Note Note;
 
-        static SparkleUI ()
+        static UserInterface ()
         {
             Application.ThreadException += OnUnhandledException;
             Application.SetUnhandledExceptionMode (UnhandledExceptionMode.CatchException);
         }
 
 
-        public SparkleUI ()
+        public UserInterface ()
         {   
             // FIXME: The second time windows are shown, the windows
             // don't have the smooth ease in animation, but appear abruptly. 
             // The ease out animation always seems to work
-            Setup       = new SparkleSetup ();
-            EventLog    = new SparkleEventLogWindow();
-            About       = new SparkleAbout ();
-            Bubbles     = new SparkleBubbles ();
-            StatusIcon  = new SparkleStatusIcon ();
-            Note        = new SparkleNote ();
+            Setup       = new Setup ();
+            EventLog    = new EventLog();
+            About       = new About ();
+            Bubbles     = new Bubbles ();
+            StatusIcon  = new StatusIcon ();
+            Note        = new Note ();
 
             SparkleShare.Controller.UIHasLoaded ();
         }
@@ -64,7 +64,7 @@ namespace SparkleShare {
         private static void OnUnhandledException (object sender, ThreadExceptionEventArgs exception_args)
         {
             try {
-                SparkleLogger.WriteCrashReport (exception_args.Exception);
+                Logger.WriteCrashReport (exception_args.Exception);
             } finally {
                 Environment.Exit (-1);
             }
