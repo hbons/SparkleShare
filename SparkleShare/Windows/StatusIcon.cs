@@ -26,9 +26,9 @@ using Drawing = System.Drawing;
 
 namespace SparkleShare {
 
-    public class SparkleStatusIcon : Control {
+    public class StatusIcon : Control {
 
-        public SparkleStatusIconController Controller = new SparkleStatusIconController();
+        public StatusIconController Controller = new StatusIconController();
 
         private readonly Drawing.Bitmap syncing_idle_image = SparkleUIHelpers.GetBitmap("process-syncing-idle");
         private readonly Drawing.Bitmap syncing_up_image = SparkleUIHelpers.GetBitmap("process-syncing-up");
@@ -43,10 +43,10 @@ namespace SparkleShare {
         private SparkleMenuItem exit_item;
         private SparkleMenuItem[] state_menu_items;
 
-        private readonly SparkleNotifyIcon notify_icon = new SparkleNotifyIcon();
+        private readonly NotifyIcon notify_icon = new NotifyIcon();
 
 
-        public SparkleStatusIcon() {
+        public StatusIcon() {
             this.notify_icon.HeaderText = "SparkleShare";
             this.notify_icon.Icon = this.syncing_idle_image;
 
@@ -142,7 +142,7 @@ namespace SparkleShare {
 
             if(Controller.LinkCodeItemEnabled) {
                 SparkleMenuItem code_item = new SparkleMenuItem {
-                    Header = SparkleShare.Controller.CurrentUser.PublicKey.Substring(0, 20) + "..."
+                    Header = SparkleShare.Controller.UserAuthenticationInfo.PublicKey.Substring(0, 20) + "..."
                 };
 
                 SparkleMenuItem copy_item = new SparkleMenuItem {
