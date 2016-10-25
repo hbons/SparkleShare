@@ -307,6 +307,8 @@ namespace Sparkles.Git {
 
             string output = git_ls_remote.StartAndReadStandardOutput ();
 
+            var a = git_ls_remote.StandardError.ReadToEnd();
+
             if (git_ls_remote.ExitCode != 0)
                 return null;
 
@@ -418,15 +420,15 @@ namespace Sparkles.Git {
         {
 			var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
 
-            string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
+            string GIT_SSH_COMMAND = SSHCommand.FormatGitSSHCommand (auth_info);
             string smudge_command;
             string clean_command;
 
-            if (InstallationInfo.OperatingSystem == OS.Mac) {
-                smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' " + 
-                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " smudge %f";
+            if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
+                smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' " +
+                    Path.Combine(Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace("\\", "/") + " smudge %f";
 
-                clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs") + " clean %f";
+                clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace("\\", "/") + " clean %f";
 
             } else {
 				smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";

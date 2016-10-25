@@ -27,14 +27,14 @@ using System.Xaml;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Window {
+    public class About : Window {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
+        public AboutController Controller = new AboutController ();
 
         private Label updates;
 
 
-        public SparkleAbout ()
+        public About ()
         {
             Title      = "About SparkleShare";
             ResizeMode = ResizeMode.NoResize;
