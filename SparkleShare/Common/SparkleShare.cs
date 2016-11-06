@@ -26,7 +26,6 @@ namespace SparkleShare {
 
         public static Controller Controller;
         public static UserInterface UI;
-        public static string [] Arguments;
 
         static Mutex program_mutex = new Mutex (false, "SparkleShare");
         
@@ -36,8 +35,6 @@ namespace SparkleShare {
         #endif
         public static void Main (string [] args)
         {
-            Arguments = args;
-
             if (args.Length != 0 && (args [0].Equals ("help") || args [0].Equals ("version")) &&
                 InstallationInfo.OperatingSystem != OS.Mac &&
                 InstallationInfo.OperatingSystem != OS.Windows) {
@@ -69,7 +66,7 @@ namespace SparkleShare {
             Controller.Initialize ();
 
             UI = new UserInterface ();
-            UI.Run ();
+            UI.Run (args);
 
             #if !__MonoCS__
             // Suppress assertion messages in debug mode

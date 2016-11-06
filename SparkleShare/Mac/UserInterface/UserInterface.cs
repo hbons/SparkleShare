@@ -49,9 +49,9 @@ namespace SparkleShare {
         }
 
 
-        public void Run ()
+        public void Run (string [] args)
         {
-            NSApplication.Main (SparkleShare.Arguments);
+            NSApplication.Main (args);
         }
 
 
