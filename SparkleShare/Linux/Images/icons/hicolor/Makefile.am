@@ -14,7 +14,8 @@ system_theme_icons = \
 	apps,org.sparkleshare.SparkleShare-24.png \
 	apps,org.sparkleshare.SparkleShare-32.png \
 	apps,org.sparkleshare.SparkleShare-48.png \
-        apps,org.sparkleshare.SparkleShare-256.png
+	apps,org.sparkleshare.SparkleShare-256.png \
+	apps,org.sparkleshare.SparkleShare-512.png
 
 app_theme_icons = \
 	status,document-added-12.png \
