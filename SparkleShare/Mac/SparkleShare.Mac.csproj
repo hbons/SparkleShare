@@ -24,7 +24,10 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
@@ -47,7 +50,10 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
@@ -72,8 +78,14 @@
     <EnablePackageSigning>false</EnablePackageSigning>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
-        <Command type="AfterBuild" command="${ProjectDir}/packReleaseDist.sh ${TargetDir}/${SolutionName}.app" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/packReleaseDist.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>false</EnableCodeSigning>
@@ -92,7 +104,10 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
       </CustomCommands>
     </CustomCommands>
     <EnableCodeSigning>False</EnableCodeSigning>
@@ -106,6 +121,33 @@
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
+    <Optimize>False</Optimize>
+    <OutputPath>bin\DebugMac</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>AfterBuild</type>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
+    <EnableCodeSigning>False</EnableCodeSigning>
+    <CreatePackage>False</CreatePackage>
+    <EnablePackageSigning>False</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <ConsolePause>False</ConsolePause>
+    <DebugSymbols>true</DebugSymbols>
+    <UseSGen>false</UseSGen>
+    <UseRefCounting>false</UseRefCounting>
+    <Profiling>false</Profiling>
+    <LinkMode>None</LinkMode>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
+    <TlsProvider>Default</TlsProvider>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
