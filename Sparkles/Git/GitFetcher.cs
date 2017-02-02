@@ -246,8 +246,11 @@ namespace Sparkles.Git {
             git_config_smudge.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
 
+            string git_info_path = Path.Combine (TargetFolder, ".git", "info");
+            Directory.CreateDirectory (git_info_path);
+
             // Store the password, TODO: 600 permissions
-            string password_file_path = Path.Combine (TargetFolder, ".git", "info", "encryption_password");
+            string password_file_path = Path.Combine (git_info_path, "encryption_password");
             File.WriteAllText (password_file_path, password.SHA256 (password_salt));
         }
 
@@ -358,9 +361,7 @@ namespace Sparkles.Git {
         void InstallExcludeRules ()
         {
             string git_info_path = Path.Combine (TargetFolder, ".git", "info");
-
-            if (!Directory.Exists (git_info_path))
-                Directory.CreateDirectory (git_info_path);
+            Directory.CreateDirectory (git_info_path);
 
             string exclude_rules = string.Join (Environment.NewLine, ExcludeRules);
             string exclude_rules_file_path = Path.Combine (git_info_path, "exclude");
@@ -371,8 +372,10 @@ namespace Sparkles.Git {
 
         void InstallAttributeRules ()
         {
-            string git_attributes_file_path = Path.Combine (TargetFolder, ".git", "info", "attributes");
-            Directory.CreateDirectory (Path.GetDirectoryName (git_attributes_file_path));
+            string git_info_path = Path.Combine (TargetFolder, ".git", "info");
+            Directory.CreateDirectory (git_info_path);
+
+            string git_attributes_file_path = Path.Combine (git_info_path, "attributes");
 
             if (FetchedRepoStorageType == StorageType.LargeFiles) {
                 File.WriteAllText (git_attributes_file_path, "* filter=lfs diff=lfs merge=lfs -text");
