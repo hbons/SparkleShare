@@ -178,7 +178,10 @@ namespace Sparkles.Git {
                 File.WriteAllText (identifier_path, identifier);
 
                 var git_add    = new GitCommand (TargetFolder, "add .sparkleshare");
-                var git_commit = new GitCommand (TargetFolder, "commit --message=\"Initial commit by SparkleShare\"");
+                var git_commit = new GitCommand (TargetFolder,
+                    string.Format ("commit --message=\"{0}\" --author=\"{1}\"",
+                        "Set up SparkleShare project",
+                        "SparkleShare <info@sparkleshare.org>"));
 
                 // We can't do the "commit --all" shortcut because it doesn't add untracked files
                 git_add.StartAndWaitForExit ();
