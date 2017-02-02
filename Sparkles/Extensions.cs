@@ -57,7 +57,7 @@ namespace Sparkles {
         public static string AESEncrypt (this string plain_text, string password)
         {
             Random random = new Random ();
-            byte [] salt_bytes = new Byte [128];
+            byte [] salt_bytes = new Byte [16];
             random.NextBytes (salt_bytes);
 
             string salt = Convert.ToBase64String (salt_bytes);
