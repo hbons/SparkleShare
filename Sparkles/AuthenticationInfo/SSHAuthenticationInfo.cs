@@ -101,7 +101,7 @@ namespace Sparkles {
                 "-C \"" + computer_name + " (SparkleShare)\" " + // Key comment
                 "-f \"" + key_file_name + "\"";
 
-            var ssh_keygen = new Command ("ssh-keygen", arguments);
+            var ssh_keygen = new SSHCommand ("ssh-keygen", arguments);
             ssh_keygen.StartInfo.WorkingDirectory = Path;
             ssh_keygen.StartAndWaitForExit ();
 
