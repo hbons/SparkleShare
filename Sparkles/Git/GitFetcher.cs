@@ -311,14 +311,16 @@ namespace Sparkles.Git {
             if (string.IsNullOrWhiteSpace (output))
                 return StorageType.Unknown;
 
+            string encrypted_storage_prefix  = "x-sparkleshare-encrypted-";
+            string large_file_storage_prefix = "x-sparkleshare-lfs";
+
             foreach (string line in output.Split ("\n".ToCharArray ())) {
+                // Remote branches are outputed as "remote/branch", we need the second part
                 string [] line_parts = line.Split ('/');
                 string branch = line_parts [line_parts.Length - 1];
 
-                if (branch == "x-sparkleshare-lfs")
+                if (branch == large_file_storage_prefix)
                     return StorageType.LargeFiles;
-
-                string encrypted_storage_prefix = "x-sparkleshare-encrypted-";
 
                 if (branch.StartsWith (encrypted_storage_prefix)) {
                     password_salt = branch.Replace (encrypted_storage_prefix, "");
