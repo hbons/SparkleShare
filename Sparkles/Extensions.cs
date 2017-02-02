@@ -54,6 +54,55 @@ namespace Sparkles {
         }
 
 
+        public static string AESEncrypt (this string plain_text, string password)
+        {
+            Random random = new Random ();
+            byte [] salt_bytes = new Byte [128];
+            random.NextBytes (salt_bytes);
+
+            string salt = Convert.ToBase64String (salt_bytes);
+            password = (password + salt).SHA256 ().Substring (0, 32);
+
+            RijndaelManaged aes = new RijndaelManaged () {
+                KeySize = 256,
+                BlockSize = 128,
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7,
+                Key = Encoding.UTF8.GetBytes (password),
+                IV = Encoding.UTF8.GetBytes (password.ToCharArray (), 0, 16)
+            };
+
+            byte [] buffer = Encoding.UTF8.GetBytes (plain_text);
+            ICryptoTransform crypto = aes.CreateEncryptor (aes.Key, aes.IV);
+            byte [] encrypted_bytes = crypto.TransformFinalBlock (buffer, 0, buffer.Length);
+
+            return salt + "_" + Convert.ToBase64String (encrypted_bytes);
+        }
+
+
+        public static string AESDecrypt (this string s, string password)
+        {
+            string salt = s.Substring (0, s.IndexOf ("_"));
+            password = (password + salt).SHA256 ().Substring (0, 32);
+
+            RijndaelManaged aes = new RijndaelManaged () {
+                KeySize = 256,
+                BlockSize = 128,
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7,
+                Key = Encoding.UTF8.GetBytes (password),
+                IV = Encoding.UTF8.GetBytes (password.ToCharArray (), 0, 16)
+            };
+
+            string encrypted_text = s.Substring (s.IndexOf ("_") + 1);
+            byte [] buffer = Convert.FromBase64String (encrypted_text);
+            ICryptoTransform crypto = aes.CreateDecryptor (aes.Key, aes.IV);
+            byte [] decrypted_bytes = crypto.TransformFinalBlock (buffer, 0, buffer.Length);
+
+            return Encoding.UTF8.GetString (decrypted_bytes);
+        }
+
+
         // Format a file size nicely with small caps.
         // Example: 1048576 becomes "1 ᴍʙ"
         public static string ToSize (this double byte_count)
