@@ -191,12 +191,11 @@ namespace Sparkles {
             RemoteUrl         = new Uri (this.local_config.UrlByName (Name));
             IsBuffering       = false;
             this.identifier   = Identifier;
-            ChangeSets        = GetChangeSets ();
 
             string storage_type = this.local_config.GetFolderOptionalAttribute (Name, "storage_type");
 
             if (!string.IsNullOrEmpty (storage_type))
-                StorageType = (StorageType) Enum.Parse(typeof(StorageType), storage_type);
+                StorageType = (StorageType) Enum.Parse (typeof (StorageType), storage_type);
 
             string is_paused = this.local_config.GetFolderOptionalAttribute (Name, "paused");
             if (is_paused != null && is_paused.Equals (bool.TrueString))
@@ -248,6 +247,8 @@ namespace Sparkles {
 
         public void Initialize ()
         {
+            ChangeSets = GetChangeSets ();
+
             // Sync up everything that changed since we've been offline
             new Thread (() => {
                 if (Status != SyncStatus.Paused) {

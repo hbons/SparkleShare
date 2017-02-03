@@ -368,18 +368,30 @@ namespace Sparkles.Git {
         {
             GitCommand git;
 
+            string user_name  = base.local_config.User.Name;
+            string user_email = base.local_config.User.Email;
+
             if (!this.user_is_set) {
-                git = new GitCommand (LocalPath, "config user.name \"" + base.local_config.User.Name + "\"");
+                git = new GitCommand (LocalPath, "config user.name \"" + user_name + "\"");
                 git.StartAndWaitForExit ();
 
-                git = new GitCommand (LocalPath, "config user.email \"" + base.local_config.User.Email + "\"");
+                git = new GitCommand (LocalPath, "config user.email \"" + user_email + "\"");
                 git.StartAndWaitForExit ();
 
                 this.user_is_set = true;
             }
 
-            git = new GitCommand (LocalPath, "commit --all --message=\"" + message + "\" " +
-                "--author=\"" + base.local_config.User.Name + " <" + base.local_config.User.Email + ">\"");
+            if (StorageType == StorageType.Encrypted) {
+                string password_file_path = Path.Combine (LocalPath, ".git", "info", "encryption_password");
+                string password = File.ReadAllText (password_file_path);
+
+                user_name  = user_name.AESEncrypt (password);
+                user_email = user_email.AESEncrypt (password);
+            }
+
+            git = new GitCommand (LocalPath,
+                string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
+                    message, user_name, user_email));
 
             git.StartAndReadStandardOutput ();
         }
@@ -705,6 +717,21 @@ namespace Sparkles.Git {
                     continue;
 
                 change_set.RemoteUrl = RemoteUrl;
+
+                if (StorageType == StorageType.Encrypted) {
+                    string password_file_path = Path.Combine (LocalPath, ".git", "info", "encryption_password");
+                    string password = File.ReadAllText (password_file_path);
+
+                    try {
+                        change_set.User = new User (
+                            change_set.User.Name.AESDecrypt (password),
+                            change_set.User.Email.AESDecrypt (password));
+
+                    } catch (Exception e) {
+                        Console.WriteLine (e.StackTrace);
+                        change_set.User = new User (match.Groups [2].Value, match.Groups [3].Value);
+                    }
+                }
 
                 change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
                     int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
