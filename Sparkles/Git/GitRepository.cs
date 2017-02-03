@@ -700,6 +700,10 @@ namespace Sparkles.Git {
                 change_set.Folder    = new SparkleFolder (Name);
                 change_set.Revision  = match.Groups [1].Value;
                 change_set.User      = new User (match.Groups [2].Value, match.Groups [3].Value);
+
+                if (change_set.User.Name == "SparkleShare")
+                    continue;
+
                 change_set.RemoteUrl = RemoteUrl;
 
                 change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
