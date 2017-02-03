@@ -568,7 +568,9 @@ namespace Sparkles.Git {
 
             Add ();
 
-            var git = new GitCommand (LocalPath, "commit --message \"Conflict resolution by SparkleShare\"");
+            var git = new GitCommand (LocalPath,
+                "commit --message=\"Conflict resolution\" --author=\"SparkleShare <info@sparkleshare.org>\"");
+
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
 
