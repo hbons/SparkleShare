@@ -26,15 +26,25 @@ libappindicator-sharp
 
 You will need the packages listed below for the most used Linux distributions:  
 
-```
-desktop-file-utils
-intltool
-libtool
-mono-devel
-mono-gmcs
-mono-mcs
-monodevelop
-nant
+```shell
+# On Ubuntu 16.04:
+sudo apt-get install \
+  desktop-file-utils \
+  git \
+  gtk-sharp3-gapi \
+  intltool \
+  libdbus-glib2.0-cil-dev \
+  libgtk3.0-cil-dev \
+  libsoup2.4-dev \
+  libtool-bin \
+  libwebkit2gtk-4.0 \
+  mono-devel \
+  mono-mcs \
+  nant \
+  xsltproc
+
+# On Fedora 25:
+sudo dnf install # TODO
 ```
 
 
