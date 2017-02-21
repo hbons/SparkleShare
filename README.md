@@ -2,6 +2,8 @@
 
 SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It's available for Linux distributions, macOS, and Windows.
 
+[![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
+
 ![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/tutorial-slide-2%402x.png)
 
 
