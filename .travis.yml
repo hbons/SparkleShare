@@ -1,0 +1,15 @@
+sudo: required
+
+services:
+  - docker
+
+os:
+  - linux
+
+before_install:
+  - cd build/ci/
+  - docker pull ubuntu:xenial
+
+script:
+  - docker build -t "sparkleshare:nightly" .
+
