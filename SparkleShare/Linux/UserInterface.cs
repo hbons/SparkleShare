@@ -41,7 +41,7 @@ namespace SparkleShare {
 
         public UserInterface ()
         {
-            application = new Application ("org.sparkleshare.SparkleShare", 0);
+            application = new Application ("org.sparkleshare.SparkleShare", GLib.ApplicationFlags.None);
 
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
@@ -60,7 +60,7 @@ namespace SparkleShare {
         }
 
 
-        public void Run ()
+        public void Run (string [] args)
         {   
             (application as GLib.Application).Run (0, null);
         }
