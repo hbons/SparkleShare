@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sparkleshare>
+  <preset>
+    <info>
+        <name>Own gitlab</name>
+        <description>Everything under my control</description>
+        <icon>gitlab.png</icon>
+        <backend>Git</backend>
+    </info>
+    <address>
+      <value/>
+      <example>ssh://[user@]hostname[:port]</example>
+    </address>
+    <path>
+      <value/>
+      <example>/path/to/project</example>
+    </path>
+  </preset>
+</sparkleshare>
+

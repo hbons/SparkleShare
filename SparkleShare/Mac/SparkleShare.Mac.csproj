@@ -296,9 +296,6 @@
     <BundleResource Include="..\Common\Presets\github.xml">
       <Link>Presets\github.xml</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Presets\own-server.xml">
-      <Link>Presets\own-server.xml</Link>
-    </BundleResource>
     <BundleResource Include="..\Common\Presets\bitbucket.png">
       <Link>Presets\bitbucket.png</Link>
     </BundleResource>
@@ -341,6 +338,12 @@
     </BundleResource>
     <BundleResource Include="..\Common\Presets\gitlab.xml">
       <Link>Presets\gitlab.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\own-gitlab.xml">
+      <Link>Presets\own-gitlab.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\own-server.xml">
+      <Link>Presets\own-server.xml</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>

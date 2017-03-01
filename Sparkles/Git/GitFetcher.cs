@@ -49,7 +49,7 @@ namespace Sparkles.Git {
             if (!RemoteUrl.Scheme.Equals ("ssh") && !RemoteUrl.Scheme.Equals ("git"))
                 uri_builder.Scheme = "ssh";
 
-            if (RemoteUrl.Host.Equals ("github.com") ||
+            if (RemoteUrl.Host.Equals ("github.com") || // There should be a way to identify hosted gitlab instances.
                 RemoteUrl.Host.Equals ("gitlab.com")) {
 
                 AvailableStorageTypes.Add (
