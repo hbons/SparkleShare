@@ -306,8 +306,12 @@ namespace Sparkles.Git {
 
             string output = git_ls_remote.StartAndReadStandardOutput ();
 
-            if (git_ls_remote.ExitCode != 0)
-                return null;
+			if (git_ls_remote.ExitCode != 0) {
+				Logger.LogInfo("Fetcher", string.Format("Failed to list remotes. Probably an authentication problem. Git exit code is:{0}", git_ls_remote.ExitCode));
+				errors.Add("error: Could not list remotes. Make sure your SSH Key is added to your Git Server.");
+
+				return null;
+			}
 
             if (string.IsNullOrWhiteSpace (output))
                 return StorageType.Unknown;
