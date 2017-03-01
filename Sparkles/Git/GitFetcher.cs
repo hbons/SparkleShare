@@ -200,6 +200,8 @@ namespace Sparkles.Git {
                     git_branch.StartAndWaitForExit ();
                 }
 
+				File.SetAttributes(identifier_path, FileAttributes.Hidden);
+
             } else {
                 if (File.Exists (identifier_path))
                     identifier = File.ReadAllText (identifier_path).Trim ();
@@ -226,7 +228,6 @@ namespace Sparkles.Git {
             if (Directory.Exists (git_lfs_tmp_path))
                 Directory.Delete (git_lfs_tmp_path, true);
 
-            File.SetAttributes (identifier_path, FileAttributes.Hidden);
             return identifier;
         }
 
