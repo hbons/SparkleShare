@@ -176,18 +176,19 @@ namespace Sparkles.Git {
 
             if (IsFetchedRepoEmpty) {
                 File.WriteAllText (identifier_path, identifier);
+                File.SetAttributes (identifier_path, FileAttributes.Hidden);
 
+                // We can't do the "commit --all" shortcut because it doesn't add untracked files
                 var git_add    = new GitCommand (TargetFolder, "add .sparkleshare");
                 var git_commit = new GitCommand (TargetFolder,
                     string.Format ("commit --message=\"{0}\" --author=\"{1}\"",
                         "Set up SparkleShare project",
                         "SparkleShare <info@sparkleshare.org>"));
 
-                // We can't do the "commit --all" shortcut because it doesn't add untracked files
                 git_add.StartAndWaitForExit ();
                 git_commit.StartAndWaitForExit ();
 
-                // These branches will be pushed  later by "git push --all"
+                // These branches will be pushed later by "git push --all"
                 if (selected_storage_type == StorageType.LargeFiles) {
                     var git_branch = new GitCommand (TargetFolder, "branch x-sparkleshare-lfs", auth_info);
                     git_branch.StartAndWaitForExit ();
@@ -201,9 +202,6 @@ namespace Sparkles.Git {
                 }
 
             } else {
-                if (File.Exists (identifier_path))
-                    identifier = File.ReadAllText (identifier_path).Trim ();
-
                 string branch = "HEAD";
                 string prefered_branch = "SparkleShare";
 
@@ -218,6 +216,11 @@ namespace Sparkles.Git {
 
                 var git_checkout = new GitCommand (TargetFolder, string.Format ("checkout --quiet --force {0}", branch));
                 git_checkout.StartAndWaitForExit ();
+
+                if (File.Exists (identifier_path)) {
+                    File.SetAttributes (identifier_path, FileAttributes.Hidden);
+                    identifier = File.ReadAllText (identifier_path).Trim ();
+                }
             }
 
             // git-lfs may leave junk behind
@@ -226,7 +229,6 @@ namespace Sparkles.Git {
             if (Directory.Exists (git_lfs_tmp_path))
                 Directory.Delete (git_lfs_tmp_path, true);
 
-            File.SetAttributes (identifier_path, FileAttributes.Hidden);
             return identifier;
         }
 
