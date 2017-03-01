@@ -52,7 +52,7 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/SparkleShare.app</command>
         </Command>
       </CustomCommands>
     </CustomCommands>
@@ -106,7 +106,7 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/SparkleShare.app</command>
         </Command>
       </CustomCommands>
     </CustomCommands>
@@ -132,7 +132,7 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>${ProjectDir}/postBuild.sh ${TargetDir}/${SolutionName}.app</command>
+          <command>${ProjectDir}/postBuild.sh ${TargetDir}/SparkleShare.app</command>
         </Command>
       </CustomCommands>
     </CustomCommands>
