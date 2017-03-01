@@ -1,4 +1,4 @@
-#!/bin/sh                                                                                                                                          
+#!/bin/sh
 function abspath()
 {
   case "${1}" in
@@ -17,6 +17,8 @@ export projectFolder=$(abspath ${projectFolder})
 export gitVersion=$(cat ${projectFolder}/git.version)
 export gitLfsVersion=$(cat ${projectFolder}/git-lfs.version)
 
+export LINUX_GIT_LFS_VERSION=${gitLfsVersion}
+
 set -e
 
 if [ ! -f ${projectFolder}/git-${gitVersion}.tar.gz ]
@@ -31,9 +33,10 @@ then
   tar xzf git-lfs.tar.gz
 
   cd git-${gitVersion}
-  make configure
-  ./configure --prefix=${projectFolder}/git --with-openssl=no
-  make install
+  make distclean
+  # make configure
+  # ./configure CXX=o64-clang++ LDFLAGS=-stdlib=libstdc++ --prefix=${projectFolder}/git --with-openssl=no
+  make prefix=${projectFolder}/git install
   cd ..
 
   cd git-lfs-${gitLfsVersion}
@@ -41,7 +44,7 @@ then
   cd ..
 
   tar czf git-${gitVersion}.tar.gz git
-
+  exit
   rm -rf git
   rm -rf git-${gitVersion}
   rm -rf git-lfs-${gitLfsVersion}
