@@ -134,8 +134,10 @@ namespace Sparkles {
 
                 string id_path = Path.Combine (LocalPath, ".sparkleshare");
 
-                if (File.Exists (id_path))
+                if (File.Exists (id_path)) {
+                    File.SetAttributes (id_path, FileAttributes.Hidden);
                     this.identifier = File.ReadAllText (id_path).Trim ();
+                }
 
                 if (!string.IsNullOrEmpty (this.identifier)) {
                     return this.identifier;
