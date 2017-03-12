@@ -73,6 +73,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Presets\" />
+    <Folder Include="UserInterface\" />
+    <Folder Include="UserInterface\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\HTML\day-entry.html">
@@ -134,18 +136,37 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Common\SparkleShare.cs">
-      <Link>SparkleShare.cs</Link>
-    </Compile>
     <Compile Include="Controller.cs" />
-    <Compile Include="UserInterface\About.cs" />
-    <Compile Include="UserInterface\Bubbles.cs" />
-    <Compile Include="UserInterface\EventLog.cs" />
-    <Compile Include="UserInterface\Setup.cs" />
-    <Compile Include="UserInterface\SetupWindow.cs" />
-    <Compile Include="UserInterface\StatusIcon.cs" />
-    <Compile Include="UserInterface\UserInterface.cs" />
-    <Compile Include="UserInterface\UserInterfaceHelpers.cs" />
+    <Compile Include="About.cs">
+      <Link>UserInterface\About.cs</Link>
+    </Compile>
+    <Compile Include="Bubbles.cs">
+      <Link>UserInterface\Bubbles.cs</Link>
+    </Compile>
+    <Compile Include="Controller.cs">
+      <Link>UserInterface\Controller.cs</Link>
+    </Compile>
+    <Compile Include="EventLog.cs">
+      <Link>UserInterface\EventLog.cs</Link>
+    </Compile>
+    <Compile Include="Note.cs">
+      <Link>UserInterface\Note.cs</Link>
+    </Compile>
+    <Compile Include="Setup.cs">
+      <Link>UserInterface\Setup.cs</Link>
+    </Compile>
+    <Compile Include="SetupWindow.cs">
+      <Link>UserInterface\SetupWindow.cs</Link>
+    </Compile>
+    <Compile Include="StatusIcon.cs">
+      <Link>UserInterface\StatusIcon.cs</Link>
+    </Compile>
+    <Compile Include="UserInterface.cs">
+      <Link>UserInterface\UserInterface.cs</Link>
+    </Compile>
+    <Compile Include="UserInterfaceHelpers.cs">
+      <Link>UserInterface\UserInterfaceHelpers.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\Common\SparkleShare.projitems" Label="Shared" Condition="Exists('..\Common\SparkleShare.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
