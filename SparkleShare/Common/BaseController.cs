@@ -647,7 +647,8 @@ namespace SparkleShare {
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
             FinishFetcher (StorageType.Encrypted);
-        }
+        } // TODO: make this the main method. password optional. need to know storage type before Complete to allow crypto in lfs
+        // Make sure IsCryptoPasswordCorrect works with SparkleShare.txt checkout and LFS
         
         
         public void FinishFetcher (StorageType selected_storage_type)
