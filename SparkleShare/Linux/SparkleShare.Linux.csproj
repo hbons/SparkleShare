@@ -72,8 +72,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UserInterface\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Presets\" />
   </ItemGroup>
   <ItemGroup>
@@ -136,63 +134,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Common\Avatars.cs">
-      <Link>UserInterface\Avatars.cs</Link>
-    </Compile>
-    <Compile Include="About.cs">
-      <Link>UserInterface\About.cs</Link>
-    </Compile>
-    <Compile Include="Bubbles.cs">
-      <Link>UserInterface\Bubbles.cs</Link>
-    </Compile>
-    <Compile Include="Note.cs">
-      <Link>UserInterface\Note.cs</Link>
-    </Compile>
-    <Compile Include="Setup.cs">
-      <Link>UserInterface\Setup.cs</Link>
-    </Compile>
-    <Compile Include="SetupWindow.cs">
-      <Link>UserInterface\SetupWindow.cs</Link>
-    </Compile>
-    <Compile Include="StatusIcon.cs">
-      <Link>UserInterface\StatusIcon.cs</Link>
-    </Compile>
-    <Compile Include="UserInterface.cs">
-      <Link>UserInterface\UserInterface.cs</Link>
-    </Compile>
-    <Compile Include="UserInterfaceHelpers.cs">
-      <Link>UserInterface\UserInterfaceHelpers.cs</Link>
-    </Compile>
     <Compile Include="..\Common\SparkleShare.cs">
       <Link>SparkleShare.cs</Link>
     </Compile>
-    <Compile Include="..\Common\AboutController.cs">
-      <Link>Controllers\AboutController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\BaseController.cs">
-      <Link>Controllers\BaseController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\BubblesController.cs">
-      <Link>Controllers\BubblesController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\EventLogController.cs">
-      <Link>Controllers\EventLogController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\NoteController.cs">
-      <Link>Controllers\NoteController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\SetupController.cs">
-      <Link>Controllers\SetupController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\StatusIconController.cs">
-      <Link>Controllers\StatusIconController.cs</Link>
-    </Compile>
-    <Compile Include="Controller.cs">
-      <Link>Controllers\Controller.cs</Link>
-    </Compile>
-    <Compile Include="EventLog.cs">
-      <Link>UserInterface\EventLog.cs</Link>
-    </Compile>
+    <Compile Include="Controller.cs" />
+    <Compile Include="UserInterface\About.cs" />
+    <Compile Include="UserInterface\Bubbles.cs" />
+    <Compile Include="UserInterface\EventLog.cs" />
+    <Compile Include="UserInterface\Setup.cs" />
+    <Compile Include="UserInterface\SetupWindow.cs" />
+    <Compile Include="UserInterface\StatusIcon.cs" />
+    <Compile Include="UserInterface\UserInterface.cs" />
+    <Compile Include="UserInterface\UserInterfaceHelpers.cs" />
   </ItemGroup>
+  <Import Project="..\Common\SparkleShare.projitems" Label="Shared" Condition="Exists('..\Common\SparkleShare.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{F16E3683-B622-4654-B799-99C8D68AA963}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SparkleShare</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AboutController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Avatars.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BubblesController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventLogController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoteController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SetupController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SparkleShare.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StatusIconController.cs" />
+  </ItemGroup>
+</Project>

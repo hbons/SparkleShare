@@ -41,6 +41,7 @@
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
+    <UseMSBuildEngine>True</UseMSBuildEngine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>False</Optimize>
@@ -155,9 +156,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="Mono.Posix" />
-    <Reference Include="MonoMac">
-      <HintPath>..\..\..\monomac\src\MonoMac.dll</HintPath>
-    </Reference>
+    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs">
@@ -166,28 +165,7 @@
     <Compile Include="MainMenu.xib.designer.cs">
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
-    <Compile Include="..\Common\SparkleShare.cs">
-      <Link>SparkleShare.cs</Link>
-    </Compile>
-    <Compile Include="MacWatcher.cs" />
-    <Compile Include="..\Common\AboutController.cs">
-      <Link>Controllers\AboutController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\BubblesController.cs">
-      <Link>Controllers\BubblesController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\EventLogController.cs">
-      <Link>Controllers\EventLogController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\NoteController.cs">
-      <Link>Controllers\NoteController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\SetupController.cs">
-      <Link>Controllers\SetupController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\StatusIconController.cs">
-      <Link>Controllers\StatusIconController.cs</Link>
-    </Compile>
+    <Compile Include="Watcher.cs" />
     <Compile Include="UserInterface\About.cs" />
     <Compile Include="UserInterface\Bubbles.cs" />
     <Compile Include="UserInterface\EventLog.cs" />
@@ -196,15 +174,10 @@
     <Compile Include="UserInterface\SetupWindow.cs" />
     <Compile Include="UserInterface\StatusIcon.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
-    <Compile Include="..\Common\BaseController.cs">
-      <Link>Controllers\BaseController.cs</Link>
-    </Compile>
-    <Compile Include="Controller.cs">
-      <Link>Controllers\Controller.cs</Link>
-    </Compile>
     <Compile Include="..\Common\Avatars.cs">
       <Link>UserInterface\Avatars.cs</Link>
     </Compile>
+    <Compile Include="Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
@@ -212,8 +185,8 @@
   <ItemGroup>
     <None Include="Info.plist" />
   </ItemGroup>
+  <Import Project="..\Common\SparkleShare.projitems" Label="Shared" Condition="Exists('..\Common\SparkleShare.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Mono\MonoMac\v0.0\Mono.MonoMac.targets" />
   <ItemGroup>
     <Content Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>

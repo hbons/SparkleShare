@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare.Windows", "Spa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShare.Linux", "SparkleShare\Linux\SparkleShare.Linux.csproj", "{5714D3CA-88A6-4330-A29D-4CA90D1D193C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SparkleShare", "SparkleShare\Common\SparkleShare.shproj", "{F16E3683-B622-4654-B799-99C8D68AA963}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|Any CPU = Release|Any CPU
