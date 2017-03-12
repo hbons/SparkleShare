@@ -15,6 +15,7 @@
 Makefile.in
 Makefile
 intltool-*
+compile
 configure
 config.guess
 config.h
@@ -29,6 +30,7 @@ obj/
 install-sh
 libtool
 ltmain.sh
+lt*.m4
 missing
 build/m4/shave/shave
 build/m4/*.m4
