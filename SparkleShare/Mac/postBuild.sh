@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# expect path to app bundle argument
+# Expect path to app bundle argument
 export bundle=$1
 export projectFolder=$(dirname $0)
 export gitVersion=$(cat ${projectFolder}/git.version)
 
-echo postprocessing ${bundle}
+echo Postprocessing ${bundle}...
 
 export PATH=/usr/local/bin:/opt/local/bin:/Library/Frameworks/Mono.framework/Versions/Current/bin:/usr/bin:/bin
 
