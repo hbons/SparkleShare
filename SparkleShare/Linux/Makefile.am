@@ -19,15 +19,15 @@ SOURCES =  \
 	../Common/NoteController.cs \
 	../Common/SetupController.cs \
 	../Common/StatusIconController.cs \
-	Userinterface/About.cs \
-	Userinterface/Bubbles.cs \
-	Userinterface/EventLog.cs \
-	Userinterface/Note.cs \
-	Userinterface/Setup.cs \
-	Userinterface/SetupWindow.cs \
-	Userinterface/StatusIcon.cs \
-	Userinterface/UserInterface.cs \
-	Userinterface/UserInterfaceHelpers.cs \
+        About.cs \
+        Bubbles.cs \
+        EventLog.cs \
+        Note.cs \
+        Setup.cs \
+        SetupWindow.cs \
+        StatusIcon.cs \
+        UserInterface.cs \
+        UserInterfaceHelpers.cs \
 	Controller.cs
 
 include $(top_srcdir)/build/build.mk
