@@ -37,8 +37,7 @@ RUN git clone https://github.com/hbons/webkit2gtk-sharp && \
 
 RUN cd ../
 
-RUN git clone https://github.com/hbons/SparkleShare && \
-  cd SparkleShare/ && \
-  ./autogen.sh && \
+COPY ./ ./
+RUN ./autogen.sh && \
   make && make install 
 
