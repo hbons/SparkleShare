@@ -7,9 +7,8 @@ os:
   - linux
 
 before_install:
-  - cd build/ci/
   - docker pull ubuntu:xenial
 
 script:
-  - docker build -t "sparkleshare:nightly" .
+  - docker build --file build/ci/Dockerfile --tag "sparkleshare:nightly" .
 
