@@ -16,18 +16,13 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 
 using System.Windows;
 using Forms = System.Windows.Forms;
-using Microsoft.Win32;
 
 using Sparkles;
 using Sparkles.Git;
@@ -59,8 +54,8 @@ namespace SparkleShare {
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
             SSHCommand.SSHPath = Path.Combine (msysgit_path, "usr", "bin");
-            SSHFetcher.SSHKeyScan = Path.Combine(msysgit_path, "usr", "bin", "ssh-keyscan.exe");
-            GitCommand.GitPath = Path.Combine(msysgit_path, "bin", "git.exe");
+            SSHFetcher.SSHKeyScan = Path.Combine (msysgit_path, "usr", "bin", "ssh-keyscan.exe");
+            GitCommand.GitPath = Path.Combine (msysgit_path, "bin", "git.exe");
 
             base.Initialize ();
         }
@@ -90,12 +85,12 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            string app_path = Path.GetDirectoryName(Forms.Application.ExecutablePath);
-            string icon_file_path = Path.Combine(app_path, "Images", "sparkleshare-folder.ico");
+            string app_path = Path.GetDirectoryName (Forms.Application.ExecutablePath);
+            string icon_file_path = Path.Combine (app_path, "Images", "sparkleshare-folder.ico");
 
-            if (!File.Exists(icon_file_path))
+            if (!File.Exists (icon_file_path))
             {
-                string ini_file_path = Path.Combine(FoldersPath, "desktop.ini");
+                string ini_file_path = Path.Combine (FoldersPath, "desktop.ini");
                 string n = Environment.NewLine;
 
                 string ini_file = "[.ShellClassInfo]" + n +
@@ -105,16 +100,16 @@ namespace SparkleShare {
 
                 try
                 {
-                    File.Create(ini_file_path).Close();
-                    File.WriteAllText(ini_file_path, ini_file);
+                    File.Create (ini_file_path).Close ();
+                    File.WriteAllText (ini_file_path, ini_file);
 
-                    File.SetAttributes(ini_file_path,
-                        File.GetAttributes(ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+                    File.SetAttributes (ini_file_path,
+                        File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
 
                 }
                 catch (IOException e)
                 {
-                    Logger.LogInfo("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                    Logger.LogInfo ("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
                 }
             }
         }
@@ -158,10 +153,10 @@ namespace SparkleShare {
         {
             if (!Directory.Exists (FoldersPath))
             {
-                Directory.CreateDirectory(FoldersPath);
+                Directory.CreateDirectory (FoldersPath);
 
-                File.SetAttributes(FoldersPath, File.GetAttributes(FoldersPath) | FileAttributes.System);
-                Logger.LogInfo("Config", "Created '" + FoldersPath + "'");
+                File.SetAttributes (FoldersPath, File.GetAttributes(FoldersPath) | FileAttributes.System);
+                Logger.LogInfo ("Config", "Created '" + FoldersPath + "'");
             }
         }
 
