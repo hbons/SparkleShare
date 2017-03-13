@@ -16,12 +16,9 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Security.Permissions;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
