@@ -16,9 +16,7 @@
 
 
 using System;
-using System.Globalization;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Sparkles.Git {
@@ -307,8 +305,6 @@ namespace Sparkles.Git {
 
             string output = git_ls_remote.StartAndReadStandardOutput ();
 
-            var a = git_ls_remote.StandardError.ReadToEnd();
-
             if (git_ls_remote.ExitCode != 0)
                 return null;
 
@@ -426,9 +422,9 @@ namespace Sparkles.Git {
 
             if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
                 smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' " +
-                    Path.Combine(Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace("\\", "/") + " smudge %f";
+                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/") + " smudge %f";
 
-                clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace("\\", "/") + " clean %f";
+                clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/") + " clean %f";
 
             } else {
 				smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";

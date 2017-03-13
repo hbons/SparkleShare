@@ -55,7 +55,7 @@ namespace SparkleShare {
         }
 
         
-        public void Run ()
+        public void Run (string [] args)
         {
             Application.Run ();
             StatusIcon.Dispose ();

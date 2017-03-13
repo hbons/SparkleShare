@@ -17,23 +17,16 @@
 
 using Sparkles;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Media;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shell;
 
 using Drawing = System.Drawing;
 using Imaging = System.Windows.Interop.Imaging;
-using WPF = System.Windows.Controls;
 
 namespace SparkleShare {
 

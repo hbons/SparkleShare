@@ -224,7 +224,7 @@ namespace SparkleShare {
             // TODO: ToString() with nice os version names (Mac OS X Yosemite, Fedora 24, Ubuntu 16.04, etc.)
             Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
 
-            UserAuthenticationInfo = new SSHAuthenticationInfo();
+            UserAuthenticationInfo = new SSHAuthenticationInfo ();
             SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
 
             Preset.PresetsPath = PresetsPath;
