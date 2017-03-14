@@ -6,9 +6,9 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{728483AA-E34B-4441-BF2C-C8BC2901E4E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>SparkleShare</AssemblyName>
+    <AssemblyName>SparkleShare.Windows</AssemblyName>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>SparkleShare</RootNamespace>
+    <RootNamespace>SparkleShare.Windows</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
