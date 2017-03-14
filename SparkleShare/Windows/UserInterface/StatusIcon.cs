@@ -30,11 +30,11 @@ namespace SparkleShare {
 
         public StatusIconController Controller = new StatusIconController();
 
-        private readonly Drawing.Bitmap syncing_idle_image = SparkleUIHelpers.GetBitmap("process-syncing-idle");
-        private readonly Drawing.Bitmap syncing_up_image = SparkleUIHelpers.GetBitmap("process-syncing-up");
-        private readonly Drawing.Bitmap syncing_down_image = SparkleUIHelpers.GetBitmap("process-syncing-down");
-        private readonly Drawing.Bitmap syncing_image = SparkleUIHelpers.GetBitmap("process-syncing");
-        private readonly Drawing.Bitmap syncing_error_image = SparkleUIHelpers.GetBitmap("process-syncing-error");
+        private readonly Drawing.Bitmap syncing_idle_image = UserInterfaceHelpers.GetBitmap("process-syncing-idle");
+        private readonly Drawing.Bitmap syncing_up_image = UserInterfaceHelpers.GetBitmap("process-syncing-up");
+        private readonly Drawing.Bitmap syncing_down_image = UserInterfaceHelpers.GetBitmap("process-syncing-down");
+        private readonly Drawing.Bitmap syncing_image = UserInterfaceHelpers.GetBitmap("process-syncing");
+        private readonly Drawing.Bitmap syncing_error_image = UserInterfaceHelpers.GetBitmap("process-syncing-error");
 
         private ContextMenu context_menu;
 
@@ -117,7 +117,7 @@ namespace SparkleShare {
             };
 
             Image folder_image = new Image {
-                Source = SparkleUIHelpers.GetImageSource("sparkleshare-folder"),
+                Source = UserInterfaceHelpers.GetImageSource("sparkleshare-folder"),
                 Width = 16,
                 Height = 16
             };
@@ -215,7 +215,7 @@ namespace SparkleShare {
                     SparkleMenuItem subfolder_item = new SparkleMenuItem {
                         Header = project.Name.Replace("_", "__"),
                         Icon = new Image {
-                            Source = SparkleUIHelpers.GetImageSource("folder"),
+                            Source = UserInterfaceHelpers.GetImageSource("folder"),
                             Width = 16,
                             Height = 16
                         }
@@ -233,7 +233,7 @@ namespace SparkleShare {
                         Header = "Open folder",
                         Icon = new Image
                         {
-                            Source = SparkleUIHelpers.GetImageSource("folder"),
+                            Source = UserInterfaceHelpers.GetImageSource("folder"),
                             Width = 16,
                             Height = 16
                         }

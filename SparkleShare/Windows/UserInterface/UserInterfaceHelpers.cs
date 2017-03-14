@@ -25,7 +25,7 @@ using Drawing = System.Drawing;
 
 namespace SparkleShare {
 
-    public static class SparkleUIHelpers {
+    public static class UserInterfaceHelpers {
         
         public static string ToHex (this Drawing.Color color)
         {

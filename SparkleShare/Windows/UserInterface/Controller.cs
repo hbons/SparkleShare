@@ -63,22 +63,22 @@ namespace SparkleShare {
 
         public override string EventLogHTML {
             get {
-                string html = SparkleUIHelpers.GetHTML ("event-log.html");
-                return html.Replace ("<!-- $jquery -->", SparkleUIHelpers.GetHTML ("jquery.js"));
+                string html = UserInterfaceHelpers.GetHTML ("event-log.html");
+                return html.Replace ("<!-- $jquery -->", UserInterfaceHelpers.GetHTML ("jquery.js"));
             }
         }
 
 
         public override string DayEntryHTML {
             get {
-                return SparkleUIHelpers.GetHTML ("day-entry.html");
+                return UserInterfaceHelpers.GetHTML ("day-entry.html");
             }
         }
 
 
         public override string EventEntryHTML {
             get {
-                return SparkleUIHelpers.GetHTML ("event-entry.html");
+                return UserInterfaceHelpers.GetHTML ("event-entry.html");
             }
         }
 
