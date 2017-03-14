@@ -26,7 +26,7 @@
         </StackPanel>
         <TextBox x:Name="balloon_text_field" Grid.Row="1" Grid.ColumnSpan="2" Width="438" Height="72" BorderBrush="{x:Null}" BorderThickness="0" Padding="8,12,8,8" TextWrapping="Wrap" AcceptsReturn="True" Text="Anything to add?" >
             <TextBox.Background>
-                <ImageBrush ImageSource="pack://application:,,,/SparkleShare;component/Images/text-balloon.png" Stretch="Uniform"></ImageBrush>
+                <ImageBrush ImageSource="pack://application:,,,/SparkleShare.Windows;component/Images/text-balloon.png" Stretch="Uniform"></ImageBrush>
             </TextBox.Background>
         </TextBox>
         <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
