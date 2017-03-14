@@ -40,7 +40,7 @@ namespace SparkleShare {
             Height = size;
 
             int current_frame            = 0;
-            BitmapSource spinner_gallery = SparkleUIHelpers.GetImageSource ("process-working-22");
+            BitmapSource spinner_gallery = UserInterfaceHelpers.GetImageSource ("process-working-22");
             int frames_in_width          = spinner_gallery.PixelWidth / size;
             int frames_in_height         = spinner_gallery.PixelHeight / size;
             int frame_count              = (frames_in_width * frames_in_height) - 1;

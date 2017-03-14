@@ -101,42 +101,30 @@
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Common\BubblesController.cs">
-      <Link>BubblesController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\BaseController.cs">
-      <Link>BaseController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\NoteController.cs">
-      <Link>NoteController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\StatusIconController.cs">
-      <Link>StatusIconController.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\SetupController.cs" />
-    <Compile Include="EventLog.cs" />
-    <Compile Include="Note.xaml.cs">
-      <DependentUpon>Note.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Shortcut.cs" />
-    <Compile Include="UserInterface.cs" />
     <Compile Include="..\Common\AboutController.cs" />
     <Compile Include="..\Common\Avatars.cs" />
-    <Compile Include="Bubbles.cs" />
-    <Compile Include="About.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="StatusIcon.cs" />
-    <Compile Include="SparkleUIHelpers.cs" />
-    <Compile Include="..\Common\EventLogController.cs">
-      <Link>SparkleEventLogController.cs</Link>
+    <Compile Include="..\Common\BaseController.cs" />
+    <Compile Include="..\Common\BubblesController.cs" />
+    <Compile Include="..\Common\EventLogController.cs" />
+    <Compile Include="..\Common\NoteController.cs" />
+    <Compile Include="..\Common\SetupController.cs" />
+    <Compile Include="..\Common\SparkleShare.cs" />
+    <Compile Include="..\Common\StatusIconController.cs" />
+    <Compile Include="UserInterface\About.cs" />
+    <Compile Include="UserInterface\Bubbles.cs" />
+    <Compile Include="UserInterface\EventLog.cs" />
+    <Compile Include="UserInterface\Controller.cs" />
+    <Compile Include="UserInterface\Note.xaml.cs">
+      <DependentUpon>Note.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetupWindow.cs" />
-    <Compile Include="..\Common\SparkleShare.cs">
-      <Link>SparkleShare.cs</Link>
-    </Compile>
-    <Compile Include="NotifyIcon.cs" />
-    <Compile Include="Spinner.cs" />
+    <Compile Include="UserInterface\NotifyIcon.cs" />
+    <Compile Include="UserInterface\Setup.cs" />
+    <Compile Include="UserInterface\SetupWindow.cs" />
+    <Compile Include="UserInterface\Shortcut.cs" />
+    <Compile Include="UserInterface\Spinner.cs" />
+    <Compile Include="UserInterface\StatusIcon.cs" />
+    <Compile Include="UserInterface\UserInterface.cs" />
+    <Compile Include="UserInterface\UserInterfaceHelpers.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio />
@@ -295,7 +283,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Note.xaml">
+    <Page Include="UserInterface\Note.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

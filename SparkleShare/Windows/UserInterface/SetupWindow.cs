@@ -49,7 +49,7 @@ namespace SparkleShare {
             Height     = 440;
             ResizeMode = ResizeMode.NoResize;
             Background = new SolidColorBrush (Colors.WhiteSmoke);
-            Icon       = SparkleUIHelpers.GetImageSource ("sparkleshare-app", "ico");
+            Icon       = UserInterfaceHelpers.GetImageSource ("sparkleshare-app", "ico");
 			
 			TaskbarItemInfo = new TaskbarItemInfo () {
 				Description = "SparkleShare"
@@ -85,7 +85,7 @@ namespace SparkleShare {
                 Height = 482
             };
 
-            this.side_splash.Source = SparkleUIHelpers.GetImageSource ("side-splash");
+            this.side_splash.Source = UserInterfaceHelpers.GetImageSource ("side-splash");
             
             
             ContentCanvas.Children.Add (this.bar);
