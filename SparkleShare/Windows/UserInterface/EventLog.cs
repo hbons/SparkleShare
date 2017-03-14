@@ -57,7 +57,7 @@ namespace SparkleShare
 
             Background = new SolidColorBrush(Color.FromRgb(240, 240, 240));
             AllowsTransparency = false;
-            Icon = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
+            Icon = UserInterfaceHelpers.GetImageSource("sparkleshare-app", "ico");
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             WriteOutImages();
@@ -308,7 +308,7 @@ namespace SparkleShare
                 File.SetAttributes(tmp_path, File.GetAttributes(tmp_path) | FileAttributes.Hidden);
             }
 
-            BitmapSource image = SparkleUIHelpers.GetImageSource("user-icon-default");
+            BitmapSource image = UserInterfaceHelpers.GetImageSource("user-icon-default");
             string file_path = System.IO.Path.Combine(pixmaps_path, "user-icon-default.png");
 
             using (FileStream stream = new FileStream(file_path, FileMode.Create))
@@ -322,7 +322,7 @@ namespace SparkleShare
 
             foreach (string action in actions)
             {
-                image = SparkleUIHelpers.GetImageSource("document-" + action + "-12");
+                image = UserInterfaceHelpers.GetImageSource("document-" + action + "-12");
                 file_path = System.IO.Path.Combine(pixmaps_path, "document-" + action + "-12.png");
 
                 using (FileStream stream = new FileStream(file_path, FileMode.Create))

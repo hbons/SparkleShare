@@ -37,7 +37,7 @@ namespace SparkleShare {
             ResizeMode = ResizeMode.NoResize;
 			Height     = 288;
 			Width      = 720;
-            Icon       = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
+            Icon       = UserInterfaceHelpers.GetImageSource("sparkleshare-app", "ico");
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Closing += Close;
@@ -74,7 +74,7 @@ namespace SparkleShare {
                 Height = 260
             };
         
-            image.Source = SparkleUIHelpers.GetImageSource ("about");
+            image.Source = UserInterfaceHelpers.GetImageSource ("about");
             
             
             Label version = new Label () {
