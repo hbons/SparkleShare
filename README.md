@@ -1,6 +1,6 @@
 # [SparkleShare](https://www.sparkleshare.org/)
 
-SparkleShare is an Open Source collaboration and sharing tool that is designed to keep things simple and to stay out of your way. It's available for Linux distributions, macOS, and Windows.
+SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server. It's available for Linux distributions, macOS, and Windows. [Support the project on Patreon](https://www.patreon.com/SparkleShare).
 
 [![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
 
