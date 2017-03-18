@@ -2,9 +2,7 @@
 
 SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server. It's available for Linux distributions, macOS, and Windows. [Support the project on Patreon](https://www.patreon.com/SparkleShare).
 
-[![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
-
-![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/tutorial-slide-2%402x.png)
+![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/readme-banner.png)
 
 
 ## How does it work?
@@ -22,6 +20,8 @@ SparkleShare uses the version control system [Git](https://git-scm.com/) under t
 
 
 ## Compiling from source
+
+[![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
 
 Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [macOS](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md). Make sure to have the `git` package installed when you're building on Linux.
 
