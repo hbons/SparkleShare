@@ -79,7 +79,7 @@ namespace Sparkles.Git {
             git_config = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git_config.StartAndWaitForExit ();
 
-            git_config = new GitCommand (LocalPath, "config core.sshCommand " + SSHCommand.FormatGitSSHCommand (auth_info));
+            git_config = new GitCommand (LocalPath, "config core.sshCommand " + GitCommand.FormatGitSSHCommand (auth_info));
             git_config.StartAndWaitForExit();
         }
 
@@ -210,13 +210,13 @@ namespace Sparkles.Git {
             if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
                 pre_push_hook_content =
                     "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + SSHCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
                     Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
 
             } else {
                 pre_push_hook_content =
                     "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + SSHCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
                     "git-lfs pre-push \"$@\"";
             }
 

@@ -416,7 +416,7 @@ namespace Sparkles.Git {
         {
 			var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
 
-            string GIT_SSH_COMMAND = SSHCommand.FormatGitSSHCommand (auth_info);
+            string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
             string smudge_command;
             string clean_command;
 
