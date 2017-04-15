@@ -18,6 +18,7 @@ SOURCES =  \
 	Logger.cs \
 	Preset.cs \
 	SSHAuthenticationInfo.cs \
+	SSHCommand.cs \
 	SSHFetcher.cs \
 	TcpListener.cs \
 	User.cs \
