@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,53 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationInfo.cs" />
+    <Compile Include="BaseFetcher.cs" />
+    <Compile Include="BaseListener.cs" />
+    <Compile Include="BaseRepository.cs" />
+    <Compile Include="ChangeSet.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="ListenerFactory.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="InstallationInfo.Directory.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="SSHFetcher.cs">
-      <Link>Fetcher\SSHFetcher.cs</Link>
-    </Compile>
-    <Compile Include="BaseFetcher.cs">
-      <Link>Fetcher\BaseFetcher.cs</Link>
-    </Compile>
-    <Compile Include="TcpListener.cs">
-      <Link>Listener\TcpListener.cs</Link>
-    </Compile>
-    <Compile Include="BaseListener.cs">
-      <Link>Listener\BaseListener.cs</Link>
-    </Compile>
-    <Compile Include="ListenerFactory.cs">
-      <Link>Listener\ListenerFactory.cs</Link>
-    </Compile>
-    <Compile Include="SSHAuthenticationInfo.cs">
-      <Link>AuthenticationInfo\SSHAuthenticationInfo.cs</Link>
-    </Compile>
-    <Compile Include="AuthenticationInfo.cs">
-      <Link>AuthenticationInfo\AuthenticationInfo.cs</Link>
-    </Compile>
-    <Compile Include="BaseRepository.cs">
-      <Link>Repository\BaseRepository.cs</Link>
-    </Compile>
-    <Compile Include="ChangeSet.cs">
-      <Link>Repository\ChangeSet.cs</Link>
-    </Compile>
-    <Compile Include="User.cs">
-      <Link>Repository\User.cs</Link>
-    </Compile>
-    <Compile Include="Watcher.cs">
-      <Link>Repository\Watcher.cs</Link>
-    </Compile>
+    <Compile Include="SSHCommand.cs" />
+    <Compile Include="SSHFetcher.cs" />
+    <Compile Include="SSHAuthenticationInfo.cs" />
+    <Compile Include="TcpListener.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="InstallationInfo.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="Invite.cs" />
+    <Compile Include="Watcher.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fetcher\" />
-    <Folder Include="Listener\" />
-    <Folder Include="AuthenticationInfo\" />
-    <Folder Include="Repository\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

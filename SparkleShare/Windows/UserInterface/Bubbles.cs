@@ -15,16 +15,14 @@
 //   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-using System;
-
 namespace SparkleShare {
     
-    public class SparkleBubbles {
+    public class Bubbles {
 
-        public SparkleBubblesController Controller = new SparkleBubblesController ();
+        public BubblesController Controller = new BubblesController ();
 
 
-        public SparkleBubbles ()
+        public Bubbles ()
         {
             Controller.ShowBubbleEvent += delegate (string title, string subtext, string image_path) {
                 if (!SparkleShare.Controller.NotificationsEnabled)
