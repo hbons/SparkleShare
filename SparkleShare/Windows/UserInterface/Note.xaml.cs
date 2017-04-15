@@ -26,19 +26,19 @@ using Sparkles;
 
 namespace SparkleShare {
 
-    public partial class SparkleNote : Window {
+    public partial class Note : Window {
 
-        public SparkleNoteController Controller = new SparkleNoteController ();
+        public NoteController Controller = new NoteController ();
 
         private readonly string default_text = "Anything to add?";
 
-        public SparkleNote()
+        public Note ()
         {
             InitializeComponent();
 
             Background = new SolidColorBrush(Color.FromRgb(240, 240, 240));
             AllowsTransparency = false;
-            Icon = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
+            Icon = UserInterfaceHelpers.GetImageSource("sparkleshare-app", "ico");
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             Closing += this.OnClosing;
@@ -85,10 +85,10 @@ namespace SparkleShare {
 
         private void CreateNote()
         {
-            ImageSource avatar = SparkleUIHelpers.GetImageSource("user-icon-default");
+            ImageSource avatar = UserInterfaceHelpers.GetImageSource("user-icon-default");
 
             if (File.Exists (Controller.AvatarFilePath)) {
-                avatar = SparkleUIHelpers.GetImage (Controller.AvatarFilePath);
+                avatar = UserInterfaceHelpers.GetImage (Controller.AvatarFilePath);
             }
 
             this.user_image.ImageSource = avatar;
