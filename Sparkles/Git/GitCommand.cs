@@ -21,7 +21,6 @@ namespace Sparkles.Git {
 
     public class GitCommand : Command {
 
-        public static string SSHPath = "ssh";
         public static string ExecPath;
 
 
@@ -82,10 +81,10 @@ namespace Sparkles.Git {
         {
             StartInfo.WorkingDirectory = working_dir;
 
-            string GIT_SSH_COMMAND = SSHPath;
+            string GIT_SSH_COMMAND = SSHCommand.SSHCommandPath;
 
             if (auth_info != null)
-                GIT_SSH_COMMAND = FormatGitSSHCommand (auth_info);
+                GIT_SSH_COMMAND = SSHCommand.FormatGitSSHCommand (auth_info);
 
             if (ExecPath != null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
@@ -208,17 +207,6 @@ namespace Sparkles.Git {
             }
 
             return error;
-        }
-
-
-        public static string FormatGitSSHCommand (SSHAuthenticationInfo auth_info)
-        {
-            return SSHPath + " " +
-                "-i " + auth_info.PrivateKeyFilePath.Replace (" ", "\\ ") + " " +
-                "-o UserKnownHostsFile=" + auth_info.KnownHostsFilePath.Replace (" ", "\\ ") + " " +
-                "-o IdentitiesOnly=yes" + " " + // Don't fall back to other keys on the system
-                "-o PasswordAuthentication=no" + " " + // Don't hang on possible password prompts
-                "-F /dev/null"; // Ignore the system's SSH config file
         }
     }
 }

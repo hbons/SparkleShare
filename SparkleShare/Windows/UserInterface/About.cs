@@ -17,30 +17,27 @@
 
 using System;
 using System.ComponentModel; 
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Xaml;
 
 namespace SparkleShare {
 
-    public class SparkleAbout : Window {
+    public class About : Window {
 
-        public SparkleAboutController Controller = new SparkleAboutController ();
+        public AboutController Controller = new AboutController ();
 
         private Label updates;
 
 
-        public SparkleAbout ()
+        public About ()
         {
             Title      = "About SparkleShare";
             ResizeMode = ResizeMode.NoResize;
 			Height     = 288;
 			Width      = 720;
-            Icon       = SparkleUIHelpers.GetImageSource("sparkleshare-app", "ico");
+            Icon       = UserInterfaceHelpers.GetImageSource("sparkleshare-app", "ico");
             
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Closing += Close;
@@ -77,7 +74,7 @@ namespace SparkleShare {
                 Height = 260
             };
         
-            image.Source = SparkleUIHelpers.GetImageSource ("about");
+            image.Source = UserInterfaceHelpers.GetImageSource ("about");
             
             
             Label version = new Label () {

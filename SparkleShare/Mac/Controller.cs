@@ -61,16 +61,12 @@ namespace SparkleShare {
         }
 
 
-        public override bool CreateSparkleShareFolder ()
+        public override void CreateSparkleShareFolder ()
         {
             if (!Directory.Exists (SparkleShare.Controller.FoldersPath)) {
                 Directory.CreateDirectory (SparkleShare.Controller.FoldersPath);
                 Syscall.chmod (SparkleShare.Controller.FoldersPath, (FilePermissions) 448); // 448 -> 700
-
-                return true;
             }
-
-            return false;
         }
 
 
