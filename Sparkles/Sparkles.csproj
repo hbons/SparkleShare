@@ -43,6 +43,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWindows|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWindows|AnyCPU'">
+    <OutputPath>..\bin\</OutputPath>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -58,8 +72,12 @@
     <Compile Include="ListenerFactory.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="InstallationInfo.Directory.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="SSHCommand.cs" />
+    <Compile Include="Command.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SSHCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SSHFetcher.cs" />
     <Compile Include="SSHAuthenticationInfo.cs" />
     <Compile Include="TcpListener.cs" />
@@ -67,7 +85,9 @@
     <Compile Include="InstallationInfo.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="Invite.cs" />
-    <Compile Include="Watcher.cs" />
+    <Compile Include="Watcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
