@@ -97,7 +97,7 @@ if test "$OSNAME" = "Linux" ; then
 fi
 
 AM_CONDITIONAL(HAVE_APP_INDICATOR, test "$enable_appindicator" = "yes")
-AM_CONDITIONAL(BUILD_XDG_APP, test "$prefix" = "/app")
+AM_CONDITIONAL(BUILD_FLATPAK, test "$prefix" = "/app")
 
 AC_SUBST([GUISUBDIRS])
 SHAMROCK_CHECK_NUNIT
