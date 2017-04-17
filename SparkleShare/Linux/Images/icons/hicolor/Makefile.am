@@ -1,7 +1,7 @@
 theme = hicolor
 app_themedir = $(pkgdatadir)/icons/$(theme)
 
-if BUILD_XDG_APP
+if BUILD_FLATPAK
 system_themedir = $(app_themedir)
 else
 system_themedir = $(datadir)/icons/$(theme)
