@@ -61,8 +61,15 @@ namespace SparkleShare {
 
 
         public void Run (string [] args)
-        {   
-            (application as GLib.Application).Run (0, null);
+        {
+            // FIXME: Hack to cover API differences between Ubuntu and latest GNOME
+            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                #if HAVE_APP_INDICATOR
+                (application as GLib.Application).Run (0, null);
+                #endif
+            } else {
+                (application as GLib.Application).Run ("org.sparkleshare.SparkleShare", new string [0]);
+            }
         }
 
 
