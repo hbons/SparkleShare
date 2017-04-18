@@ -28,7 +28,8 @@ namespace SparkleShare {
 
     public class Controller : BaseController {
 
-        public Controller ()
+        public Controller (Configuration config)
+            : base (config)
         {
         }
 
