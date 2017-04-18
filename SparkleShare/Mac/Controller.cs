@@ -39,7 +39,8 @@ namespace SparkleShare {
         }
 
         
-        public Controller ()
+        public Controller (Configuration config)
+            : base (config)
         {
             NSApplication.Init ();
 
