@@ -24,7 +24,18 @@ namespace Sparkles {
 
     public class Configuration : XmlDocument {
 
-        public static Configuration DefaultConfiguration;
+        private static Lazy<Configuration> ConfigLazy = new Lazy<Configuration> (() => {
+            string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
+
+            if (InstallationInfo.OperatingSystem != OS.Windows && InstallationInfo.OperatingSystem != OS.Mac)
+                app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
+
+            string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
+            
+            return new Configuration (config_path, "projects.xml");
+        });
+        
+        public static Configuration DefaultConfiguration { get { return ConfigLazy.Value; } }
         public static bool DebugMode = true;
 
         public readonly string DirectoryPath;
