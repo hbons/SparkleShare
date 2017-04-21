@@ -194,18 +194,9 @@ namespace SparkleShare {
         bool lost_folders_path = false;
         
         
-        public BaseController ()
+        public BaseController (Configuration config)
         {
-            string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
-
-            if (InstallationInfo.OperatingSystem != OS.Windows && InstallationInfo.OperatingSystem != OS.Mac)
-                app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
-
-            string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
-            
-            Config = new Configuration (config_path, "projects.xml");
-            Configuration.DefaultConfiguration = Config;
-
+            Config = config;
             FoldersPath = Config.FoldersPath;
         }
         

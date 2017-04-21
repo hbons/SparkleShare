@@ -62,7 +62,7 @@ namespace SparkleShare {
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-            Controller = new Controller ();
+            Controller = new Controller (Configuration.DefaultConfiguration);
             Controller.Initialize ();
 
             UI = new UserInterface ();
