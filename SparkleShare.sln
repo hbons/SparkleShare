@@ -17,6 +17,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SparkleShare", "SparkleShar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{6CCE36AC-7129-40B0-B6E6-2A6A0EA190D0}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		README.md = README.md
 	EndProjectSection
