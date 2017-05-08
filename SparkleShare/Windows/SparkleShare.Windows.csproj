@@ -144,15 +144,6 @@
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Common\AboutController.cs" />
-    <Compile Include="..\Common\Avatars.cs" />
-    <Compile Include="..\Common\BaseController.cs" />
-    <Compile Include="..\Common\BubblesController.cs" />
-    <Compile Include="..\Common\EventLogController.cs" />
-    <Compile Include="..\Common\NoteController.cs" />
-    <Compile Include="..\Common\SetupController.cs" />
-    <Compile Include="..\Common\SparkleShare.cs" />
-    <Compile Include="..\Common\StatusIconController.cs" />
     <Compile Include="UserInterface\About.cs" />
     <Compile Include="UserInterface\Bubbles.cs" />
     <Compile Include="UserInterface\EventLog.cs" />
@@ -161,6 +152,7 @@
       <DependentUpon>Note.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\NotifyIcon.cs" />
+    <Compile Include="UserInterface\ProtocolHandler.cs" />
     <Compile Include="UserInterface\Setup.cs" />
     <Compile Include="UserInterface\SetupWindow.cs" />
     <Compile Include="UserInterface\Shortcut.cs" />
