@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkleShareInviteOpener", "SparkleShare\Windows\SparkleShareInviteOpener\SparkleShareInviteOpener.csproj", "{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SparkleShare\Common\SparkleShare.projitems*{728483aa-e34b-4441-bf2c-c8bc2901e4e0}*SharedItemsImports = 4
@@ -100,6 +102,19 @@ Global
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseWindows|Any CPU.ActiveCfg = ReleaseMac|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.DebugWindows|Any CPU.ActiveCfg = DebugWindows|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.DebugWindows|Any CPU.Build.0 = DebugWindows|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseMac|Any CPU.Build.0 = Release|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseWindows|Any CPU.ActiveCfg = ReleaseWindows|Any CPU
+		{1DB5492D-B897-4A5E-8DD7-175EC65F52F2}.ReleaseWindows|Any CPU.Build.0 = ReleaseWindows|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
