@@ -60,7 +60,7 @@ namespace SparkleShare {
                 if (Environment.OSVersion.Version.Major < 14)
                     return "Lucida Grande";
 
-                if (Environment.OSVersion.Version.Major <= 15)
+                if (Environment.OSVersion.Version.Major <= 16)
                     return "Helvetica Neue";
 
                 return "SF UI Text";
