@@ -2,7 +2,7 @@
 # 
 # Translators:
 #   <benjamincottyn@gmail.com>, 2011.
-#   <hylkebons@gmail.com>, 2011.
+#   <hi@planetpeanut.uk>, 2011.
 #   <inxidious@gmail.com>, 2011.
 # Łukasz Jernaś <deejay1@srem.org>, 2011.
 #   <m.manshanden@gmail.com>, 2011.
