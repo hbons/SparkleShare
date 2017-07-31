@@ -7,8 +7,8 @@ os:
   - linux
 
 before_install:
-  - docker pull ubuntu:xenial
+  - docker pull fedora:26
 
 script:
-  - docker build --file build/ci/Dockerfile --tag "sparkleshare:nightly" .
+  - docker build --file build/ci/flatpak/Dockerfile --tag "sparkleshare:nightly" .
 
