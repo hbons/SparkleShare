@@ -20,9 +20,11 @@ using System;
 using Gtk;
 using Sparkles;
 
-namespace SparkleShare {
+namespace SparkleShare
+{
 
-    public class UserInterface {
+    public class UserInterface
+    {
 
         public static string AssetsPath = InstallationInfo.Directory;
 
@@ -46,7 +48,7 @@ namespace SparkleShare {
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label().StyleContext.GetColor (StateFlags.Insensitive));
+            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label ().StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
 
             var tree_view = new TreeView ();
@@ -55,7 +57,7 @@ namespace SparkleShare {
                 UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetColor (StateFlags.Selected)),
                 UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetBackgroundColor (StateFlags.Selected)),
                 0.39);
-    
+
             SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (color);
         }
 
@@ -68,8 +70,11 @@ namespace SparkleShare {
                 (application as GLib.Application).Run (0, null);
                 #endif
             } else {
-                (application as GLib.Application).Run ("org.sparkleshare.SparkleShare", new string [0]);
-            }
+                #if HAVE_APP_INDICATOR
+                #else
+				(application as GLib.Application).Run ("org.sparkleshare.SparkleShare", new string [0]);
+                #endif
+			}
         }
 
 
