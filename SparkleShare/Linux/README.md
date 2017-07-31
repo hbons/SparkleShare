@@ -33,6 +33,7 @@ sudo apt-get install \
   git \
   gtk-sharp3-gapi \
   intltool \
+  libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
   libsoup2.4-dev \
