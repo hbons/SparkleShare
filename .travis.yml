@@ -7,7 +7,7 @@ os:
   - linux
 
 before_install:
-  - docker pull fedora:26
+  - docker pull fedora:latest
 
 script:
   - docker build --file build/ci/flatpak/Dockerfile --tag "sparkleshare:nightly" .
