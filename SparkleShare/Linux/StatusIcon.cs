@@ -280,7 +280,7 @@ namespace SparkleShare {
         // Makes the menu visible
         void ShowMenu (object o, EventArgs args)
         {
-            this.menu.Popup (null, null, SetPosition, 0, Global.CurrentEventTime);
+            this.menu.Popup (null, null, SetPosition, 0, Gtk.Global.CurrentEventTime);
         }
 
 
