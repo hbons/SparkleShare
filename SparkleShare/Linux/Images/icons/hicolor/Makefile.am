@@ -1,11 +1,6 @@
 theme = hicolor
 app_themedir = $(pkgdatadir)/icons/$(theme)
-
-if BUILD_FLATPAK
-system_themedir = $(app_themedir)
-else
 system_themedir = $(datadir)/icons/$(theme)
-endif
 
 system_theme_icons = \
 	apps,org.sparkleshare.SparkleShare-16.png \
