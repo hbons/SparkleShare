@@ -94,10 +94,10 @@ namespace SparkleShare {
             var links_layout = new HBox (false, 16);
 
             CssProvider label_css_provider = new CssProvider ();
-            label_css_provider.LoadFromData ("label { color: #fff; font-size: 12px; background-color: rgba(0, 0, 0, 0); }");
+            label_css_provider.LoadFromData ("label { color: #fff; font-size: 14pt; background-color: rgba(0, 0, 0, 0); }");
 
             CssProvider label_highlight_css_provider = new CssProvider ();
-            label_highlight_css_provider.LoadFromData ("label { color: #a8bbcf; font-size: 12px; }");
+            label_highlight_css_provider.LoadFromData ("label { color: #a8bbcf; font-size: 12pt; }");
 
             var version = new Label {
                 Text = "version " + Controller.RunningVersion,
@@ -161,7 +161,7 @@ namespace SparkleShare {
             CanFocus = false;
 
             CssProvider css_provider = new CssProvider ();
-            css_provider.LoadFromData ("label { color: #729fcf; font-size: 12px; }");
+            css_provider.LoadFromData ("label a { color: #729fcf; font-size: 14pt; }");
             StyleContext.AddProvider (css_provider, 800);
         }
     }
