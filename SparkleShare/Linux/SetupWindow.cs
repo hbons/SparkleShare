@@ -34,7 +34,7 @@ namespace SparkleShare {
         {
             SetWmclass ("SparkleShare", "SparkleShare");
 
-			IconName       = "org.sparkleshare.SparkleShare";
+            IconName       = "org.sparkleshare.SparkleShare";
             Resizable      = false;
             WindowPosition = WindowPosition.CenterAlways;
             Deletable      = false;
@@ -42,26 +42,23 @@ namespace SparkleShare {
 
 
             SetSizeRequest (400, 400);
-
             DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
-
-                VBox layout_vertical = new VBox (false, 16);
+            VBox layout_vertical = new VBox (false, 16);
             layout_vertical.BorderWidth = 16;
 
-                    this.content_area    = new EventBox ();
-                    this.option_area = new EventBox ();
+            this.content_area    = new EventBox ();
+            this.option_area = new EventBox ();
 
-                    this.buttons = CreateButtonBox ();
+            this.buttons = CreateButtonBox ();
 
-                HBox layout_actions = new HBox (false , 16);
+            HBox layout_actions = new HBox (false , 16);
 
-                layout_actions.PackStart (this.option_area, true, true, 0);
-                layout_actions.PackStart (this.buttons, false, false, 0);
+            layout_actions.PackStart (this.option_area, true, true, 0);
+            layout_actions.PackStart (this.buttons, false, false, 0);
 
-                layout_vertical.PackStart (this.content_area, true, true, 0);
-                layout_vertical.PackStart (layout_actions, false, false, 0);
-
+            layout_vertical.PackStart (this.content_area, true, true, 0);
+            layout_vertical.PackStart (layout_actions, false, false, 0);
 
             base.Add (layout_vertical);
         }
