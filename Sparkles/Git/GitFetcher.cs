@@ -47,7 +47,7 @@ namespace Sparkles.Git {
             if (!RemoteUrl.Scheme.Equals ("ssh") && !RemoteUrl.Scheme.Equals ("git"))
                 uri_builder.Scheme = "ssh";
 
-            if (RemoteUrl.Host.Equals ("github.com") ||
+            if (RemoteUrl.Host.Equals ("github.com") || // There should be a way to identify hosted gitlab instances.
                 RemoteUrl.Host.Equals ("gitlab.com")) {
 
                 AvailableStorageTypes.Add (
@@ -199,6 +199,8 @@ namespace Sparkles.Git {
                     git_branch.StartAndWaitForExit ();
                 }
 
+				File.SetAttributes(identifier_path, FileAttributes.Hidden);
+
             } else {
                 string branch = "HEAD";
                 string prefered_branch = "SparkleShare";
@@ -305,8 +307,12 @@ namespace Sparkles.Git {
 
             string output = git_ls_remote.StartAndReadStandardOutput ();
 
-            if (git_ls_remote.ExitCode != 0)
-                return null;
+			if (git_ls_remote.ExitCode != 0) {
+				Logger.LogInfo("Fetcher", string.Format("Failed to list remotes. Probably an authentication problem. Git exit code is:{0}", git_ls_remote.ExitCode));
+				errors.Add("error: Could not list remotes. Make sure your SSH Key is added to your Git Server.");
+
+				return null;
+			}
 
             if (string.IsNullOrWhiteSpace (output))
                 return StorageType.Unknown;

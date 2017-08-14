@@ -8,11 +8,11 @@ You can build SparkleShare from source or download the SparkleShare bundle.
   Install [Xcode](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12) from the macOS App Store, or [download](https://developer.apple.com/xcode/) it manually.
   Install [Xamarin Studio](http://monodevelop.com/download/).
 
-The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need 
- the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
+The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need the packages <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
 
 ```bash
-brew install autoconf automake libtool pkg-config
+brew install autoconf automake libtool pkg-config gettext
+brew link --force gettext
 ```
 
 ### Building
