@@ -63,6 +63,32 @@ namespace Sparkles {
         }
 
 
+        public static string MacOSVersion ()
+        {
+            var uname = new Command ("sw_vers", "-productVersion", false);
+            string output = uname.StartAndReadStandardOutput ();
+            string version = output;
+
+            // Parse the version number between the periods (e.g. "10.12.1" -> 12)
+            output = output.Substring (output.IndexOf (".") + 1);
+            output = output.Substring (0, output.LastIndexOf ("."));
+
+            string release = "Unreleased Version";
+
+            switch (int.Parse (output)) {
+            case 7:  release = "Lion"; break;
+            case 8:	 release = "Mountain Lion"; break;
+            case 9:	 release = "Mavericks"; break;
+            case 10: release = "Yosemite"; break;
+            case 11: release = "El Capitan"; break;
+            case 12: release = "Sierra"; break;
+            case 13: release = "High Sierra"; break;
+            }
+
+            return string.Format ("macOS {0} ({1})", version, release);
+        }
+
+
         public static string Version {
             get {
                 string version = "" + Assembly.GetExecutingAssembly ().GetName ().Version;

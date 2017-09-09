@@ -213,7 +213,10 @@ namespace SparkleShare {
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
 
             // TODO: ToString() with nice OS version names (Mac OS X Yosemite, Fedora 24, Ubuntu 16.04, etc.)
-            Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
+            if (InstallationInfo.OperatingSystem == OS.Mac)
+                Logger.LogInfo ("Environment", InstallationInfo.MacOSVersion ());
+            else
+                Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
 
             UserAuthenticationInfo = new SSHAuthenticationInfo ();
             SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;
