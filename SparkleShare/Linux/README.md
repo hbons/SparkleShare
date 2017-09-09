@@ -24,6 +24,7 @@ libappindicator-sharp
 
 ### Common build requirements
 
+Make sure to have the `git` package installed when you're building on Linux.
 You will need the packages listed below for the most used Linux distributions:  
 
 ```shell
