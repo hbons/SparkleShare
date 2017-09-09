@@ -77,8 +77,8 @@ namespace Sparkles {
 
             switch (int.Parse (output)) {
             case 7:  release = "Lion"; break;
-            case 8:	 release = "Mountain Lion"; break;
-            case 9:	 release = "Mavericks"; break;
+            case 8:  release = "Mountain Lion"; break;
+            case 9:  release = "Mavericks"; break;
             case 10: release = "Yosemite"; break;
             case 11: release = "El Capitan"; break;
             case 12: release = "Sierra"; break;
