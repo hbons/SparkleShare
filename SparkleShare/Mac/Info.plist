@@ -5,7 +5,7 @@
 	<key>CFBundleIconFile</key>
 	<string>sparkleshare-app</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.sparkleshare.sparkleshare</string>
+	<string>org.sparkleshare.SparkleShare</string>
 	<key>CFBundleName</key>
 	<string>SparkleShare</string>
 	<key>CFBundleShortVersionString</key>
