@@ -212,7 +212,7 @@ namespace SparkleShare {
             Logger.LogInfo ("Environment", "Git LFS " + Sparkles.Git.GitCommand.GitLFSVersion);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
 
-            // TODO: ToString() with nice OS version names (Mac OS X Yosemite, Fedora 24, Ubuntu 16.04, etc.)
+            // TODO: Nice OS version names for Linux (Fedora 24, Ubuntu 16.04, etc.)
             if (InstallationInfo.OperatingSystem == OS.Mac)
                 Logger.LogInfo ("Environment", InstallationInfo.MacOSVersion ());
             else
