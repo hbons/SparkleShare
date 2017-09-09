@@ -164,7 +164,7 @@ namespace Sparkles {
         protected Configuration local_config;
 
         string identifier;
-        BaseListener listener;
+        BaseListener listener = null;
         Watcher watcher;
         TimeSpan poll_interval        = PollInterval.Short;
         DateTime last_poll            = DateTime.Now;
@@ -231,8 +231,8 @@ namespace Sparkles {
                 if (HasRemoteChanges && !this.is_syncing)
                     SyncDownBase ();
                 
-                if (this.listener.IsConnected)
-                    this.poll_interval = PollInterval.Long;
+                // if (this.listener.IsConnected)
+                //    this.poll_interval = PollInterval.Long;
             }
             
             // In the unlikely case that we haven't synced up our
@@ -412,7 +412,7 @@ namespace Sparkles {
                 HasUnsyncedChanges = false;
                 this.poll_interval = PollInterval.Long;
 
-                this.listener.Announce (new Announcement (Identifier, CurrentRevision));
+                // this.listener.Announce (new Announcement (Identifier, CurrentRevision));
 
                 Status = SyncStatus.Idle;
                 SyncStatusChanged (Status);
@@ -427,7 +427,7 @@ namespace Sparkles {
                 if (Error == ErrorStatus.None && SyncUp ()) {
                     HasUnsyncedChanges = false;
 
-                    this.listener.Announce (new Announcement (Identifier, CurrentRevision));
+                    // this.listener.Announce (new Announcement (Identifier, CurrentRevision));
 
                     Status = SyncStatus.Idle;
                     SyncStatusChanged (Status);
@@ -525,17 +525,17 @@ namespace Sparkles {
 
         void CreateListener ()
         {
-            this.listener = ListenerFactory.CreateListener (Name, Identifier);
+            // this.listener = ListenerFactory.CreateListener (Name, Identifier);
 
-            if (this.listener.IsConnected)
-                this.poll_interval = PollInterval.Long;
+            // if (this.listener.IsConnected)
+            //    this.poll_interval = PollInterval.Long;
 
-            this.listener.Connected            += ListenerConnectedDelegate;
-            this.listener.Disconnected         += ListenerDisconnectedDelegate;
-            this.listener.AnnouncementReceived += ListenerAnnouncementReceivedDelegate;
+            // this.listener.Connected            += ListenerConnectedDelegate;
+            // this.listener.Disconnected         += ListenerDisconnectedDelegate;
+            // this.listener.AnnouncementReceived += ListenerAnnouncementReceivedDelegate;
 
-            if (!this.listener.IsConnected && !this.listener.IsConnecting)
-                this.listener.Connect ();
+            // if (!this.listener.IsConnected && !this.listener.IsConnecting)
+            //    this.listener.Connect ();
         }
 
         
@@ -659,10 +659,10 @@ namespace Sparkles {
                 this.remote_timer = null;
             }
 
-            this.listener.Disconnected         -= ListenerDisconnectedDelegate;
-            this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
+            // this.listener.Disconnected         -= ListenerDisconnectedDelegate;
+            // this.listener.AnnouncementReceived -= ListenerAnnouncementReceivedDelegate;
 
-            this.listener.Dispose ();
+            // this.listener.Dispose ();
 
             if (!UseCustomWatcher)
                 this.watcher.Dispose ();
