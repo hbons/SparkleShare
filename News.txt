@@ -1,9 +1,25 @@
 2.0.0 for Linux, Mac and Windows (Sun Sep 10, 2017):
 
+    SparkleShare 2.0 is a clean break and will be incompatible with 
+    the 1.x series. Repositories added using 1.0 will likely not work
+    and will have to be re-synced to take advantage of 2.0 features.
+
     Hylke:
-    - 
-    - 
-    - 
+    - Flatpak version now available
+    - Support for Git LFS managed repositories
+    - Updated Linux app icon by Sam Hewitt
+    - Projects are now grouped by host/organisation
+    - Prefer to use the "SparkleShare" branch if it exists remotely
+    - Added a GitLab preset
+    - Add an entry to GNOME's System Settings to manage notifications
+    - Encrypt names and emails in history of encrypted projects
+    - When conflicts are resolved "SparkleShare" is now the author and 
+      merge commits will be hidden from the log
+    - Fix conflict resolution on encrypted files
+    - Use a standalone SSH configuration instead of ssh-agent
+    - Use SHA256 instead of MD5 for SSH fingerprinting
+    - Dropped limited HTTPS support
+    - Dropped insecure DSA key support
 
 
 1.5.0 for Linux, Mac and Windows (Tue Dec 22, 2015):
