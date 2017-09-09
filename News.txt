@@ -1,9 +1,9 @@
-2.0.0 for Linux, Mac and Windows (???):
+2.0.0 for Linux, Mac and Windows (Sun Sep 10, 2017):
 
     Hylke:
     - 
-    -
-    -
+    - 
+    - 
 
 
 1.5.0 for Linux, Mac and Windows (Tue Dec 22, 2015):
