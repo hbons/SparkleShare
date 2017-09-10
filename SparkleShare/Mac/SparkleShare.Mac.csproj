@@ -5,16 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CF5BC8DB-A633-4FCC-8A3E-E3AC9B59FABC}</ProjectGuid>
-    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{8FCDF699-E2C3-4CB3-AF98-44198972AFC0}</ProjectGuid>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SparkleShare</RootNamespace>
     <AssemblyName>SparkleShare</AssemblyName>
-    <ReleaseVersion>
-    </ReleaseVersion>
-    <SuppressXamMacMigration>True</SuppressXamMacMigration>
-    <SuppressXamMacUpsell>True</SuppressXamMacUpsell>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <ReleaseVersion></ReleaseVersion>
+    <UseXamMacFullFramework>true</UseXamMacFullFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -122,6 +121,8 @@
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
+    <CodeSigningKey>Mac Developer</CodeSigningKey>
+    <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugMac|AnyCPU' ">
     <Optimize>False</Optimize>
@@ -152,20 +153,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
     <Reference Include="System.Net" />
-    <Reference Include="Mono.Posix" />
-    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppDelegate.cs">
-      <DependentUpon>MainMenu.xib</DependentUpon>
-    </Compile>
-    <Compile Include="MainMenu.xib.designer.cs">
-      <DependentUpon>MainMenu.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Watcher.cs" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-128.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-16.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-16%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-256.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-256%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-32.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-32%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="UserInterface\About.cs" />
     <Compile Include="UserInterface\Bubbles.cs" />
     <Compile Include="UserInterface\EventLog.cs" />
@@ -174,73 +184,74 @@
     <Compile Include="UserInterface\SetupWindow.cs" />
     <Compile Include="UserInterface\StatusIcon.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
-    <Compile Include="..\Common\Avatars.cs">
-      <Link>UserInterface\Avatars.cs</Link>
+    <Compile Include="AppDelegate.cs">
+      <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
+    <Compile Include="MainMenu.xib.designer.cs">
+      <DependentUpon>MainMenu.xib</DependentUpon>
+    </Compile>
+    <Compile Include="Watcher.cs" />
     <Compile Include="Controller.cs" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="MainMenu.xib" />
+    <ProjectReference Include="..\..\Sparkles\Sparkles.csproj">
+      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
+      <Name>Sparkles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sparkles\Git\Sparkles.Git.csproj">
+      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
+      <Name>Sparkles.Git</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Info.plist" />
-  </ItemGroup>
-  <Import Project="..\Common\SparkleShare.projitems" Label="Shared" Condition="Exists('..\Common\SparkleShare.projitems')" />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Content Include="..\Common\HTML\day-entry.html">
-      <Link>HTML\day-entry.html</Link>
-    </Content>
-    <Content Include="..\Common\HTML\event-entry.html">
-      <Link>HTML\event-entry.html</Link>
-    </Content>
-    <Content Include="..\Common\HTML\event-log.html">
-      <Link>HTML\event-log.html</Link>
-    </Content>
-    <Content Include="..\Common\HTML\jquery.js">
-      <Link>HTML\jquery.js</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="..\Common\Images\side-splash.png">
-      <Link>Resources\side-splash.png</Link>
+    <BundleResource Include="..\Common\Images\about.png">
+      <Link>Resources\about.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Images\about%402x.png">
+      <Link>Resources\about%402x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Linux\Images\icons\hicolor\document-added-12.png">
       <Link>Resources\document-added-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
-      <Link>Resources\document-edited-12.png</Link>
-    </BundleResource>
     <BundleResource Include="..\Linux\Images\icons\hicolor\document-deleted-12.png">
       <Link>Resources\document-deleted-12.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
+      <Link>Resources\document-edited-12.png</Link>
     </BundleResource>
     <BundleResource Include="..\Linux\Images\icons\hicolor\document-moved-12.png">
       <Link>Resources\document-moved-12.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Images\about.png">
-      <Link>Resources\about.png</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\tutorial-slide-3.png">
-      <Link>Resources\tutorial-slide-3.png</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\process-syncing-down.png" />
-    <BundleResource Include="Resources\process-syncing-error.png" />
-    <BundleResource Include="Resources\process-syncing-idle.png" />
-    <BundleResource Include="Resources\process-syncing-up.png" />
     <BundleResource Include="Resources\process-syncing.png" />
-    <BundleResource Include="..\Common\Images\user-icon-default.png">
-      <Link>Resources\user-icon-default.png</Link>
+    <BundleResource Include="Resources\process-syncing%402x.png" />
+    <BundleResource Include="Resources\process-syncing-down.png" />
+    <BundleResource Include="Resources\process-syncing-down%402x.png" />
+    <BundleResource Include="Resources\process-syncing-error.png" />
+    <BundleResource Include="Resources\process-syncing-error%402x.png" />
+    <BundleResource Include="Resources\process-syncing-idle.png" />
+    <BundleResource Include="Resources\process-syncing-idle%402x.png" />
+    <BundleResource Include="Resources\process-syncing-up.png" />
+    <BundleResource Include="Resources\process-syncing-up%402x.png" />
+    <BundleResource Include="..\Common\Images\side-splash.png">
+      <Link>Resources\side-splash.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Images\side-splash%402x.png">
       <Link>Resources\side-splash%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="Resources\process-syncing-down%402x.png" />
-    <BundleResource Include="Resources\process-syncing-error%402x.png" />
-    <BundleResource Include="Resources\process-syncing-idle%402x.png" />
-    <BundleResource Include="Resources\process-syncing-up%402x.png" />
-    <BundleResource Include="Resources\process-syncing%402x.png" />
-    <BundleResource Include="..\Common\Images\about%402x.png">
-      <Link>Resources\about%402x.png</Link>
+    <BundleResource Include="..\Mac\Resources\sparkleshare-app.icns">
+      <Link>Resources\sparkleshare-app.icns</Link>
+    </BundleResource>
+    <BundleResource Include="..\Mac\Resources\sparkleshare-folder.icns">
+      <Link>Resources\sparkleshare-folder.icns</Link>
+    </BundleResource>
+    <BundleResource Include="..\Mac\Resources\sparkleshare-folder-yosemite.icns">
+      <Link>Resources\sparkleshare-folder-yosemite.icns</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Images\text-balloon.png">
+      <Link>Resources\text-balloon.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Images\text-balloon%402x.png">
+      <Link>Resources\text-balloon%402x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Images\tutorial-slide-1.png">
       <Link>Resources\tutorial-slide-1.png</Link>
@@ -254,57 +265,24 @@
     <BundleResource Include="..\Common\Images\tutorial-slide-2%402x.png">
       <Link>Resources\tutorial-slide-2%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Presets\bitbucket%402x.png">
-      <Link>Presets\bitbucket%402x.png</Link>
+    <BundleResource Include="..\Mac\Resources\tutorial-slide-3.png">
+      <Link>Resources\tutorial-slide-3.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Presets\github%402x.png">
-      <Link>Presets\github%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\own-server%402x.png">
-      <Link>Presets\own-server%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\bitbucket.xml">
-      <Link>Presets\bitbucket.xml</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\github.xml">
-      <Link>Presets\github.xml</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\own-server.xml">
-      <Link>Presets\own-server.xml</Link>
+    <BundleResource Include="Resources\tutorial-slide-3%402x.png" />
+    <BundleResource Include="..\Common\Images\user-icon-default.png">
+      <Link>Resources\user-icon-default.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Presets\bitbucket.png">
       <Link>Presets\bitbucket.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\bitbucket%402x.png">
+      <Link>Presets\bitbucket%402x.png</Link>
+    </BundleResource>
     <BundleResource Include="..\Common\Presets\github.png">
       <Link>Presets\github.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Presets\own-server.png">
-      <Link>Presets\own-server.png</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\tutorial-slide-3%402x.png" />
-    <BundleResource Include="..\Common\Presets\planio.png">
-      <Link>Presets\planio.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\planio.xml">
-      <Link>Presets\planio.xml</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\planio%402x.png">
-      <Link>Presets\planio%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Images\text-balloon.png">
-      <Link>Resources\text-balloon.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Images\text-balloon%402x.png">
-      <Link>Resources\text-balloon%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\sparkleshare-app.icns">
-      <Link>Resources\sparkleshare-app.icns</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\sparkleshare-folder.icns">
-      <Link>Resources\sparkleshare-folder.icns</Link>
-    </BundleResource>
-    <BundleResource Include="Resources\sparkleshare-folder-yosemite.icns">
-      <Link>Resources\sparkleshare-folder-yosemite.icns</Link>
+    <BundleResource Include="..\Common\Presets\github%402x.png">
+      <Link>Presets\github%402x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Common\Presets\gitlab.png">
       <Link>Presets\gitlab.png</Link>
@@ -312,18 +290,53 @@
     <BundleResource Include="..\Common\Presets\gitlab%402x.png">
       <Link>Presets\gitlab%402x.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\own-server.png">
+      <Link>Presets\own-server.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\own-server%402x.png">
+      <Link>Presets\own-server%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\planio.png">
+      <Link>Presets\planio.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\planio%402x.png">
+      <Link>Presets\planio%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\bitbucket.xml">
+      <Link>Presets\bitbucket.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\github.xml">
+      <Link>Presets\github.xml</Link>
+    </BundleResource>
     <BundleResource Include="..\Common\Presets\gitlab.xml">
       <Link>Presets\gitlab.xml</Link>
     </BundleResource>
+    <BundleResource Include="..\Common\Presets\own-server.xml">
+      <Link>Presets\own-server.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\Presets\planio.xml">
+      <Link>Presets\planio.xml</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\HTML\day-entry.html">
+      <Link>HTML\day-entry.html</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\HTML\event-entry.html">
+      <Link>HTML\event-entry.html</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\HTML\event-log.html">
+      <Link>HTML\event-log.html</Link>
+    </BundleResource>
+    <BundleResource Include="..\Common\HTML\jquery.js">
+      <Link>HTML\jquery.js</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sparkles\Sparkles.csproj">
-      <Project>{2C914413-B31C-4362-93C7-1AE34F09112A}</Project>
-      <Name>Sparkles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Sparkles\Git\Sparkles.Git.csproj">
-      <Project>{009FDCD7-1D57-4202-BB6D-8477D8C6B8EE}</Project>
-      <Name>Sparkles.Git</Name>
-    </ProjectReference>
+    <Folder Include="Resources\" />
+    <Folder Include="UserInterface\" />
   </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="MainMenu.xib" />
+  </ItemGroup>
+  <Import Project="..\Common\SparkleShare.projitems" Label="Shared" Condition="Exists('..\Common\SparkleShare.projitems')" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
