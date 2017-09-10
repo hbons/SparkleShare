@@ -1,4 +1,4 @@
-﻿//   SparkleShare, a collaboration and sharing tool.
+﻿﻿﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
 
 
 using System;
-using System.Drawing;
 
 using AppKit;
+using CoreGraphics;
 using Foundation;
 
 namespace SparkleShare {
@@ -38,21 +38,21 @@ namespace SparkleShare {
 
         public About () : base ()
         {
-            SetFrame (new RectangleF (0, 0, 640, 281), true);
+            SetFrame (new CGRect (0, 0, 640, 281), true);
             Center ();
 
             Delegate    = new SparkleAboutDelegate ();
             StyleMask   = (NSWindowStyle.Closable | NSWindowStyle.Titled);
             Title       = "About SparkleShare";
-            MaxSize     = new SizeF (640, 281);
-            MinSize     = new SizeF (640, 281);
+            MaxSize     = new CGSize (640, 281);
+            MinSize     = new CGSize (640, 281);
             HasShadow   = true;
             IsOpaque    = false;
             BackingType = NSBackingStore.Buffered;
             Level       = NSWindowLevel.Floating;
 
             this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0),
+                Frame                     = new CGRect (0, 0, 0, 0),
                 KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
                 KeyEquivalent             = "w"
             };
@@ -82,22 +82,22 @@ namespace SparkleShare {
         private void CreateAbout ()
         {
             this.about_image = NSImage.ImageNamed ("about");
-            this.about_image.Size = new SizeF (720, 260);
+            this.about_image.Size = new CGSize (720, 260);
 
             this.about_image_view = new NSImageView () {
                 Image = this.about_image,
-                Frame = new RectangleF (0, 0, 720, 260)
+                Frame = new CGRect (0, 0, 720, 260)
             };
 
             this.version_text_field = new SparkleLabel ("version " + Controller.RunningVersion, NSTextAlignment.Left) {
                 DrawsBackground = false,
-                Frame           = new RectangleF (295, 140, 318, 22),
+                Frame           = new CGRect (295, 140, 318, 22),
                 TextColor       = NSColor.White
             };
 
             this.updates_text_field = new SparkleLabel ("Checking for updates...", NSTextAlignment.Left) {
                 DrawsBackground = false,
-                Frame           = new RectangleF (295, Frame.Height - 232, 318, 98),
+                Frame           = new CGRect (295, Frame.Height - 232, 318, 98),
                 TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f)
             };
 
@@ -108,26 +108,26 @@ namespace SparkleShare {
                 "under the GNU GPLv3", NSTextAlignment.Left) {
                 
                 DrawsBackground = false,
-                Frame           = new RectangleF (295, Frame.Height - 260, 318, 98),
+                Frame           = new CGRect (295, Frame.Height - 260, 318, 98),
                 TextColor       = NSColor.White
             };
 
             this.website_link       = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
-            this.website_link.Frame = new RectangleF (new PointF (295, 25), this.website_link.Frame.Size);
+            this.website_link.Frame = new CGRect (new CGPoint (295, 25), this.website_link.Frame.Size);
             
             this.credits_link       = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
-            this.credits_link.Frame = new RectangleF (
-                new PointF (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
+            this.credits_link.Frame = new CGRect (
+                new CGPoint (this.website_link.Frame.X + this.website_link.Frame.Width + 10, 25),
                 this.credits_link.Frame.Size);
             
             this.report_problem_link       = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
-            this.report_problem_link.Frame = new RectangleF (
-                new PointF (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
+            this.report_problem_link.Frame = new CGRect (
+                new CGPoint (this.credits_link.Frame.X + this.credits_link.Frame.Width + 10, 25),
                 this.report_problem_link.Frame.Size);
             
             this.debug_log_link       = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
-            this.debug_log_link.Frame = new RectangleF (
-                new PointF (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
+            this.debug_log_link.Frame = new CGRect (
+                new CGPoint (this.report_problem_link.Frame.X + this.report_problem_link.Frame.Width + 10, 25),
                 this.debug_log_link.Frame.Size);
 
             ContentView.AddSubview (this.about_image_view);
