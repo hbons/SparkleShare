@@ -1,4 +1,4 @@
-﻿//   SparkleShare, an instant update workflow to Git.
+﻿﻿//   SparkleShare, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 using AppKit;
+using CoreGraphics;
 
 namespace SparkleShare {
 
@@ -114,7 +114,7 @@ namespace SparkleShare {
             };
 
             this.folder_item.Image = this.sparkleshare_image;
-            this.folder_item.Image.Size = new SizeF (16, 16);
+            this.folder_item.Image.Size = new CGSize (16, 16);
 
             this.add_item = new NSMenuItem () {
                 Title   = "Sync Remote Project…",
@@ -217,7 +217,7 @@ namespace SparkleShare {
                     if (!Controller.Projects [i].HasError)
                         this.folder_menu_items [i].Activated += Controller.OpenFolderDelegate (project.Name);
 
-                    item.Image.Size = new SizeF (16, 16);
+                    item.Image.Size = new CGSize (16, 16);
                     i++;
                 };
             }
