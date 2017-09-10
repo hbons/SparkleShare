@@ -1,4 +1,4 @@
-﻿//   SparkleShare, an instant update workflow to Git.
+﻿﻿﻿//   SparkleShare, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
 
 
 using System.Collections.Generic;
-using System.Drawing;
 
+using CoreGraphics;
 using Foundation;
 using AppKit;
 
@@ -38,11 +38,11 @@ namespace SparkleShare {
 
         public SetupWindow ()
         {
-            SetFrame (new RectangleF (0, 0, 640, 420), true);
+            SetFrame (new CGRect (0, 0, 640, 420), true);
 
             StyleMask   = NSWindowStyle.Titled;
-            MaxSize     = new SizeF (640, 420);
-            MinSize     = new SizeF (640, 420);
+            MaxSize     = new CGSize (640, 420);
+            MinSize     = new CGSize (640, 420);
             HasShadow   = true;
 			IsOpaque    = false;
             BackingType = NSBackingStore.Buffered;
@@ -51,21 +51,21 @@ namespace SparkleShare {
             Center ();
 
             this.side_splash = NSImage.ImageNamed ("side-splash");
-            this.side_splash.Size = new SizeF (150, 482);
+            this.side_splash.Size = new CGSize (150, 482);
 
             this.side_splash_view = new NSImageView () {
                 Image = this.side_splash,
-                Frame = new RectangleF (0, 0, 150, 482)
+                Frame = new CGRect (0, 0, 150, 482)
             };
 
             this.header_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
-                Frame = new RectangleF (190, Frame.Height - 80, Frame.Width, 24),
+                Frame = new CGRect (190, Frame.Height - 80, Frame.Width, 24),
                 Font  = NSFontManager.SharedFontManager.FontWithFamily (
                     UserInterface.FontName, NSFontTraitMask.Bold, 0, 16)
             };
 
             this.description_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
-                Frame = new RectangleF (190, Frame.Height - 130, 640 - 240, 44)
+                Frame = new CGRect (190, Frame.Height - 130, 640 - 240, 44)
             };
 
             this.header_text_field.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
@@ -99,12 +99,12 @@ namespace SparkleShare {
                 
                 foreach (NSButton button in Buttons) {
                     button.BezelStyle = NSBezelStyle.Rounded;
-                    button.Frame      = new RectangleF (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
+                    button.Frame      = new CGRect (Frame.Width - 15 - x - (105 * i), 12, 105, 32);
 
                     // Make the button a bit wider if the text is likely to be longer
                     if (button.Title.Contains (" ")) {
                         button.SizeToFit ();
-                        button.Frame = new RectangleF (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width,
+                        button.Frame = new CGRect (Frame.Width - 30 - 15 - (105 * (i - 1)) - button.Frame.Width,
                             12, button.Frame.Width + 30, 32);
 
                         x += 22;

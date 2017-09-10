@@ -1,4 +1,4 @@
-﻿//   SparkleShare, a collaboration and sharing tool.
+﻿﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 
-using Mono.Unix;
-using Foundation;
 using AppKit;
+using CoreGraphics;
+using Foundation;
 using WebKit;
 
 using Sparkles;
@@ -85,19 +84,19 @@ namespace SparkleShare {
                 Description = "First off, what’s your name and email?\n(visible only to team members)";
 
                 FullNameLabel       = new SparkleLabel ("Full Name:", NSTextAlignment.Right);
-                FullNameLabel.Frame = new RectangleF (165, Frame.Height - 234, 160, 17);
+                FullNameLabel.Frame = new CGRect (165, Frame.Height - 234, 160, 17);
 
                 FullNameTextField = new NSTextField () {
-                    Frame       = new RectangleF (330, Frame.Height - 238, 196, 22),
-                    StringValue = UnixUserInfo.GetRealUser ().RealName,
+                    Frame       = new CGRect (330, Frame.Height - 238, 196, 22),
+                    StringValue = new NSProcessInfo ().GetFullUserName (),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
                 EmailLabel       = new SparkleLabel ("Email:", NSTextAlignment.Right);
-                EmailLabel.Frame = new RectangleF (165, Frame.Height - 264, 160, 17);
+                EmailLabel.Frame = new CGRect (165, Frame.Height - 264, 160, 17);
                     
                 EmailTextField = new NSTextField () {
-                    Frame       = new RectangleF (330, Frame.Height - 268, 196, 22),
+                    Frame       = new CGRect (330, Frame.Height - 268, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
@@ -154,20 +153,20 @@ namespace SparkleShare {
                 Description = "Do you want to add this project to SparkleShare?";
 
                 AddressLabel       = new SparkleLabel ("Address:", NSTextAlignment.Right);
-                AddressLabel.Frame = new RectangleF (165, Frame.Height - 238, 160, 17);
+                AddressLabel.Frame = new CGRect (165, Frame.Height - 238, 160, 17);
                 AddressLabel.Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
      
                 AddressTextField = new SparkleLabel (Controller.PendingInvite.Address, NSTextAlignment.Left) {
-                    Frame = new RectangleF (330, Frame.Height - 240, 260, 17)
+                    Frame = new CGRect (330, Frame.Height - 240, 260, 17)
                 };
 
                 PathLabel       = new SparkleLabel ("Remote Path:", NSTextAlignment.Right);
-                PathLabel.Frame = new RectangleF (165, Frame.Height - 262, 160, 17);
+                PathLabel.Frame = new CGRect (165, Frame.Height - 262, 160, 17);
                 PathLabel.Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
 
 
                 PathTextField = new SparkleLabel (Controller.PendingInvite.RemotePath, NSTextAlignment.Left) {
-                    Frame = new RectangleF (330, Frame.Height - 264, 260, 17)
+                    Frame = new CGRect (330, Frame.Height - 264, 260, 17)
                 };
 
                 CancelButton = new NSButton () { Title = "Cancel" };
@@ -192,12 +191,12 @@ namespace SparkleShare {
                 Description = "";
 
                 AddressLabel = new SparkleLabel ("Address:", NSTextAlignment.Left) {
-                    Frame = new RectangleF (190, Frame.Height - 308, 160, 17),
+                    Frame = new CGRect (190, Frame.Height - 308, 160, 17),
                     Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 AddressTextField = new NSTextField () {
-                    Frame       = new RectangleF (190, Frame.Height - 336, 196, 22),
+                    Frame       = new CGRect (190, Frame.Height - 336, 196, 22),
                     Enabled     = (Controller.SelectedPreset.Address == null),
                     Delegate    = new SparkleTextFieldDelegate (),
                     StringValue = "" + Controller.PreviousAddress
@@ -206,12 +205,12 @@ namespace SparkleShare {
                 AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
                 PathLabel = new SparkleLabel ("Remote Path:", NSTextAlignment.Left) {
-                    Frame = new RectangleF (190 + 196 + 16, Frame.Height - 308, 160, 17),
+                    Frame = new CGRect (190 + 196 + 16, Frame.Height - 308, 160, 17),
                     Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 PathTextField = new NSTextField () {
-                    Frame       = new RectangleF (190 + 196 + 16, Frame.Height - 336, 196, 22),
+                    Frame       = new CGRect (190 + 196 + 16, Frame.Height - 336, 196, 22),
                     Enabled     = (Controller.SelectedPreset.Path == null),
                     Delegate    = new SparkleTextFieldDelegate (),
                     StringValue = "" + Controller.PreviousPath
@@ -221,25 +220,25 @@ namespace SparkleShare {
 
                 PathHelpLabel = new SparkleLabel (Controller.SelectedPreset.PathExample, NSTextAlignment.Left) {
                     TextColor = NSColor.DisabledControlText,
-                    Frame     = new RectangleF (190 + 196 + 16, Frame.Height - 358, 204, 19)
+                    Frame     = new CGRect (190 + 196 + 16, Frame.Height - 358, 204, 19)
                 };
 
                 AddressHelpLabel = new SparkleLabel (Controller.SelectedPreset.AddressExample, NSTextAlignment.Left) {
                     TextColor = NSColor.DisabledControlText,
-                    Frame     = new RectangleF (190, Frame.Height - 358, 204, 19)
+                    Frame     = new CGRect (190, Frame.Height - 358, 204, 19)
                 };
 
                 if (TableView == null || TableView.RowCount != Controller.Presets.Count) {
                     TableView = new NSTableView () {
-                        Frame            = new RectangleF (0, 0, 0, 0),
+                        Frame            = new CGRect (0, 0, 0, 0),
                         RowHeight        = 38,
-                        IntercellSpacing = new SizeF (8, 12),
+                        IntercellSpacing = new CGSize (8, 12),
                         HeaderView       = null,
                         Delegate         = new SparkleTableViewDelegate ()
                     };
 
                     ScrollView = new NSScrollView () {
-                        Frame               = new RectangleF (190, Frame.Height - 280, 408, 185),
+                        Frame               = new CGRect (190, Frame.Height - 280, 408, 185),
                         DocumentView        = TableView,
                         HasVerticalScroller = true,
                         BorderType          = NSBorderType.BezelBorder
@@ -267,14 +266,14 @@ namespace SparkleShare {
                     if (Environment.OSVersion.Version.Major < 11)
                         DataSource = new SparkleDataSource (1, Controller.Presets);
                     else
-                        DataSource = new SparkleDataSource (BackingScaleFactor, Controller.Presets);
+                        DataSource = new SparkleDataSource ((float) BackingScaleFactor, Controller.Presets);
 
                     TableView.DataSource = DataSource;
                     TableView.ReloadData ();
                     
                     (TableView.Delegate as SparkleTableViewDelegate).SelectionChanged += delegate {
-                        Controller.SelectedPresetChanged (TableView.SelectedRow);
-                        Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
+                        Controller.SelectedPresetChanged ((int) TableView.SelectedRow);
+                        Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, (int) TableView.SelectedRow);
                     };
                 }
                 
@@ -283,7 +282,7 @@ namespace SparkleShare {
                 MakeFirstResponder ((NSResponder) TableView);
 
                 HistoryCheckButton = new NSButton () {
-                    Frame = new RectangleF (190, Frame.Height - 400, 300, 18),
+                    Frame = new CGRect (190, Frame.Height - 400, 300, 18),
                     Title = "Fetch prior revisions"
                 };
 
@@ -318,11 +317,11 @@ namespace SparkleShare {
 
 
                 (AddressTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
-                    Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
+                    Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, (int) TableView.SelectedRow);
                 };
 
                  (PathTextField.Delegate as SparkleTextFieldDelegate).StringValueChanged += delegate {
-                    Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
+                    Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, (int) TableView.SelectedRow);
                 };
 
 
@@ -354,7 +353,7 @@ namespace SparkleShare {
                 Buttons.Add (AddButton);
                 Buttons.Add (CancelButton);
 
-                Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, TableView.SelectedRow);
+                Controller.CheckAddPage (AddressTextField.StringValue, PathTextField.StringValue, (int) TableView.SelectedRow);
             }
 
             if (type == PageType.Syncing) {
@@ -362,7 +361,7 @@ namespace SparkleShare {
                 Description = "This may take a while for large projects.\nIsn’t it coffee-o’clock?";
 
                 ProgressIndicator = new NSProgressIndicator () {
-                    Frame         = new RectangleF (190, Frame.Height - 200, 640 - 150 - 80, 20),
+                    Frame         = new CGRect (190, Frame.Height - 200, 640 - 150 - 80, 20),
                     Style         = NSProgressIndicatorStyle.Bar,
                     MinValue      = 0.0,
                     MaxValue      = 100.0,
@@ -380,7 +379,7 @@ namespace SparkleShare {
                 };
 
                 ProgressLabel       = new SparkleLabel ("Preparing to fetch files…", NSTextAlignment.Right);
-                ProgressLabel.Frame = new RectangleF (Frame.Width - 40 - 250, 185, 250, 25);
+                ProgressLabel.Frame = new CGRect (Frame.Width - 40 - 250, 185, 250, 25);
 
 
                 Controller.UpdateProgressBarEvent += delegate (double percentage, string speed) {
@@ -408,7 +407,7 @@ namespace SparkleShare {
                 // Displaying marked up text with Cocoa is
                 // a pain, so we just use a webview instead
                 WebView web_view = new WebView ();
-                web_view.Frame   = new RectangleF (190, Frame.Height - 525, 375, 400);
+                web_view.Frame   = new CGRect (190, Frame.Height - 525, 375, 400);
 
                 string html = "<style>" +
                     "* {" +
@@ -473,11 +472,11 @@ namespace SparkleShare {
                 ButtonCellProto.SetButtonType (NSButtonType.Radio);
                 ButtonCellProto.Font = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
 
-                Matrix = new NSMatrix (new RectangleF (202, Frame.Height - 256 - 128, 256, 256), NSMatrixMode.Radio,
+                Matrix = new NSMatrix (new CGRect (202, Frame.Height - 256 - 128, 256, 256), NSMatrixMode.Radio,
                     ButtonCellProto, SparkleShare.Controller.FetcherAvailableStorageTypes.Count, 1);
 
-                Matrix.CellSize = new SizeF (256, 36);
-                Matrix.IntercellSpacing = new SizeF (32, 32);
+                Matrix.CellSize = new CGSize (256, 36);
+                Matrix.IntercellSpacing = new CGSize (32, 32);
 
                 int i = 0;
                 foreach (StorageTypeInfo storage_type in SparkleShare.Controller.FetcherAvailableStorageTypes) {
@@ -485,7 +484,7 @@ namespace SparkleShare {
 
                     NSTextField storage_type_description = new SparkleLabel (storage_type.Description, NSTextAlignment.Left) {
                         TextColor = NSColor.DisabledControlText,
-                        Frame = new RectangleF (223, Frame.Height - 190 - (68 * i), 256, 32)
+                        Frame = new CGRect (223, Frame.Height - 190 - (68 * i), 256, 32)
                     };
 
                     storage_type_descriptions.Add (storage_type_description);
@@ -501,7 +500,7 @@ namespace SparkleShare {
                 ContinueButton = new NSButton () { Title = "Continue" };
 
                 ContinueButton.Activated += delegate {
-                    StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes [Matrix.SelectedRow];
+                    StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes [(int) Matrix.SelectedRow];
                     Controller.StoragePageCompleted (selected_storage_type.Type);
                 };
 
@@ -530,22 +529,22 @@ namespace SparkleShare {
                     extra_pos_y = 20;
   
                 PasswordLabel = new SparkleLabel ("Password:", NSTextAlignment.Right) {
-                    Frame           = new RectangleF (155, Frame.Height - 202 - extra_pos_y, 160, 17),
+                    Frame           = new CGRect (155, Frame.Height - 202 - extra_pos_y, 160, 17),
                     Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
                 };
 
                 PasswordTextField = new NSSecureTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 208 - extra_pos_y, 196, 22),
+                    Frame       = new CGRect (320, Frame.Height - 208 - extra_pos_y, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
                 VisiblePasswordTextField = new NSTextField () {
-                    Frame       = new RectangleF (320, Frame.Height - 208 - extra_pos_y, 196, 22),
+                    Frame       = new CGRect (320, Frame.Height - 208 - extra_pos_y, 196, 22),
                     Delegate    = new SparkleTextFieldDelegate ()
                 };
 
                 ShowPasswordCheckButton = new NSButton () {
-                    Frame = new RectangleF (318, Frame.Height - 235 - extra_pos_y, 300, 18),
+                    Frame = new CGRect (318, Frame.Height - 235 - extra_pos_y, 300, 18),
                     Title = "Show password",
                     State = NSCellStateValue.Off
                 };
@@ -553,15 +552,15 @@ namespace SparkleShare {
                 ShowPasswordCheckButton.SetButtonType (NSButtonType.Switch);
 
                 WarningImage = NSImage.ImageNamed ("NSInfo");
-                WarningImage.Size = new SizeF (24, 24);
+                WarningImage.Size = new CGSize (24, 24);
 
                 WarningImageView = new NSImageView () {
                     Image = WarningImage,
-                    Frame = new RectangleF (200, Frame.Height - 320, 24, 24)
+                    Frame = new CGRect (200, Frame.Height - 320, 24, 24)
                 };
 
                 WarningTextField = new SparkleLabel ("This password can’t be changed later, and your files can’t be recovered if it’s forgotten.", NSTextAlignment.Left) {
-                    Frame = new RectangleF (235, Frame.Height - 390, 325, 100),
+                    Frame = new CGRect (235, Frame.Height - 390, 325, 100),
                 };
 
                 CancelButton = new NSButton () { Title = "Cancel" };
@@ -642,15 +641,15 @@ namespace SparkleShare {
 
                 if (warnings.Length > 0) {
                     WarningImage = NSImage.ImageNamed ("NSInfo");
-                    WarningImage.Size = new SizeF (24, 24);
+                    WarningImage.Size = new CGSize (24, 24);
 
                     WarningImageView = new NSImageView () {
                         Image = WarningImage,
-                        Frame = new RectangleF (200, Frame.Height - 175, 24, 24)
+                        Frame = new CGRect (200, Frame.Height - 175, 24, 24)
                     };
 
                     WarningTextField = new SparkleLabel (warnings [0], NSTextAlignment.Left);
-                    WarningTextField.Frame       = new RectangleF (235, Frame.Height - 245, 325, 100);
+                    WarningTextField.Frame       = new CGRect (235, Frame.Height - 245, 325, 100);
 
                     ContentView.AddSubview (WarningImageView);
                     ContentView.AddSubview (WarningTextField);
@@ -783,7 +782,7 @@ namespace SparkleShare {
                     image_path = hi_path;
             }
 
-            return new NSImage (image_path) { Size = new SizeF (24, 24) };
+            return new NSImage (image_path) { Size = new CGSize (24, 24) };
         }
     }
 

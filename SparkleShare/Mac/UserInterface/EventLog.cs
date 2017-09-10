@@ -1,4 +1,4 @@
-﻿//   SparkleShare, a collaboration and sharing tool.
+﻿﻿﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
 
 
 using System;
-using System.Drawing;
 using System.IO;
 
 using AppKit;
+using CoreGraphics;
 using Foundation;
 using WebKit;
 
@@ -56,33 +56,33 @@ namespace SparkleShare {
             float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
 
             SetFrame (
-                new RectangleF (
-                    new PointF (x, y),
-                    new SizeF (min_width, height)),
+                new CGRect (
+                    new CGPoint (x, y),
+                    new CGSize (min_width, height)),
                 true);
 
             StyleMask = (NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
                          NSWindowStyle.Titled | NSWindowStyle.Resizable);
 
-            MinSize        = new SizeF (min_width, min_height);
+            MinSize        = new CGSize (min_width, min_height);
             HasShadow      = true;
             IsOpaque       = false;
             BackingType    = NSBackingStore.Buffered;
-            TitlebarHeight = Frame.Height - ContentView.Frame.Height;
+            TitlebarHeight = (float) (Frame.Height - ContentView.Frame.Height);
             Level          = NSWindowLevel.Floating;
 
 
-            this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                Frame = new RectangleF (new PointF (0, 0),
-                    new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+            this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
+                Frame = new CGRect (new CGPoint (0, 0),
+                    new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };
 
             this.web_view.Preferences.PlugInsEnabled = false;
 
             this.cover = new NSBox () {
-                Frame = new RectangleF (
-                    new PointF (-1, -1),
-                    new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 1)),
+                Frame = new CGRect (
+                    new CGPoint (-1, -1),
+                    new CGSize (Frame.Width + 2, this.web_view.Frame.Height + 1)),
                 FillColor = NSColor.White,
                 BorderType = NSBorderType.NoBorder,
                 BoxType = NSBoxType.NSBoxCustom
@@ -103,9 +103,9 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (0, ContentView.Frame.Height - 31),
-                    new SizeF (60, 20)),
+                Frame           = new CGRect (
+                    new CGPoint (0, ContentView.Frame.Height - 31),
+                    new CGSize (60, 20)),
                 StringValue     = "Size:"
             };
 
@@ -114,9 +114,9 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (60, ContentView.Frame.Height - 27),
-                    new SizeF (60, 20)),
+                Frame           = new CGRect (
+                    new CGPoint (60, ContentView.Frame.Height - 27),
+                    new CGSize (60, 20)),
                 StringValue     = "…",
                 Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
             };
@@ -127,9 +127,9 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (130, ContentView.Frame.Height - 31),
-                    new SizeF (60, 20)),
+                Frame           = new CGRect (
+                    new CGPoint (130, ContentView.Frame.Height - 31),
+                    new CGSize (60, 20)),
                 StringValue     = "History:"
             };
 
@@ -138,34 +138,34 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.WindowBackground,
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (190, ContentView.Frame.Height - 27),
-                    new SizeF (60, 20)
+                Frame           = new CGRect (
+                    new CGPoint (190, ContentView.Frame.Height - 27),
+                    new CGSize (60, 20)
                 ),
                 StringValue     = "…",
                 Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
             };
 
             this.popup_button = new NSPopUpButton () {
-                Frame = new RectangleF (
-                    new PointF (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
-                    new SizeF (156, 26)),
+                Frame = new CGRect (
+                    new CGPoint (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
+                    new CGSize (156, 26)),
                 PullsDown = false
             };
 
             this.background = new NSBox () {
-                Frame = new RectangleF (
-                    new PointF (-1, -1),
-                    new SizeF (Frame.Width + 2, this.web_view.Frame.Height + 2)),
+                Frame = new CGRect (
+                    new CGPoint (-1, -1),
+                    new CGSize (Frame.Width + 2, this.web_view.Frame.Height + 2)),
                 FillColor = NSColor.White,
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
             };
 
             this.progress_indicator = new NSProgressIndicator () {
-                Frame = new RectangleF (
-                    new PointF (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
-                    new SizeF (20, 20)),
+                Frame = new CGRect (
+                    new CGPoint (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+                    new CGSize (20, 20)),
                 Style = NSProgressIndicatorStyle.Spinning
             };
 
@@ -180,7 +180,7 @@ namespace SparkleShare {
             ContentView.AddSubview (this.background);
             ContentView.AddSubview (this.hidden_close_button);
 
-            (Delegate as SparkleEventsDelegate).WindowResized += delegate (SizeF new_window_size) {
+            (Delegate as SparkleEventsDelegate).WindowResized += delegate (CGSize new_window_size) {
                 SparkleShare.Controller.Invoke (() => Relayout (new_window_size));
             };
 
@@ -240,7 +240,7 @@ namespace SparkleShare {
                         PreventsApplicationTerminationWhenModal = false
                     };
 
-                    if ((NSPanelButtonType) panel.RunModal () == NSPanelButtonType.Ok) {
+                    if ((NSPanelButtonType) (int) panel.RunModal () == NSPanelButtonType.Ok) {
                         string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
                         Controller.SaveDialogCompleted (target_file_path);
                     
@@ -252,41 +252,41 @@ namespace SparkleShare {
         }
 
 
-        public void Relayout (SizeF new_window_size)
+        public void Relayout (CGSize new_window_size)
         {
-            this.web_view.Frame = new RectangleF (this.web_view.Frame.Location,
-                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
+            this.web_view.Frame = new CGRect (this.web_view.Frame.Location,
+                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
 
-            this.cover.Frame = new RectangleF (this.cover.Frame.Location,
-                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
+            this.cover.Frame = new CGRect (this.cover.Frame.Location,
+                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
 
-            this.background.Frame = new RectangleF (this.background.Frame.Location,
-                new SizeF (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
+            this.background.Frame = new CGRect (this.background.Frame.Location,
+                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
 
-            this.size_label.Frame = new RectangleF (
-                new PointF (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+            this.size_label.Frame = new CGRect (
+                new CGPoint (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
                 this.size_label.Frame.Size);
 
-            this.size_label_value.Frame = new RectangleF (
-                new PointF (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
+            this.size_label_value.Frame = new CGRect (
+                new CGPoint (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
                 this.size_label_value.Frame.Size);
 
-            this.history_label.Frame = new RectangleF (
-                new PointF (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
+            this.history_label.Frame = new CGRect (
+                new CGPoint (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
                 this.history_label.Frame.Size);
 
-            this.history_label_value.Frame = new RectangleF (
-                new PointF (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
+            this.history_label_value.Frame = new CGRect (
+                new CGPoint (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
                 this.history_label_value.Frame.Size);
 
-            this.progress_indicator.Frame = new RectangleF (
-                new PointF (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
+            this.progress_indicator.Frame = new CGRect (
+                new CGPoint (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
                 this.progress_indicator.Frame.Size);
 
             this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
 
-            this.popup_button.Frame = new RectangleF (
-                new PointF (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
+            this.popup_button.Frame = new CGRect (
+                new CGPoint (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
                 this.popup_button.Frame.Size);
 
             ContentView.AddSubview (this.popup_button);
@@ -345,8 +345,8 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
             html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
 			
-            this.web_view = new WebView (new RectangleF (0, 0, 481, 579), "", "") {
-                Frame = new RectangleF (new PointF (0, 0), new SizeF (ContentView.Frame.Width, ContentView.Frame.Height - 39))
+            this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
+                Frame = new CGRect (new CGPoint (0, 0), new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };
 
             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
@@ -379,9 +379,9 @@ namespace SparkleShare {
     public class SparkleEventsDelegate : NSWindowDelegate {
 
         public event WindowResizedHandler WindowResized = delegate { };
-        public delegate void WindowResizedHandler (SizeF new_window_size);
+        public delegate void WindowResizedHandler (CGSize new_window_size);
 
-        public override SizeF WillResize (NSWindow sender, SizeF to_frame_size)
+        public override CGSize WillResize (NSWindow sender, CGSize to_frame_size)
         {
             WindowResized (to_frame_size);
             return to_frame_size;

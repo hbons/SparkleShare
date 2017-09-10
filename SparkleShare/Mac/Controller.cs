@@ -1,4 +1,4 @@
-﻿﻿//   SparkleShare, a collaboration and sharing tool.
+﻿﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -67,10 +67,14 @@ namespace SparkleShare {
 
         public override void CreateSparkleShareFolder ()
         {
-            if (!Directory.Exists (SparkleShare.Controller.FoldersPath)) {
-                Directory.CreateDirectory (SparkleShare.Controller.FoldersPath);
-                Syscall.chmod (SparkleShare.Controller.FoldersPath, (FilePermissions) 448); // 448 -> 700
-            }
+            if (Directory.Exists (SparkleShare.Controller.FoldersPath))
+                return;
+
+            Directory.CreateDirectory (SparkleShare.Controller.FoldersPath);
+
+            // TODO: Use proper API
+            var chmod = new Command ("chmod", "700 " + SparkleShare.Controller.FoldersPath);
+            chmod.StartAndWaitForExit ();
         }
 
 
@@ -89,31 +93,31 @@ namespace SparkleShare {
         }
 
 
-		// There aren't any bindings in Xamarin.Mac to support this yet, so
-		// we call out to an applescript to do the job
+        // There aren't any bindings in Xamarin.Mac to support this yet, so
+        // we call out to an applescript to do the job
         public override void CreateStartupItem ()
         {
-			string args = "-e 'tell application \"System Events\" to " +
-				"make login item at end with properties " +
-				"{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
-			
-			var process = new Command ("osascript", args);
-			process.StartAndWaitForExit ();
-			
-			Logger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
-		}
-		
+            string args = "-e 'tell application \"System Events\" to " +
+                "make login item at end with properties " +
+                "{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
+
+            var process = new Command ("osascript", args);
+            process.StartAndWaitForExit ();
+
+            Logger.LogInfo ("Controller", "Added " + NSBundle.MainBundle.BundlePath + " to login items");
+        }
+
 
         public override void InstallProtocolHandler ()
         {
         }
 
 
-		public override void CopyToClipboard (string text)
-		{
-			NSPasteboard.GeneralPasteboard.ClearContents ();
-			NSPasteboard.GeneralPasteboard.SetStringForType (text, "NSStringPboardType");
-		}
+        public override void CopyToClipboard (string text)
+        {
+            NSPasteboard.GeneralPasteboard.ClearContents ();
+            NSPasteboard.GeneralPasteboard.SetStringForType (text, "NSStringPboardType");
+        }
 
 
         public override void OpenFolder (string path)
@@ -216,13 +220,12 @@ namespace SparkleShare {
 
 
         public delegate void Code ();
-        readonly NSObject obj = new NSObject ();
 
         public void Invoke (Code code)
         {
             using (var a = new NSAutoreleasePool ())
             {
-                obj.InvokeOnMainThread (() => code ());
+                new NSObject ().InvokeOnMainThread (() => code ());
             }
         }
     }
