@@ -1,6 +1,6 @@
-//   Originally taken from:
+﻿//   Originally taken from:
 //   https://github.com/jesse99/Continuum/blob/master/source/shared/DirectoryWatcher.cs
-//   Modified to use MonoMac and integrate into SparkleShare
+//   Modified to use Xamarin.Mac and integrate into SparkleShare
 //
 //   Copyright (C) 2008 Jesse Jones
 //   Copyright (C) 2012 Hylke Bons
@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 
-using MonoMac.Foundation;
+using Foundation;
 
 namespace SparkleShare {
 

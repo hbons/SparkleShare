@@ -19,6 +19,5 @@ cp ${MONO_PATH}/lib/libMonoPosixHelper.dylib ../MacOS/
 sed -i .bak 's/libMonoPosixHelper.dylib/@executable_path\/libMonoPosixHelper.dylib/' ./config
 
 # merge all Assemblies into one Mac binary
-mkbundle --static --deps --config ./config  -o ../MacOS/SparkleShare SparkleShare.exe Sparkles.dll MonoMac.dll Sparkles.Git.dll
+mkbundle --static --deps --config ./config  -o ../MacOS/SparkleShare SparkleShare.exe Sparkles.dll Xamarin.Mac.dll Sparkles.Git.dll
 rm *.dll *.exe
-
