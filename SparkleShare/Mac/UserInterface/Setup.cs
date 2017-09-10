@@ -1,4 +1,4 @@
-//   SparkleShare, a collaboration and sharing tool.
+﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,9 @@ using System.Drawing;
 using System.IO;
 
 using Mono.Unix;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.WebKit;
+using Foundation;
+using AppKit;
+using WebKit;
 
 using Sparkles;
 

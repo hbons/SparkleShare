@@ -1,4 +1,4 @@
-//   SparkleShare, an instant update workflow to Git.
+﻿//   SparkleShare, an instant update workflow to Git.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-using MonoMac.AppKit;
+using AppKit;
 
 namespace SparkleShare {
 
