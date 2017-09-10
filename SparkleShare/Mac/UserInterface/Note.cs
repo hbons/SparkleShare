@@ -1,4 +1,4 @@
-﻿//   SparkleShare, a collaboration and sharing tool.
+﻿﻿﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
 
 
 using System;
-using System.Drawing;
 
 using AppKit;
+using CoreGraphics;
 using Foundation;
 
 namespace SparkleShare {
@@ -38,21 +38,21 @@ namespace SparkleShare {
 
         public Note () : base ()
         {
-            SetFrame (new RectangleF (0, 0, 480, 240), true);
+            SetFrame (new CGRect (0, 0, 480, 240), true);
             Center ();
 
             Delegate    = new SparkleNoteDelegate ();
             StyleMask   = (NSWindowStyle.Closable | NSWindowStyle.Titled);
             Title       = "Add Note";
-            MaxSize     = new SizeF (480, 240);
-            MinSize     = new SizeF (480, 240);
+            MaxSize     = new CGSize (480, 240);
+            MinSize     = new CGSize (480, 240);
             HasShadow   = true;
             IsOpaque    = false;
             BackingType = NSBackingStore.Buffered;
             Level       = NSWindowLevel.Floating;
 
             this.hidden_close_button = new NSButton () {
-                Frame                     = new RectangleF (0, 0, 0, 0),
+                Frame                     = new CGRect (0, 0, 0, 0),
                 KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask,
                 KeyEquivalent             = "w"
             };
@@ -83,9 +83,9 @@ namespace SparkleShare {
         private void CreateNote ()
         {
             this.cover = new NSBox () {
-                Frame = new RectangleF (
-                    new PointF (-1, 58),
-                    new SizeF (Frame.Width + 2, this.ContentView.Frame.Height + 1)),
+                Frame = new CGRect (
+                    new CGPoint (-1, 58),
+                    new CGSize (Frame.Width + 2, this.ContentView.Frame.Height + 1)),
                 FillColor = NSColor.FromCalibratedRgba (0.77f, 0.77f, 0.75f, 1.0f),
                 BorderColor = NSColor.LightGray,
                 BoxType = NSBoxType.NSBoxCustom
@@ -97,9 +97,9 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.FromCalibratedRgba (0.77f, 0.77f, 0.75f, 1.0f),
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (85, ContentView.Frame.Height - 41),
-                    new SizeF (320, 22)),
+                Frame           = new CGRect (
+                    new CGPoint (85, ContentView.Frame.Height - 41),
+                    new CGSize (320, 22)),
                 StringValue     = SparkleShare.Controller.CurrentUser.Name,
                 Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
             };
@@ -110,9 +110,9 @@ namespace SparkleShare {
                 TextColor       = NSColor.DisabledControlText,
                 Bordered        = false,
                 Editable        = false,
-                Frame           = new RectangleF (
-                    new PointF (85, ContentView.Frame.Height - 60),
-                    new SizeF (320, 20)),
+                Frame           = new CGRect (
+                    new CGPoint (85, ContentView.Frame.Height - 60),
+                    new CGSize (320, 20)),
                 StringValue     = SparkleShare.Controller.CurrentUser.Email,
             };
 
@@ -122,9 +122,9 @@ namespace SparkleShare {
                 BackgroundColor = NSColor.White,
                 Bordered        = false,
                 Editable        = true,
-                Frame           = new RectangleF (
-                    new PointF (30, ContentView.Frame.Height - 137),
-                    new SizeF (418, 48))
+                Frame           = new CGRect (
+                    new CGPoint (30, ContentView.Frame.Height - 137),
+                    new CGSize (418, 48))
             };
 
             (this.balloon_text_field.Cell as NSTextFieldCell).PlaceholderString  = "Anything to add?";
@@ -137,13 +137,13 @@ namespace SparkleShare {
             this.cancel_button = new NSButton () {
                 Title = "Cancel",
                 BezelStyle = NSBezelStyle.Rounded,
-                Frame      = new RectangleF (Frame.Width - 15 - 105 * 2, 12, 105, 32),
+                Frame      = new CGRect (Frame.Width - 15 - 105 * 2, 12, 105, 32),
             };
 
             this.sync_button = new NSButton () {
                 Title = "Sync",
                 BezelStyle = NSBezelStyle.Rounded,
-                Frame      = new RectangleF (Frame.Width - 15 - 105, 12, 105, 32),
+                Frame      = new CGRect (Frame.Width - 15 - 105, 12, 105, 32),
             };
 
             this.cancel_button.Activated += delegate { Controller.CancelClicked (); };
@@ -157,10 +157,10 @@ namespace SparkleShare {
             else
                 this.balloon_image = NSImage.ImageNamed ("text-balloon");
 
-            this.balloon_image.Size = new SizeF (438, 72);
+            this.balloon_image.Size = new CGSize (438, 72);
             this.balloon_image_view = new NSImageView () { 
                 Image = this.balloon_image,
-                Frame = new RectangleF (21, ContentView.Frame.Height - 145, 438, 72)
+                Frame = new CGRect (21, ContentView.Frame.Height - 145, 438, 72)
             };
 
 
@@ -169,10 +169,10 @@ namespace SparkleShare {
             else
                 this.user_image = NSImage.ImageNamed ("user-icon-default");
 
-            this.user_image.Size = new SizeF (48, 48);
+            this.user_image.Size = new CGSize (48, 48);
             this.user_image_view = new NSImageView () {
                 Image = this.user_image,
-                Frame = new RectangleF (21, ContentView.Frame.Height - 65, 48, 48)
+                Frame = new CGRect (21, ContentView.Frame.Height - 65, 48, 48)
             };
 
             this.user_image_view.WantsLayer          = true;
