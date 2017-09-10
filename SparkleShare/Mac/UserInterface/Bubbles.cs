@@ -38,7 +38,7 @@ namespace SparkleShare {
                 var notification = new NSUserNotification {
                     Title           = title,
                     InformativeText = subtext,
-                    DeliveryDate    = DateTime.Now
+                    DeliveryDate    = (NSDate) DateTime.Now
                 };
 
                 NSUserNotificationCenter center  = NSUserNotificationCenter.DefaultUserNotificationCenter;
