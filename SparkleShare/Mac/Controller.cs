@@ -1,4 +1,4 @@
-//   SparkleShare, a collaboration and sharing tool.
+﻿﻿//   SparkleShare, a collaboration and sharing tool.
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
@@ -20,13 +20,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-using Mono.Unix.Native;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
+using Foundation;
+using AppKit;
 
 using Sparkles;
 using Sparkles.Git;
-using System.Linq;
 
 namespace SparkleShare {
 
@@ -91,11 +89,10 @@ namespace SparkleShare {
         }
 
 
-		public override void CreateStartupItem ()
-		{
-			// There aren't any bindings in MonoMac to support this yet, so
-			// we call out to an applescript to do the job
-			
+		// There aren't any bindings in Xamarin.Mac to support this yet, so
+		// we call out to an applescript to do the job
+        public override void CreateStartupItem ()
+        {
 			string args = "-e 'tell application \"System Events\" to " +
 				"make login item at end with properties " +
 				"{path:\"" + NSBundle.MainBundle.BundlePath + "\", hidden:false}'";
