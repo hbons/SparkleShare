@@ -54,16 +54,12 @@ namespace SparkleShare {
             NSApplication.Main (args);
         }
 
-
         public static string FontName {
             get {
                 if (Environment.OSVersion.Version.Major < 14)
                     return "Lucida Grande";
 
-                if (Environment.OSVersion.Version.Major <= 15)
-                    return "Helvetica Neue";
-
-                return "SF UI Text";
+                return "Helvetica Neue";
             }
         }
     }
