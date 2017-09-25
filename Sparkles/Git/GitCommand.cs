@@ -91,9 +91,9 @@ namespace Sparkles.Git {
             if (ExecPath != null)
                 SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
 
-			SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
+            SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
             SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
-			SetEnvironmentVariable ("LANG", "en_US");
+            SetEnvironmentVariable ("LANG", "en_US");
         }
 
 
