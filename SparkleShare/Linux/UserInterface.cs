@@ -48,7 +48,8 @@ namespace SparkleShare
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (new Label ().StyleContext.GetColor (StateFlags.Insensitive));
+            var label = new Label ();
+            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (label.StyleContext.GetColor (StateFlags.Insensitive));
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
 
             var tree_view = new TreeView ();
