@@ -611,6 +611,8 @@ namespace Sparkles.Git {
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
 
+            HasUnsyncedChanges = true;
+
             if (trigger_conflict_event)
                 OnConflictResolved ();
         }
