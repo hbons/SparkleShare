@@ -497,10 +497,8 @@ namespace Sparkles.Git {
                 // Remove possible rename indicators
                 string [] separators = {" -> \"", " -> "};
                 foreach (string separator in separators) {
-                    if (conflicting_path.Contains (separator)) {
-                        conflicting_path = conflicting_path.Substring (
-                            conflicting_path.IndexOf (separator) + separator.Length);
-                    }
+                    if (conflicting_path.Contains (separator))
+                        conflicting_path = conflicting_path.Substring (conflicting_path.IndexOf (separator) + separator.Length);
                 }
 
                 Logger.LogInfo ("Git", Name + " | Conflict type: " + line);
@@ -517,7 +515,7 @@ namespace Sparkles.Git {
 
                     if (File.Exists (abs_conflicting_path))
                         File.SetAttributes (abs_conflicting_path, FileAttributes.Hidden);
-            
+
                     continue;
                 }
 
@@ -535,11 +533,12 @@ namespace Sparkles.Git {
                     // Windows doesn't allow colons in the file name, so
                     // we use "h" between the hours and minutes instead.
                     string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
+
                     string our_path = Path.GetFileNameWithoutExtension (conflicting_path) +
                         " (" + base.local_config.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
 
                     string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-                    string abs_our_path         = Path.Combine (LocalPath, our_path);
+                    string abs_our_path         = Path.Combine (Path.GetDirectoryName (abs_conflicting_path), our_path);
 
                     if (File.Exists (abs_conflicting_path) && !File.Exists (abs_our_path))
                         File.Move (abs_conflicting_path, abs_our_path);
