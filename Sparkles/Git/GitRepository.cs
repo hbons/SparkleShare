@@ -585,8 +585,8 @@ namespace Sparkles.Git {
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("UD")) {
                     
-                    // Recover server version
-                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_file_path + "\"");
+                    // Recover our version
+                    var git_theirs = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_file_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
             
