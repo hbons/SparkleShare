@@ -1,3 +1,9 @@
+2.0.1 (???):
+
+    - Fix files created by conflict resolution being moved to the root folder
+    - On conflicts, both diverging versions plus the original version are kept
+
+
 2.0.0 for Linux, Mac and Windows (Sun Sep 10, 2017):
 
     SparkleShare 2.0 is a clean break and will be incompatible with 

@@ -490,28 +490,28 @@ namespace Sparkles.Git {
             bool trigger_conflict_event = false;
 
             foreach (string line in lines) {
-                string conflicting_path = line.Substring (3);
-                conflicting_path        = EnsureSpecialCharacters (conflicting_path);
-                conflicting_path        = conflicting_path.Trim ("\"".ToCharArray ());
+                string conflicting_file_path = line.Substring (3);
+                conflicting_file_path        = EnsureSpecialCharacters (conflicting_file_path);
+                conflicting_file_path        = conflicting_file_path.Trim ("\"".ToCharArray ());
 
                 // Remove possible rename indicators
                 string [] separators = {" -> \"", " -> "};
                 foreach (string separator in separators) {
-                    if (conflicting_path.Contains (separator))
-                        conflicting_path = conflicting_path.Substring (conflicting_path.IndexOf (separator) + separator.Length);
+                    if (conflicting_file_path.Contains (separator))
+                        conflicting_file_path = conflicting_file_path.Substring (conflicting_file_path.IndexOf (separator) + separator.Length);
                 }
 
                 Logger.LogInfo ("Git", Name + " | Conflict type: " + line);
 
                 // Ignore conflicts in hidden files and use the local versions
-                if (conflicting_path.EndsWith (".sparkleshare") || conflicting_path.EndsWith (".empty")) {
-                    Logger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_path);
+                if (conflicting_file_path.EndsWith (".sparkleshare") || conflicting_file_path.EndsWith (".empty")) {
+                    Logger.LogInfo ("Git", Name + " | Ignoring conflict in special file: " + conflicting_file_path);
 
                     // Recover local version
-                    var git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
+                    var git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_file_path + "\"");
                     git_ours.StartAndWaitForExit ();
 
-                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
+                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_file_path);
 
                     if (File.Exists (abs_conflicting_path))
                         File.SetAttributes (abs_conflicting_path, FileAttributes.Hidden);
@@ -519,43 +519,66 @@ namespace Sparkles.Git {
                     continue;
                 }
 
-                Logger.LogInfo ("Git", Name + " | Resolving: " + conflicting_path);
+                Logger.LogInfo ("Git", Name + " | Resolving: " + conflicting_file_path);
 
                 // Both the local and server version have been modified
                 if (line.StartsWith ("UU") || line.StartsWith ("AA") ||
                     line.StartsWith ("AU") || line.StartsWith ("UA")) {
 
+                    // Get the author name of the conflicting version
+                    var git_log = new GitCommand (LocalPath, "log -n 1 FETCH_HEAD --pretty=format:%an " + conflicting_file_path);
+                    string other_author_name = git_log.StartAndReadStandardOutput ();
+
+
+                    // Generate distinguishing names for both versions of the file
+                    string clue_A = string.Format (" (by {0})", base.local_config.User.Name);
+                    string clue_B = string.Format (" (by {0})", other_author_name);
+
+                    if (base.local_config.User.Name == other_author_name) {
+                        clue_A = " (A)";
+                        clue_B = " (B)";
+                    }
+
+
+                    string file_name_A = Path.GetFileNameWithoutExtension (conflicting_file_path) + clue_A + Path.GetExtension (conflicting_file_path);
+                    string file_name_B = Path.GetFileNameWithoutExtension (conflicting_file_path) + clue_B + Path.GetExtension (conflicting_file_path);
+
+                    string abs_conflicting_file_path = Path.Combine (LocalPath, conflicting_file_path);
+                    
+                    string abs_file_path_A = Path.Combine (Path.GetDirectoryName (abs_conflicting_file_path), file_name_A);
+                    string abs_file_path_B = Path.Combine (Path.GetDirectoryName (abs_conflicting_file_path), file_name_B);
+
+
                     // Recover local version
-                    var git_ours = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_path + "\"");
-                    git_ours.StartAndWaitForExit ();
+                    var git_checkout_A = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_file_path + "\"");
+                    git_checkout_A.StartAndWaitForExit ();
 
-                    // Append a timestamp to local version.
-                    // Windows doesn't allow colons in the file name, so
-                    // we use "h" between the hours and minutes instead.
-                    string timestamp  = DateTime.Now.ToString ("MMM d H\\hmm");
+                    if (File.Exists (abs_conflicting_file_path) && !File.Exists (abs_file_path_A))
+                        File.Move (abs_conflicting_file_path, abs_file_path_A);
 
-                    string our_path = Path.GetFileNameWithoutExtension (conflicting_path) +
-                        " (" + base.local_config.User.Name + ", " + timestamp + ")" + Path.GetExtension (conflicting_path);
-
-                    string abs_conflicting_path = Path.Combine (LocalPath, conflicting_path);
-                    string abs_our_path         = Path.Combine (Path.GetDirectoryName (abs_conflicting_path), our_path);
-
-                    if (File.Exists (abs_conflicting_path) && !File.Exists (abs_our_path))
-                        File.Move (abs_conflicting_path, abs_our_path);
 
                     // Recover server version
-                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
-                    git_theirs.StartAndWaitForExit ();
+                    var git_checkout_B = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_file_path + "\"");
+                    git_checkout_B.StartAndWaitForExit ();
+
+                    if (File.Exists (abs_conflicting_file_path) && !File.Exists (abs_file_path_B))
+                        File.Move (abs_conflicting_file_path, abs_file_path_B);
+
+
+                    // Recover original (before both versions diverged)
+                    var git_checkout = new GitCommand (LocalPath, "checkout ORIG_HEAD^ \"" + conflicting_file_path + "\"");
+                    git_checkout.StartAndWaitForExit ();
+
 
                     trigger_conflict_event = true;
 
-            
+
                 // The server version has been modified, but the local version was removed
                 } else if (line.StartsWith ("DU")) {
 
                     // The modified local version is already in the checkout, so it just needs to be added.
                     // We need to specifically mention the file, so we can't reuse the Add () method
-                    var git_add = new GitCommand (LocalPath, "add \"" + conflicting_path + "\"");
+                    var git_add = new GitCommand (LocalPath, "add \"" + conflicting_file_path + "\"");
                     git_add.StartAndWaitForExit ();
 
                 
@@ -563,7 +586,7 @@ namespace Sparkles.Git {
                 } else if (line.StartsWith ("UD")) {
                     
                     // Recover server version
-                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_path + "\"");
+                    var git_theirs = new GitCommand (LocalPath, "checkout --theirs \"" + conflicting_file_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
             
