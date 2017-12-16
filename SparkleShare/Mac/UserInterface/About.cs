@@ -95,7 +95,7 @@ namespace SparkleShare {
                 TextColor       = NSColor.White
             };
 
-            this.updates_text_field = new SparkleLabel ("Checking for updates...", NSTextAlignment.Left) {
+            this.updates_text_field = new SparkleLabel ("Checking for updates…", NSTextAlignment.Left) {
                 DrawsBackground = false,
                 Frame           = new CGRect (295, Frame.Height - 232, 318, 98),
                 TextColor       = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f)
@@ -173,26 +173,21 @@ namespace SparkleShare {
             
             public SparkleLink (string text, string address) : base ()
             {
+                StringValue = text;
                 this.url = new NSUrl (address);
                 
-                AllowsEditingTextAttributes = true;
+                Font = NSFont.SystemFontOfSize (11);
+
+                TextColor = NSColor.FromCalibratedRgba (1.0f, 1.0f, 1.0f, 0.5f);
                 BackgroundColor = NSColor.White;
+
+                AllowsEditingTextAttributes = true;
                 Bordered        = false;
                 DrawsBackground = false;
                 Editable        = false;
                 Selectable      = false;
-                
-                NSData name_data = NSData.FromString ("<a href='" + this.url +
-                    "' style='font-size: 9pt; font-family: \"Helvetica Neue\"; color: #739ECF'>" + text + "</a></font>");
-                
-                NSDictionary name_dictionary       = new NSDictionary();
-                NSAttributedString name_attributes = new NSAttributedString (name_data, new NSUrl ("file://"), out name_dictionary);
-                
-                NSMutableAttributedString s = new NSMutableAttributedString ();
-                s.Append (name_attributes);
-                
-                Cell.AttributedStringValue = s;
-                SizeToFit ();
+
+				SizeToFit ();
             }
             
             
