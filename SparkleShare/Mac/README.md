@@ -6,7 +6,7 @@ You can build SparkleShare from source or download the SparkleShare bundle.
 ### Installing build requirements
 
   Install [Xcode](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12) from the macOS App Store, or [download](https://developer.apple.com/xcode/) it manually.
-  Install [Xamarin Studio](http://monodevelop.com/download/).
+  Install [Visual Studio](https://www.visualstudio.com/vs/visual-studio-mac/).
 
 The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need 
  the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
@@ -19,7 +19,7 @@ brew install autoconf automake libtool pkg-config
 
 There are three build configurations available:
 
-* Debug
+* DebugMac
 
   with debug symbols and having the Symbol DEBUG defined. Requires an installed Mono framework.
   
@@ -27,13 +27,13 @@ There are three build configurations available:
 
   without debug symbols. Requires an installed Mono framework.
   
-* ReleaseDist
+* ReleaseMac
 
   without debug symbols, the Mono framework is linked statically into the binary, so it does not require an installed Mono framework.
 
 To build any of these configurations,
 
-* open `./SparkleShare.sln` in Xamarin Studio
+* open `./SparkleShare.sln` in Visual Studio
 * select the SparkleShare.Mac project in the Solution view
 * select the required configuration
 * select `Build`, then `"Build SparkleShare.Mac"` from the menu
@@ -41,7 +41,7 @@ To build any of these configurations,
 To build SparkleShare from a command line (e.g. for using a CI system), use this command:
 
 ```bash
-/Applications/Xamarin\ Studio.app/Contents/MacOS/mdtool -v build "--configuration:ReleaseDist" "./SparkleShare/Mac/SparkleShare.sln"
+ /Applications/Visual\ Studio.app/Contents/MacOS/vstool build "--configuration:ReleaseMac" "SparkleShare.sln"
 ```
 
 
