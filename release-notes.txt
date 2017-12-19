@@ -1,7 +1,8 @@
-2.0.1 (???):
+2.0.1 (Tue 19 Dec, 2017):
 
     - Fix files created by conflict resolution being moved to the root folder
     - On conflicts, both diverging versions plus the original version are kept
+    - New app icon on Mac
 
 
 2.0.0 for Linux, Mac and Windows (Sun Sep 10, 2017):
