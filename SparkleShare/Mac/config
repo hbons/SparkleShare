@@ -10,7 +10,6 @@
         <dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
         <dllmap dll="oci" target="libclntsh.dylib" os="!windows"/>
         <dllmap dll="db2cli" target="libdb2_36.dylib" os="!windows"/>
-        <dllmap dll="MonoPosixHelper" target="libMonoPosixHelper.dylib" os="!windows" />
         <dllmap dll="i:msvcrt" target="libc.dylib" os="!windows"/>
         <dllmap dll="i:msvcrt.dll" target="libc.dylib" os="!windows"/>
         <dllmap dll="sqlite" target="libsqlite.0.dylib" os="!windows"/>
@@ -27,4 +26,3 @@
         <dllmap dll="gdiplus.dll" target="libgdiplus.dylib" />
         <dllmap dll="gdiplus" target="libgdiplus.dylib" />
 </configuration>
-

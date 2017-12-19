@@ -14,10 +14,6 @@ export PATH=/usr/local/bin:/opt/local/bin:/Library/Frameworks/Mono.framework/Ver
 
 cd ${bundle}/Contents/MonoBundle/
 
-# add / fix dependency libMonoPosixHelper
-cp ${MONO_PATH}/lib/libMonoPosixHelper.dylib ../MacOS/
-sed -i .bak 's/libMonoPosixHelper.dylib/@executable_path\/libMonoPosixHelper.dylib/' ./config
-
 # merge all Assemblies into one Mac binary
 mkbundle --static --deps --config ./config  -o ../MacOS/SparkleShare SparkleShare.exe Sparkles.dll Xamarin.Mac.dll Sparkles.Git.dll
 rm *.dll *.exe
