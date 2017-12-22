@@ -55,6 +55,7 @@ namespace SparkleShare {
         }
 
 
+        // To provide the right font in web views
         public static string FontName {
             get {
                 if (Environment.OSVersion.Version.Major < 14)

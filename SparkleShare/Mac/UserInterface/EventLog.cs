@@ -115,10 +115,10 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new CGRect (
-                    new CGPoint (60, ContentView.Frame.Height - 27),
+                    new CGPoint (60, ContentView.Frame.Height - 31),
                     new CGSize (60, 20)),
                 StringValue     = "…",
-                Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
+                Font            = NSFont.BoldSystemFontOfSize (12)
             };
 
 
@@ -139,11 +139,11 @@ namespace SparkleShare {
                 Bordered        = false,
                 Editable        = false,
                 Frame           = new CGRect (
-                    new CGPoint (190, ContentView.Frame.Height - 27),
+                    new CGPoint (190, ContentView.Frame.Height - 31),
                     new CGSize (60, 20)
                 ),
                 StringValue     = "…",
-                Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
+                Font            = NSFont.BoldSystemFontOfSize (12)
             };
 
             this.popup_button = new NSPopUpButton () {
@@ -302,17 +302,17 @@ namespace SparkleShare {
 
             this.popup_button.AddItem ("Summary");
             this.popup_button.Menu.AddItem (NSMenuItem.SeparatorItem);
-			
-			int row = 2;
-       		foreach (string folder in folders) {
+
+            int row = 2;
+            foreach (string folder in folders) {
                 this.popup_button.AddItem (folder);
-				
-				if (folder.Equals (Controller.SelectedFolder))
-					this.popup_button.SelectItem (row);
-				
-				row++;
-        	}
-			
+
+                if (folder.Equals (Controller.SelectedFolder))
+                    this.popup_button.SelectItem (row);
+
+                row++;
+            }
+
             this.popup_button.AddItems (folders);
 
             this.popup_button.Activated += delegate {
@@ -328,8 +328,8 @@ namespace SparkleShare {
 
         public void UpdateContent (string html)
         {
-		    string pixmaps_path = "file://" + NSBundle.MainBundle.ResourcePath;
-			
+            string pixmaps_path = "file://" + NSBundle.MainBundle.ResourcePath;
+
             html = html.Replace ("<!-- $body-font-family -->", UserInterface.FontName);
             html = html.Replace ("<!-- $day-entry-header-font-size -->", "13.6px");
             html = html.Replace ("<!-- $body-font-size -->", "13.4px");
@@ -344,7 +344,7 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
             html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
             html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
-			
+
             this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
                 Frame = new CGRect (new CGPoint (0, 0), new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };

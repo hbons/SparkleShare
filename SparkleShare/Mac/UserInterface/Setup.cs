@@ -154,16 +154,15 @@ namespace SparkleShare {
 
                 AddressLabel       = new SparkleLabel ("Address:", NSTextAlignment.Right);
                 AddressLabel.Frame = new CGRect (165, Frame.Height - 238, 160, 17);
-                AddressLabel.Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
-     
+                AddressLabel.Font = NSFont.BoldSystemFontOfSize (12);
+
                 AddressTextField = new SparkleLabel (Controller.PendingInvite.Address, NSTextAlignment.Left) {
                     Frame = new CGRect (330, Frame.Height - 240, 260, 17)
                 };
 
                 PathLabel       = new SparkleLabel ("Remote Path:", NSTextAlignment.Right);
                 PathLabel.Frame = new CGRect (165, Frame.Height - 262, 160, 17);
-                PathLabel.Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
-
+                PathLabel.Font = NSFont.BoldSystemFontOfSize (12);
 
                 PathTextField = new SparkleLabel (Controller.PendingInvite.RemotePath, NSTextAlignment.Left) {
                     Frame = new CGRect (330, Frame.Height - 264, 260, 17)
@@ -191,8 +190,8 @@ namespace SparkleShare {
                 Description = "";
 
                 AddressLabel = new SparkleLabel ("Address:", NSTextAlignment.Left) {
-                    Frame = new CGRect (190, Frame.Height - 308, 160, 17),
-                    Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
+                    Frame = new CGRect (190, Frame.Height - 310, 160, 17),
+                    Font  = NSFont.BoldSystemFontOfSize (12)
                 };
 
                 AddressTextField = new NSTextField () {
@@ -205,8 +204,8 @@ namespace SparkleShare {
                 AddressTextField.Cell.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
                 PathLabel = new SparkleLabel ("Remote Path:", NSTextAlignment.Left) {
-                    Frame = new CGRect (190 + 196 + 16, Frame.Height - 308, 160, 17),
-                    Font  = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
+                    Frame = new CGRect (190 + 196 + 16, Frame.Height - 310, 160, 17),
+                    Font  = NSFont.BoldSystemFontOfSize (12)
                 };
 
                 PathTextField = new NSTextField () {
@@ -255,9 +254,6 @@ namespace SparkleShare {
                         HeaderToolTip = "Description",
                         Editable      = false
                     };
-
-                    DescriptionColumn.DataCell.Font = NSFontManager.SharedFontManager.FontWithFamily (
-                        UserInterface.FontName, NSFontTraitMask.Condensed, 0, 11);
 
                     TableView.AddColumn (IconColumn);
                     TableView.AddColumn (DescriptionColumn);
@@ -411,7 +407,7 @@ namespace SparkleShare {
 
                 string html = "<style>" +
                     "* {" +
-                    "  font-family: '" + UserInterface.FontName + "';" +
+                    "  font-family: -apple-system, '" + UserInterface.FontName + "';" +
                     "  font-size: 12px; cursor: default;" +
                     "}" +
                     "body {" +
@@ -470,7 +466,7 @@ namespace SparkleShare {
 
                 ButtonCellProto = new NSButtonCell ();
                 ButtonCellProto.SetButtonType (NSButtonType.Radio);
-                ButtonCellProto.Font = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize);
+                ButtonCellProto.Font = NSFont.BoldSystemFontOfSize (12);
 
                 Matrix = new NSMatrix (new CGRect (202, Frame.Height - 256 - 128, 256, 256), NSMatrixMode.Radio,
                     ButtonCellProto, SparkleShare.Controller.FetcherAvailableStorageTypes.Count, 1);
@@ -529,8 +525,8 @@ namespace SparkleShare {
                     extra_pos_y = 20;
   
                 PasswordLabel = new SparkleLabel ("Password:", NSTextAlignment.Right) {
-                    Frame           = new CGRect (155, Frame.Height - 202 - extra_pos_y, 160, 17),
-                    Font            = NSFont.FromFontName (UserInterface.FontName + " Bold", NSFont.SystemFontSize)
+                    Frame           = new CGRect (155, Frame.Height - 204 - extra_pos_y, 160, 17),
+                    Font            = NSFont.BoldSystemFontOfSize (12)
                 };
 
                 PasswordTextField = new NSSecureTextField () {
@@ -694,14 +690,15 @@ namespace SparkleShare {
 
                 NSTextFieldCell cell = new NSTextFieldCell ();
 
-                NSData name_data = NSData.FromString ("<font face='" + UserInterface.FontName + "'><b>" + preset.Name + "</b></font>");
+                NSData name_data = NSData.FromString (
+                    "<font face='-apple-system, sans-serif' style='line-height: 140%'><b>" + preset.Name + "</b></font>");
 
                 NSDictionary name_dictionary       = new NSDictionary();
                 NSAttributedString name_attributes = new NSAttributedString (
                     name_data, new NSUrl ("file://"), out name_dictionary);
 
                 NSData description_data = NSData.FromString (
-                    "<small><font style='line-height: 150%' color='#aaa' face='" + UserInterface.FontName + "'>" + preset.Description + "</font></small>");
+                    "<small><font style='line-height: 150%' color='#aaa' face='-apple-system, sans-serif'>" + preset.Description + "</font></small>");
 
                 NSDictionary description_dictionary       = new NSDictionary();
                 NSAttributedString description_attributes = new NSAttributedString (
@@ -717,15 +714,14 @@ namespace SparkleShare {
                 NSTextFieldCell selected_cell = new NSTextFieldCell ();
 
                 NSData selected_name_data = NSData.FromString (
-                    "<font color='white' face='" + UserInterface.FontName +"'><b>" + preset.Name + "</b></font>");
+                    "<font color='white' face='-apple-system, sans-serif' style='line-height: 140%'><b>" + preset.Name + "</b></font>");
 
                 NSDictionary selected_name_dictionary = new NSDictionary ();
                 NSAttributedString selected_name_attributes = new NSAttributedString (
                     selected_name_data, new NSUrl ("file://"), out selected_name_dictionary);
 
                 NSData selected_description_data = NSData.FromString (
-                    "<small><font style='line-height: 150%' color='#9bbaeb' face='" + UserInterface.FontName + "'>" +
-                    preset.Description + "</font></small>");
+                    "<small><font style='line-height: 150%' color='#9bbaeb' face='-apple-system, sans-serif'>" + preset.Description + "</font></small>");
 
                 NSDictionary selected_description_dictionary       = new NSDictionary ();
                 NSAttributedString selected_description_attributes = new NSAttributedString (

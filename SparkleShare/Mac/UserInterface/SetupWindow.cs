@@ -60,8 +60,7 @@ namespace SparkleShare {
 
             this.header_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
                 Frame = new CGRect (190, Frame.Height - 80, Frame.Width, 24),
-                Font  = NSFontManager.SharedFontManager.FontWithFamily (
-                    UserInterface.FontName, NSFontTraitMask.Bold, 0, 16)
+                Font = NSFont.BoldSystemFontOfSize (16)
             };
 
             this.description_text_field = new SparkleLabel ("", NSTextAlignment.Left) {
