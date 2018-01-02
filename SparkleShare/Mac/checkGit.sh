@@ -19,7 +19,7 @@ set -e
 
 if [ ! -f ${projectFolder}/git.tar.gz ]
 then
-  curl -s -L ${gitDownload} > git.tar.gz
+  curl --silent --location ${gitDownload} > git.tar.gz
   test -e git.tar.gz || { echo "Failed to download git"; exit 1; }
 
   mkdir git/
