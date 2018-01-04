@@ -80,9 +80,10 @@ namespace SparkleShare {
         void CreateAbout ()
         {
             CssProvider window_css_provider = new CssProvider ();
+            string image_path = InstallationInfo.Directory + "/pixmaps/about.png";
 
             window_css_provider.LoadFromData ("window, GtkWindow {" +
-                "    background-image: url(\"/app/share/sparkleshare/pixmaps/about.png\");" +
+                "    background-image: url('" + image_path + "');" +
                 "    background-repeat: no-repeat;" +
                 "    background-position: left bottom;" +
                 "}");
@@ -115,8 +116,8 @@ namespace SparkleShare {
                 Xalign = 0, Xpad = 0
             };
 
-            var license = new Label ("SparkleShare is Open Source and you’re free to use,\n" +
-                "change, and share it under the GNU GPLv3") {
+            var license = new Label ("SparkleShare is Open Source and you’re free to\n" +
+                "use, change, and share it under the GNU GPLv3") {
 
                 Xalign = 0, Xpad = 0
             };
@@ -136,7 +137,7 @@ namespace SparkleShare {
             layout_vertical.PackStart (updates, false, false, 0);
             layout_vertical.PackStart (copyright, false, false, 6);
             layout_vertical.PackStart (license, false, false, 6);
-            layout_vertical.PackStart (links_layout, false, false, 16);
+            layout_vertical.PackStart (links_layout, false, false, 6);
 
             links_layout.PackStart (website_link, false, false, 0);
             links_layout.PackStart (credits_link, false, false, 0);
