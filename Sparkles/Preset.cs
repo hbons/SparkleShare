@@ -27,7 +27,7 @@ namespace Sparkles {
         public static string PresetsPath = "";
 
         public static string LocalPresetsPath = IO.Path.Combine (
-            Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "sparkleshare", "presets");
+            Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "org.sparkleshare.SparkleShare", "presets");
 
         new public string Name { get { return GetValue ("info", "name"); } }
         public string Description { get { return GetValue ("info", "description"); } }
