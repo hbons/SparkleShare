@@ -8,7 +8,7 @@ You can build SparkleShare from source or download the SparkleShare bundle.
   Install [Xcode](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12) from the macOS App Store, or [download](https://developer.apple.com/xcode/) it manually.
   Install [Visual Studio](https://www.visualstudio.com/vs/visual-studio-mac/).
 
-The required `git` binaries are now built automatically. For doing this and for building the distribution release, where Mono libraries are merged into SparkleShare, we need 
+For building the distribution release, where Mono libraries are merged into SparkleShare, we need 
  the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
 
 ```bash
