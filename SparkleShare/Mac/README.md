@@ -9,7 +9,7 @@ You can build SparkleShare from source or download the SparkleShare bundle.
   Install [Visual Studio](https://www.visualstudio.com/vs/visual-studio-mac/).
 
 For building the distribution release, where Mono libraries are merged into SparkleShare, we need 
- the packes <tt>autoconf</tt> and <tt>pkg-config</tt>. You can install these in several ways, here's how it's done using [Homebrew](http://brew.sh/):
+ the `autoconf` and `pkg-config`. You can install these in several ways, here's how it's done using [Homebrew](https://brew.sh/):
 
 ```bash
 brew install autoconf automake libtool pkg-config
