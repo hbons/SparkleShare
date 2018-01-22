@@ -22,8 +22,8 @@ namespace Sparkles {
     
     public static class Logger {
 
-        static object debug_lock = new object ();
-        static int log_size;
+        static StreamWriter log_writer = File.AppendText (Configuration.DefaultConfiguration.LogFilePath);
+        static object log_writer_lock = new object ();
 
 
         public static void LogInfo (string type, string message)
@@ -48,15 +48,9 @@ namespace Sparkles {
             if (Configuration.DebugMode)
                 Console.WriteLine (line);
 
-            lock (debug_lock) {
-                if (log_size >= 1000) {
-                    File.WriteAllText (Configuration.DefaultConfiguration.LogFilePath, line + Environment.NewLine);
-                    log_size = 0;
-
-                } else {
-                    File.AppendAllText (Configuration.DefaultConfiguration.LogFilePath, line + Environment.NewLine);
-                    log_size++;
-                }
+            lock (log_writer_lock) {
+                log_writer.WriteLine (line);
+                log_writer.Flush ();
             }
         }
 
