@@ -222,26 +222,6 @@ namespace SparkleShare {
             public event LinkClickedHandler LinkClicked = delegate { };
             public delegate void LinkClickedHandler (string href);
 
-
-            protected override bool OnDecidePolicy (PolicyDecision decision, PolicyDecisionType decision_type)
-            {
-                if (decision_type != PolicyDecisionType.NavigationAction) {
-                    decision.Use ();
-                    return false;
-                }
-
-                string uri = (decision as NavigationPolicyDecision).Request.Uri;
-
-                if (uri.Equals ("file:///")) {
-                    decision.Use ();
-                    return false;
-                }
-                
-                LinkClicked (uri);
-                decision.Ignore ();
-
-                return true;
-            }
         }
     }
 }

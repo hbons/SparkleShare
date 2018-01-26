@@ -24,6 +24,7 @@ config.log
 config.status
 config.sub
 aclocal.m4
+build/m4/sparkleshare/libtool.m4
 autom4te.cache/
 bin/
 obj/

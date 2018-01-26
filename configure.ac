@@ -120,6 +120,7 @@ AC_OUTPUT([
 		SparkleShare/Linux/Makefile
 		SparkleShare/Linux/Images/Makefile
 		SparkleShare/Linux/Images/icons/Makefile
+		SparkleShare/Linux/Images/icons/Adwaita/Makefile
 		SparkleShare/Linux/Images/icons/hicolor/Makefile
 		SparkleShare/Linux/Images/icons/ubuntu-mono-dark/Makefile
 		SparkleShare/Linux/Images/icons/ubuntu-mono-light/Makefile
