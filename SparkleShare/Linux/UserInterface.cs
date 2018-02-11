@@ -16,6 +16,7 @@
 
 
 using System;
+using System.Reflection;
 
 using Gtk;
 using Sparkles;
@@ -68,17 +69,18 @@ namespace SparkleShare
 
         public void Run (string [] args)
         {
-            // FIXME: Hack to cover API differences between Ubuntu and latest GNOME
-            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-                #if HAVE_APP_INDICATOR
-                (application as GLib.Application).Run (0, null);
-                #endif
+            MethodInfo run_method = typeof (GLib.Application).GetMethod ("Run");
+            ParameterInfo [] run_parameters = run_method.GetParameters ();
+
+            // Use the right Run method arguments depending on the installed GTK bindings
+            if (run_parameters [0].ParameterType == typeof (System.Int32) &&
+                run_parameters [1].ParameterType == typeof (System.String)) {
+
+                run_method.Invoke ((application as GLib.Application), new object [] { 0, null });
+
             } else {
-                #if HAVE_APP_INDICATOR
-                #else
-				(application as GLib.Application).Run ("org.sparkleshare.SparkleShare", new string [0]);
-                #endif
-			}
+                run_method.Invoke ((application as GLib.Application), new object [] { "org.sparkleshare.SparkleShare", new string [0] });
+            }
         }
 
 
