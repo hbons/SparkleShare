@@ -230,6 +230,7 @@ namespace SparkleShare {
                     return false;
                 }
 
+                #pragma warning disable 0612
                 string uri = (decision as NavigationPolicyDecision).Request.Uri;
 
                 if (uri.Equals ("file:///")) {
