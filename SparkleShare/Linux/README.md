@@ -31,8 +31,9 @@ You will need the packages listed below for the most used Linux distributions:
 # On Ubuntu 16.04:
 sudo apt-get install \
   desktop-file-utils \
-  git \
-  gtk-sharp3-gapi \
+  git \ # Run requirement
+  git-lfs \ # Run requirement
+  gtk-sharp3-gapi \ # To build webkit2-sharp
   intltool \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
@@ -45,8 +46,15 @@ sudo apt-get install \
   nant \
   xsltproc
 
-# On Fedora 25:
-sudo dnf install # TODO
+# On Fedora 27:
+sudo dnf install \
+  git \ # Run requirement
+  git-lfs \ # Run requirement
+  gtk-sharp3-devel \
+  gtk-sharp3-gapi \ # To build webkit2-sharp
+  mono-devel \
+  notify-sharp3-devel \
+  webkitgtk4-devel
 ```
 
 
