@@ -80,7 +80,6 @@ namespace SparkleShare {
         void CreateAbout ()
         {
             CssProvider window_css_provider = new CssProvider ();
-            Image image = UserInterfaceHelpers.GetImage ("about.png");
 
             window_css_provider.LoadFromData ("window, GtkWindow {" +
                 "    background-image: url(\"/app/share/sparkleshare/pixmaps/about.png\");" +
