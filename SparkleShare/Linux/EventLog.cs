@@ -171,10 +171,10 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $body-font-family -->", StyleContext.GetFont (StateFlags.Normal).Family);
             html = html.Replace ("<!-- $body-font-size -->", (double) (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $body-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
-            
-			// TODO
-			// html = html.Replace ("<!-- $body-background-color -->", 
-            //     UserInterfaceHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
+
+            // TODO
+            // html = html.Replace ("<!-- $body-background-color -->",
+            // UserInterfaceHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
 
             html = html.Replace ("<!-- $day-entry-header-font-size -->", (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $day-entry-header-background-color -->",
@@ -186,25 +186,25 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $small-font-size -->", "90%");
 
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-			html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
-			html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
-			html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
-			html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
-                    
+            html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
+            html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
+            html = html.Replace ("<!-- $document-deleted-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-deleted.png"));
+            html = html.Replace ("<!-- $document-moved-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-moved.png"));
+
             this.spinner.Stop ();
             this.scrolled_window.Remove (this.scrolled_window.Child);
             this.web_view.Dispose ();
 
             this.web_view = CreateWebView ();
             this.web_view.LoadHtml (html, "file:///");
-         
+
             this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
             this.scrolled_window.ShowAll ();
         }
-            
+
 
         WebView CreateWebView ()
         {
@@ -212,7 +212,7 @@ namespace SparkleShare {
             web_view.Settings.EnablePlugins = false;
 
             web_view.LinkClicked += Controller.LinkClicked;
-           
+
             return web_view;
         }
 
@@ -236,7 +236,7 @@ namespace SparkleShare {
                     decision.Use ();
                     return false;
                 }
-                
+
                 LinkClicked (uri);
                 decision.Ignore ();
 
