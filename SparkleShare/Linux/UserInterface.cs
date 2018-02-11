@@ -43,6 +43,9 @@ namespace SparkleShare
 
         public UserInterface ()
         {
+            string gtk_version = string.Format ("{0}.{1}.{2}", Global.MajorVersion, Global.MinorVersion, Global.MicroVersion);
+            Logger.LogInfo ("Environment", "GTK+ " + gtk_version);
+
             application = new Application ("org.sparkleshare.SparkleShare", GLib.ApplicationFlags.None);
 
             application.Register (null);
