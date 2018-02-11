@@ -16,6 +16,7 @@
 
 
 using System;
+using System.IO;
 using System.Reflection;
 
 using Gtk;
@@ -51,6 +52,8 @@ namespace SparkleShare
 
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
+
+            IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 
             var label = new Label ();
             Gdk.Color color = UserInterfaceHelpers.RGBAToColor (label.StyleContext.GetColor (StateFlags.Insensitive));
