@@ -54,7 +54,8 @@ sudo dnf install \
   gtk-sharp3-gapi \ # To build webkit2-sharp
   mono-devel \
   notify-sharp3-devel \
-  webkitgtk4-devel
+  webkitgtk4-devel \
+  webkit2-sharp
 ```
 
 
