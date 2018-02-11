@@ -103,7 +103,7 @@ namespace SparkleShare {
                 Xalign = 0, Xpad = 0
             };
 
-            if (InstallationInfo.Directory.StartsWith ("/app", StringComparison.InvariantCulture))
+            if (InstallationInfo.IsFlatpak)
                 version.Text += " (Flatpak)";
 
             updates = new Label ("Checking for updates…") {
