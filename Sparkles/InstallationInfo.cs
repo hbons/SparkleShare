@@ -95,5 +95,12 @@ namespace Sparkles {
                 return version.Substring (0, version.Length - 2);
             }
         }
+
+
+        public static bool IsFlatpak {
+            get {
+                return Directory.StartsWith ("/app", StringComparison.InvariantCulture);
+            }
+        }
     }
 }

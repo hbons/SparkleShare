@@ -98,7 +98,10 @@ namespace SparkleShare {
 
         public override void OpenFile (string path)
         {
-            Global.ShowUri (Gdk.Screen.Default, path);
+            if (InstallationInfo.IsFlatpak)
+                Global.ShowUri (Gdk.Screen.Default, path);
+            else
+                new Command ("xdg-open", string.Format ("\"{0}\"", path)).Start ();
         }
 
 

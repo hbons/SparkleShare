@@ -12,6 +12,7 @@
 *.sln.cache
 *.user
 *.resources
+Makecache
 Makefile.in
 Makefile
 intltool-*
