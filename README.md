@@ -23,10 +23,11 @@ Here are instructions to build SparkleShare on [Linux distributions](SparkleShar
 [![Join the chat at https://gitter.im/hbons/SparkleShare](https://badges.gitter.im/hbons/SparkleShare.svg)](https://gitter.im/hbons/SparkleShare?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Useful links
-- [Wiki](https://www.github.com/hbons/SparkleShare/wiki)
-- Community chatroom on [Gitter](https://www.gitter.im/hbons/SparkleShare)
-- [@SparkleShare](https://www.twitter.com/SparkleShare), [@hbons](https://www.twitter.com/hbons)
 - [sparkleshare.org](https://www.sparkleshare.org/)
+- [@SparkleShare](https://www.twitter.com/SparkleShare), [@hbons](https://www.twitter.com/hbons)
+- Community chatroom on [Gitter](https://www.gitter.im/hbons/SparkleShare)
+- [Wiki](https://www.github.com/hbons/SparkleShare/wiki)
+
 
 Have fun, make awesome. :)
 
