@@ -1,7 +1,5 @@
 # [SparkleShare](https://www.sparkleshare.org/)
 
-[![Join the chat at https://gitter.im/hbons/SparkleShare](https://badges.gitter.im/hbons/SparkleShare.svg)](https://gitter.im/hbons/SparkleShare?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [SparkleShare](https://www.sparkleshare.org/) is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server. It's available for Linux distributions, macOS, and Windows. [Support the project on Patreon](https://www.patreon.com/SparkleShare).
 
 ![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/readme-banner.png)
@@ -22,10 +20,13 @@ Under the hood SparkleShare uses the version control system [Git](https://git-sc
 Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [macOS](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md).
 
 [![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
-
+[![Join the chat at https://gitter.im/hbons/SparkleShare](https://badges.gitter.im/hbons/SparkleShare.svg)](https://gitter.im/hbons/SparkleShare?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Useful links
-[Official website](https://www.sparkleshare.org/), [Twitter](https://www.twitter.com/SparkleShare), [Wiki](https://www.github.com/hbons/SparkleShare/wiki), and [Source Code](https://www.github.com/hbons/SparkleShare).
+- [Wiki](https://www.github.com/hbons/SparkleShare/wiki)
+- Community chatroom on [Gitter](https://www.gitter.im/hbons/SparkleShare)
+- [@SparkleShare](https://www.twitter.com/SparkleShare), [@hbons](https://www.twitter.com/hbons)
+- [sparkleshare.org](https://www.sparkleshare.org/)
 
 Have fun, make awesome. :)
 
