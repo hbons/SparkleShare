@@ -1,5 +1,7 @@
 # [SparkleShare](https://www.sparkleshare.org/)
 
+[![Join the chat at https://gitter.im/hbons/SparkleShare](https://badges.gitter.im/hbons/SparkleShare.svg)](https://gitter.im/hbons/SparkleShare?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [SparkleShare](https://www.sparkleshare.org/) is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server. It's available for Linux distributions, macOS, and Windows. [Support the project on Patreon](https://www.patreon.com/SparkleShare).
 
 ![Banner](https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Common/Images/readme-banner.png)
