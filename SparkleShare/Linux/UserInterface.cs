@@ -115,6 +115,7 @@ namespace SparkleShare
             Setup.Application    = application;
             EventLog.Application = application;
             About.Application    = application;
+            Note.Application     = application;
 
             SparkleShare.Controller.UIHasLoaded ();
         }
