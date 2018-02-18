@@ -17,6 +17,7 @@
 
 using System;
 using System.Xml;
+using System.Xml.Linq;
 
 using IO = System.IO;
 
@@ -80,33 +81,31 @@ namespace Sparkles {
             if (IO.File.Exists (preset_path))
                 return null;
 
-            // TODO: Don't write manually
-            string preset_xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                "<sparkleshare>" +
-                "  <preset>" +
-                "    <info>" +
-                "        <name>" + name + "</name>" +
-                "        <description>" + description + "</description>" +
-                "        <icon>own-server.png</icon>" +
-                "    </info>" +
-                "    <address>" +
-                "      <value>" + address_value + "</value>" +
-                "      <example>" + address_example + "</example>" +
-                "    </address>" +
-                "    <path>" +
-                "      <value>" + path_value + "</value>" +
-                "      <example>" + path_example + "</example>" +
-                "    </path>" +
-                "  </preset>" +
-                "</sparkleshare>";
+            string icon_name = "own-server.png";
 
-            preset_xml = preset_xml.Replace ("<value></value>", "<value/>");
-            preset_xml = preset_xml.Replace ("<example></example>", "<example/>");
+            XElement xml =
+                new XElement ("sparkleshare",
+                    new XElement ("preset",
+                        new XElement ("info",
+                            new XElement ("name", name),
+                            new XElement ("description", description),
+                            new XElement ("icon", icon_name)
+                        ),
+                        new XElement ("address",
+                            new XElement ("value", address_value),
+                            new XElement ("example", address_example)
+                        ),
+                        new XElement ("path",
+                            new XElement ("value", path_value),
+                            new XElement ("example", path_example)
+                        )
+                    )
+                );
 
             if (!IO.Directory.Exists (LocalPresetsPath))
                 IO.Directory.CreateDirectory (LocalPresetsPath);
 
-            IO.File.WriteAllText (preset_path, preset_xml);
+            IO.File.WriteAllText (preset_path, xml.ToString ());
             return new Preset (preset_path);
         }
 

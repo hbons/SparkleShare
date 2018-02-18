@@ -16,9 +16,10 @@
 
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Sparkles {
 
@@ -42,6 +43,7 @@ namespace Sparkles {
         public readonly string FilePath;
         public readonly string TmpPath;
         public readonly string BinPath;
+
         public readonly string LogFilePath;
 
 
@@ -115,11 +117,10 @@ namespace Sparkles {
                     CreateInitialConfig ();
 
                 } else {
-                    throw new XmlException (FilePath + " does not contain a valid config XML structure.");
+                    throw;
                 }
 
             } finally {
-                Load (FilePath);
                 TmpPath = Path.Combine (DirectoryPath, "tmp");
                 Directory.CreateDirectory (TmpPath);
             }
@@ -138,17 +139,16 @@ namespace Sparkles {
                     user_name = user_name.TrimEnd (',');
             }
 
-            // TODO: Don't do this manually
-            string n = Environment.NewLine;
-            File.WriteAllText (FilePath,
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + n +
-                "<sparkleshare>" + n +
-                "  <user>" + n +
-                "    <name>" + user_name + "</name>" + n +
-                "    <email>Unknown</email>" + n +
-                "  </user>" + n +
-                "  <notifications>True</notifications>" + n +
-                "</sparkleshare>");
+            XElement xml =
+                new XElement ("sparkleshare",
+                    new XElement ("user",
+                        new XElement ("name", user_name),
+                        new XElement ("email", "Unknown")
+                    ),
+                    new XElement ("notifications", bool.TrueString)
+            );
+
+            LoadXml (xml.ToString ());
         }
 
 
@@ -351,9 +351,6 @@ namespace Sparkles {
 
         void Save ()
         {
-            if (!File.Exists (FilePath))
-                throw new FileNotFoundException (FilePath + " does not exist");
-
             Save (FilePath);
             Logger.LogInfo ("Config", "Wrote to '" + FilePath + "'");
         }

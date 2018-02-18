@@ -44,7 +44,7 @@ namespace Sparkles {
         public string ToMessage ()
         {
             string message = "added: {0}";
-            
+
             switch (Changes [0].Type) {
             case ChangeType.Edited:  message = "edited: {0}"; break;
             case ChangeType.Deleted: message = "deleted: {0}"; break;
@@ -64,7 +64,7 @@ namespace Sparkles {
         public ChangeType Type;
         public DateTime Timestamp;
         public bool IsFolder;
-        
+
         public string Path;
         public string MovedToPath;
     }
