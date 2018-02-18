@@ -205,14 +205,13 @@ namespace SparkleShare {
         {
             string version = InstallationInfo.Version;
 
-            if (InstallationInfo.Directory.StartsWith ("/app", StringComparison.InvariantCulture))
+            if (InstallationInfo.IsFlatpak)
                 version += " (Flatpak)";
 
             Logger.LogInfo ("Environment", "SparkleShare " + version);
             Logger.LogInfo ("Environment", "Git LFS " + Sparkles.Git.GitCommand.GitLFSVersion);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
 
-            // TODO: Nice OS version names for Linux (Fedora 24, Ubuntu 16.04, etc.)
             if (InstallationInfo.OperatingSystem == OS.Mac)
                 Logger.LogInfo ("Environment", InstallationInfo.MacOSVersion ());
             else
@@ -641,10 +640,9 @@ namespace SparkleShare {
         {
             this.fetcher.EnableFetchedRepoCrypto (password);
             FinishFetcher (StorageType.Encrypted);
-        } // TODO: make this the main method. password optional. need to know storage type before Complete to allow crypto in lfs
-        // Make sure IsCryptoPasswordCorrect works with SparkleShare.txt checkout and LFS
-        
-        
+        }
+
+
         public void FinishFetcher (StorageType selected_storage_type)
         {
             this.watcher.EnableRaisingEvents = false;
@@ -655,17 +653,17 @@ namespace SparkleShare {
 
             try {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
-                
+
             } catch (Exception e) {
                 Logger.LogInfo ("Controller", "Error moving directory, trying again...", e);
-                
+
                 try {
                     ClearDirectoryAttributes (this.fetcher.TargetFolder);
                     Directory.Move (this.fetcher.TargetFolder, target_folder_path);
-                    
+
                 } catch (Exception x) {
                     Logger.LogInfo ("Controller", "Error moving directory", x);
-                    
+
                     this.fetcher.Dispose ();
                     this.fetcher = null;
                     this.watcher.EnableRaisingEvents = true;
@@ -674,7 +672,7 @@ namespace SparkleShare {
             }
 
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
-            
+
             Config.AddFolder (target_folder_name, identifier, this.fetcher.RemoteUrl.ToString (), backend);
 
             if (this.fetcher.FetchedRepoStorageType != StorageType.Plain) {
