@@ -536,7 +536,6 @@ namespace SparkleShare {
             string folder_name = Path.GetFileName (PreviousPath);
             folder_name = folder_name.ReplaceUnderscoreWithSpace ();
 
-            // TODO: Open SparkleShare/$HOST
             SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
             FinishPageCompleted ();
         }
