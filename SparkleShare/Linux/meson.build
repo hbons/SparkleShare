@@ -18,6 +18,7 @@ sparkleshare_src = ['../Common/SparkleShare.cs',
     'UserInterface.cs',
     'UserInterfaceHelpers.cs']
 
+
 # Startup script
 configure_file(
     input: 'sparkleshare.in',
@@ -25,12 +26,13 @@ configure_file(
     configuration: configuration, install_dir: 'bin/')
 
 # .desktop and .appdata files
-install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths('share', 'appdata'))
+install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
+install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
+install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
+install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths('/usr', 'share', 'appdata'))
 
-# Dependencies
+
+# Build SparkleShare
 gtk = dependency('gtk-sharp-3.0')
 gdk = dependency('gdk-sharp-3.0')
 gio = dependency('gio-sharp-3.0')
@@ -52,5 +54,5 @@ subdir('Images/icons')
 
 # TODO:
 # - install icons into right structure. Ubuntu icons. custom icons to right location
-# - update .desktop file database and icon cache
+# - adapt bump version script to change version in toplevel meson.build
 

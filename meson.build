@@ -10,3 +10,5 @@ subdir('Sparkles')
 subdir('Sparkles/Git')
 subdir('SparkleShare')
 
+meson.add_install_script('build/post_install.sh')
+
