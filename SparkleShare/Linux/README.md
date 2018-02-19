@@ -85,8 +85,8 @@ https://github.com/hbons/appindicator-sharp
 You can build and install SparkleShare like this:
 
 ```bash
-meson bin/
-cd bin/
+meson build/
+cd build/
 ninja
 sudo ninja install
 ```

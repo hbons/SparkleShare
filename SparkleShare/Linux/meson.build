@@ -40,19 +40,22 @@ glib = dependency('glib-sharp-3.0')
 webkit = dependency('webkit2-sharp-4.0')
 notify = dependency('notify-sharp-3.0')
 
+args = '-r:Mono.Posix'
+
+if get_option('ubuntu')
+    args = [args, '-define:HAVE_APP_INDICATOR']
+endif
+
+appindicator = dependency('appindicator3-sharp', required: get_option('ubuntu'))
+
 sparkleshare = executable('SparkleShare',
-    dependencies: [gtk, gdk, gio, glib, webkit, notify],
+    dependencies: [gtk, gdk, gio, glib, webkit, notify, appindicator],
     link_with: [sparkles, sparkles_git],
-    cs_args: '-r:Mono.Posix',
+    cs_args: args,
     sources: sparkleshare_src,
     install: true,
     install_dir: install_dir)
 
 subdir('Images')
 subdir('Images/icons')
-
-
-# TODO:
-# - install icons into right structure. Ubuntu icons. custom icons to right location
-# - adapt bump version script to change version in toplevel meson.build
 

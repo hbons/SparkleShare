@@ -204,8 +204,8 @@ namespace SparkleShare {
                 };
             }
 
-			this.recent_events_item = new MenuItem ("History…");
-			this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
+            this.recent_events_item = new MenuItem ("History…");
+            this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Sync Remote Project…");
 
@@ -229,11 +229,11 @@ namespace SparkleShare {
             
             about_item.Activated              += delegate { Controller.AboutClicked (); };
             add_item.Activated                += delegate { Controller.AddHostedProjectClicked (); };
-			this.recent_events_item.Activated += delegate { Controller.RecentEventsClicked (); };
+            this.recent_events_item.Activated += delegate { Controller.RecentEventsClicked (); };
             this.quit_item.Activated          += delegate { Controller.QuitClicked (); };
 
             folder_item.Submenu = new Menu ();
-			(folder_item.Submenu as Menu).Add (this.recent_events_item);
+                (folder_item.Submenu as Menu).Add (this.recent_events_item);
 
             if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
                 MenuItem notify_item;
@@ -300,3 +300,4 @@ namespace SparkleShare {
         }
     }
 }
+
