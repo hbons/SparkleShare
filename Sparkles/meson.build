@@ -1,3 +1,8 @@
+directory_info_file = configure_file(
+    input: 'InstallationInfo.Directory.cs.in',
+    output: 'InstallationInfo.Directory.cs',
+    configuration: configuration)
+
 sparkles_src = ['AuthenticationInfo.cs',
     'BaseFetcher.cs',
     'BaseListener.cs',
@@ -7,7 +12,7 @@ sparkles_src = ['AuthenticationInfo.cs',
     'Configuration.cs',
     'Extensions.cs',
     'InstallationInfo.cs',
-    'InstallationInfo.Directory.cs',
+    directory_info_file,
     'Invite.cs',
     'ListenerFactory.cs',
     'Logger.cs',
@@ -19,10 +24,6 @@ sparkles_src = ['AuthenticationInfo.cs',
     'User.cs',
     'Watcher.cs']
 
-# generator = custom_target('replace',
-#    input: 'InstallationInfo.Directory.cs.in',
-#    output: 'InstallationInfo.Directory.cs',
-#    command: ['sed', 's/@VERSION@/2.0.1/g @INPUT@', '@OUTPUT@'])
 
 sparkles = library('Sparkles',
     sources: sparkles_src,

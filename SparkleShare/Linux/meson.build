@@ -18,6 +18,19 @@ sparkleshare_src = ['../Common/SparkleShare.cs',
     'UserInterface.cs',
     'UserInterfaceHelpers.cs']
 
+# Startup script
+configure_file(
+    input: 'sparkleshare.in',
+    output: 'sparkleshare',
+    configuration: configuration, install_dir: 'bin/')
+
+# .desktop and .appdata files
+install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: join_paths('share', 'applications'))
+install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: join_paths('share', 'applications'))
+install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: join_paths('share', 'applications'))
+install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths('share', 'appdata'))
+
+# Dependencies
 gtk = dependency('gtk-sharp-3.0')
 gdk = dependency('gdk-sharp-3.0')
 gio = dependency('gio-sharp-3.0')
@@ -33,23 +46,11 @@ sparkleshare = executable('SparkleShare',
     install: true,
     install_dir: install_dir)
 
-# Install the startup script
-install_data(sources: 'sparkleshare', install_dir: '/bin')
-
-# Install .desktop and .appdata files
-install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: join_paths('share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths('share', 'appdata'))
-
 subdir('Images')
 subdir('Images/icons')
 
 
 # TODO:
-# - preprocess startup script, and InstallationInfo.Directory.cs.in
-# - special Ubuntu icons. custom icons to right location
-# - preprocess InstallationInfo.Directory.cs.in
-# - Keep around bump version script
+# - install icons into right structure. Ubuntu icons. custom icons to right location
 # - update .desktop file database and icon cache
 
