@@ -1,5 +1,5 @@
 # Install app icons in system theme
-theme_dir = join_paths('/usr', 'share', 'icons', 'hicolor')
+theme_dir = join_paths(get_option('prefix'), 'share', 'icons', 'hicolor')
 icon_sizes = ['16', '22', '24', '32', '48', '256', '512']
 app_icon_name = 'org.sparkleshare.SparkleShare'
 
@@ -62,7 +62,7 @@ if get_option('ubuntu')
     size = '24'
 
     foreach theme : themes
-        theme_dir = join_paths('/usr', 'share', 'icons', theme)
+        theme_dir = join_paths(get_option('prefix'), 'share', 'icons', theme)
 
         install_data(sources: join_paths(theme, category, size, 'process-syncing.png'),
             install_dir: join_paths(theme_dir, category, size))

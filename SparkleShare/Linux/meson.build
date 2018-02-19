@@ -23,13 +23,14 @@ sparkleshare_src = ['../Common/SparkleShare.cs',
 configure_file(
     input: 'sparkleshare.in',
     output: 'sparkleshare',
-    configuration: configuration, install_dir: 'bin/')
+    configuration: configuration, install_dir: get_option('bindir'))
 
 # .desktop and .appdata files
-install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
-install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: join_paths('/usr', 'share', 'applications'))
-install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths('/usr', 'share', 'appdata'))
+apps_dir = join_paths(get_option('prefix'), 'share', 'applications')
+install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: apps_dir)
+install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: apps_dir)
+install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: apps_dir)
+install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths(get_option('prefix'), 'share', 'appdata'))
 
 
 # Build SparkleShare
