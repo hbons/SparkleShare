@@ -12,37 +12,13 @@
 *.sln.cache
 *.user
 *.resources
-Makecache
-Makefile.in
-Makefile
-intltool-*
-compile
-configure
-config.guess
-config.h
-config.h.in
-config.log
-config.status
-config.sub
-aclocal.m4
-autom4te.cache/
 bin/
 obj/
 git-*
-install-sh
-libtool
-ltmain.sh
-lt*.m4
-missing
-build/m4/shave/shave
-build/m4/*.m4
-build/m4/shave/shave-libtool
-build/m4/sparkleshare/libtool.m4
 Sparkles/InstallationInfo.Directory.cs
 SparkleShare/Linux/sparkleshare
 SparkleShare/Mac/git/*
-SparkleShare/Mac/git*.gz
-gnome-doc-utils.make
+SparkleShare/Mac/git*
 /sparkleshare-*
 desktop.ini
 _ReSharper.*
@@ -51,12 +27,12 @@ _ReSharper.*
 *.wixpdb
 *.wxs
 *.dotCover
-
 SparkleShare/Windows/build/
-  
+
 # NuGet Packages
 *.nupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+
