@@ -34,17 +34,12 @@ sudo apt-get install \
   git \ # Run requirement
   git-lfs \ # Run requirement
   gtk-sharp3-gapi \ # To build webkit2-sharp
-  intltool \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
   libsoup2.4-dev \
-  libtool-bin \
   libwebkit2gtk-4.0 \
-  mono-devel \
-  mono-mcs \
-  nant \
-  xsltproc
+  meson
 
 # On Fedora 27:
 sudo dnf install \
@@ -52,7 +47,7 @@ sudo dnf install \
   git-lfs \ # Run requirement
   gtk-sharp3-devel \
   gtk-sharp3-gapi \ # To build webkit2-sharp
-  mono-devel \
+  meson \
   notify-sharp3-devel \
   webkitgtk4-devel \
   webkit2-sharp
@@ -73,7 +68,7 @@ Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:
 https://github.com/hbons/soup-sharp  
 https://github.com/hbons/webkit2gtk-sharp
 
-All with the usual:
+All with:
 
 ```bash
 ./autogen.sh
@@ -90,16 +85,17 @@ https://github.com/hbons/appindicator-sharp
 You can build and install SparkleShare like this:
 
 ```bash
-$ ./configure (or ./autogen.sh if you build from the repository)
-$ make
-$ sudo make install
+meson bin/
+cd bin/
+ninja
+sudo ninja install
 ```
 
 
 ### Uninstall
 
 ```bash
-sudo make uninstall
+sudo ninja uninstall
 ```
 
 
