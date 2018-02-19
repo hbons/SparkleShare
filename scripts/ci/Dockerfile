@@ -1,11 +1,12 @@
-FROM ubuntu:16.04
+FROM ubuntu:17.10
 
 RUN apt-get update
 RUN apt-get install -y \
+  automake \
+  autoconf \
   desktop-file-utils \
   git \
   gtk-sharp3-gapi \
-  intltool \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
@@ -14,8 +15,11 @@ RUN apt-get install -y \
   libwebkit2gtk-4.0 \
   mono-devel \
   mono-mcs \
-  nant \
+  ninja-build \
+  python3-pip \
   xsltproc
+
+RUN pip3 install meson
 
 RUN git clone https://github.com/hbons/notify-sharp && \
   cd notify-sharp/ && \
@@ -39,6 +43,9 @@ RUN git clone https://github.com/hbons/webkit2gtk-sharp && \
 RUN cd ../
 
 COPY ./ ./
-RUN ./autogen.sh && \
-  make && make install 
+RUN mkdir build/
+
+RUN meson build/ && \
+  cd build/ && \
+  ninja && ninja install
 
