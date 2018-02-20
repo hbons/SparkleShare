@@ -10,6 +10,7 @@ RUN apt-get install -y \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
+  libmono-system-xml-linq4.0-cil \
   libsoup2.4-dev \
   libtool-bin \
   libwebkit2gtk-4.0 \
