@@ -27,6 +27,7 @@ sparkles_src = ['AuthenticationInfo.cs',
 
 sparkles = library('Sparkles',
     sources: sparkles_src,
+    cs_args: '-r:System.Xml.Linq',
     install: true,
     install_dir: install_dir)
 
