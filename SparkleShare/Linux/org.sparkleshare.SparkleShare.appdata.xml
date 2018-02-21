@@ -10,6 +10,7 @@
     <description>
         <p>SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server.</p>
         <p>SparkleShare is based on the popular version control system Git. It even supports the popular extension Git LFS to deal well with large files. So if you are already using Git repositories in your company, SparkleShare will integrate seamlessly.</p>
+        <p>Note: on some Linux distributions you'll need the TopIcons extension for GNOME Shell to show the SparkleShare status icon.</p>
     </description>
 
     <releases>
@@ -51,7 +52,7 @@
             <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-3.png?raw=true</image>
         </screenshot>
     </screenshots>
-    
+
     <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
     <launchable id="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
     <provides>
