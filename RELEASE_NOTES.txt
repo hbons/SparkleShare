@@ -1,3 +1,10 @@
+3.28.0 (???):
+
+    -
+    -
+    -
+
+
 2.0.1 (Tue 19 Dec, 2017):
 
     - Fix files created by conflict resolution being moved to the root folder
