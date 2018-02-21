@@ -194,18 +194,6 @@
     <BundleResource Include="..\Common\Images\about%402x.png">
       <Link>Resources\about%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Linux\Images\icons\hicolor\document-added-12.png">
-      <Link>Resources\document-added-12.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Linux\Images\icons\hicolor\document-deleted-12.png">
-      <Link>Resources\document-deleted-12.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
-      <Link>Resources\document-edited-12.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Linux\Images\icons\hicolor\document-moved-12.png">
-      <Link>Resources\document-moved-12.png</Link>
-    </BundleResource>
     <BundleResource Include="Resources\process-syncing.png" />
     <BundleResource Include="Resources\process-syncing%402x.png" />
     <BundleResource Include="Resources\process-syncing-down.png" />
@@ -312,6 +300,18 @@
     </BundleResource>
     <BundleResource Include="..\Common\HTML\jquery.js">
       <Link>HTML\jquery.js</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-added.png">
+      <Link>Resources\document-added.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-deleted.png">
+      <Link>Resources\document-deleted.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-edited.png">
+      <Link>Resources\document-edited.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-moved.png">
+      <Link>Resources\document-moved.png</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>
