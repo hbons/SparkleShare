@@ -72,8 +72,20 @@ namespace SparkleShare
 
         public void Run (string [] args)
         {
-            MethodInfo run_method = typeof (GLib.Application).GetMethod ("Run");
-            ParameterInfo [] run_parameters = run_method.GetParameters ();
+            MethodInfo [] methods = typeof (GLib.Application).GetMethods (BindingFlags.Instance | BindingFlags.Public);
+            ParameterInfo [] run_parameters = new ParameterInfo [0];
+            MethodInfo run_method = methods [0];
+
+            foreach (MethodInfo method in methods) {
+                if (method.Name == "Run") {
+                    run_parameters = method.GetParameters ();
+
+                    if (run_parameters.Length == 2) {
+                        run_method = method;
+                        break;
+                    }
+                }
+            }
 
             // Use the right Run method arguments depending on the installed GTK bindings
             if (run_parameters [0].ParameterType == typeof (System.Int32) &&

@@ -24,6 +24,6 @@ using System.Reflection;
 namespace Sparkles {
 
     public partial class InstallationInfo {
-        public const string Directory = "@expanded_datadir@/sparkleshare";
+        public const string Directory = "@ABS_INSTALL_DIR@";
     }
 }
