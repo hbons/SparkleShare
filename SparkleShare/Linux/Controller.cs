@@ -23,6 +23,7 @@ using Gtk;
 using Mono.Unix.Native;
 
 using Sparkles;
+using Sparkles.Git;
 
 namespace SparkleShare {
 
@@ -31,6 +32,8 @@ namespace SparkleShare {
         public Controller (Configuration config)
             : base (config)
         {
+            if (InstallationInfo.IsFlatpak)
+                GitCommand.ExecPath = Path.Combine ("/app", "libexec", "git-core");
         }
 
 
