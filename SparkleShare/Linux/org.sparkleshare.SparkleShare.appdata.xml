@@ -1,28 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
-  <metadata_licence>CC0-1.0</metadata_licence>
-  <project_license>GPL-3.0</project_license>
-  <name>SparkleShare</name>
-  <summary>Self hosted, instant, secure file sync</summary>
-  <description>
-    <p>SparkleShare creates a special folder on your computer. You can add remotely hosted folders (or "projects") to this folder. These projects will be automatically kept in sync with both the host and all of your peers when someone adds, removes or edits a file.</p>
-    <p>SparkleShare was made to cover certain use cases, but doesn't handle every scenario well. To help you decide if SparkleShare is right for you, here's a few examples of what it does well and less well:</p>
-    <p>Great:</p>
-    <ul>
-      <li>Frequently changing project files, like text, office documents, and images</li>
-      <li>Tracking and syncing files edited by multiple people</li>
-      <li>Reverting a file to any point in its history</li>
-      <li>Preventing spying on your files on the server using encryption</li>
-    </ul>
-    <p>Not so great:</p>
-    <ul>
-      <li>Full computer backups</li>
-      <li>Storing your photo or music collection</li>
-      <li>Large binary files that change often, like video editing projects</li>
-    </ul>
-    <p>Have fun!</p>
-  </description>
-  <url type="homepage">http://www.sparkleshare.org/</url>
-</component>
+    <name>SparkleShare</name>
+    <summary>Magic self hosted Git file sync</summary>
+    <developer_name>Hylke Bons</developer_name>
+    <project_license>GPL-3.0+</project_license>
+    <url type="homepage">http://www.sparkleshare.org/</url>
+    <url type="bugtracker">https://www.github.com/hbons/SparkleShare/issues</url>
+    
+    <description>
+        <p>SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server.</p>
+        <p>SparkleShare is based on the popular version control system Git. It even supports the popular extension Git LFS to deal well with large files. So if you are already using Git repositories in your company, SparkleShare will integrate seamlessly.</p>
+    </description>
 
+    <releases>
+        <release version="2.0.1" date="2017-12-04" urgency="low">
+            <description>
+                <p>Fixes and improvements:</p>
+                <ul>
+                    <li>Fix files created by conflict resolution being moved to the root folder</li>
+                    <li>On conflicts, both diverging versions plus the original version are now kept</li>
+                </ul>
+           </description>
+        </release>
+        <release version="2.0.0" date="2017-09-10" urgency="medium">
+            <description>
+                <p>SparkleShare 2.0 is a clean break and will be incompatible with the 1.x series. Repositories added using 1.0 will likely not work and will have to be re-synced to take advantage of 2.0 features (1.x and 2.x clients will still be able to sync to the same repository without problems).</p>
+                <ul>
+                    <li>Support for Git LFS managed repositories</li>
+                    <li>Projects are now grouped by host or organisation</li>
+                    <li>In encrypted repositories, name and email metadata is now also encrypted</li>
+                    <li>Change notification preferences from GNOME System Settings</li>
+                    <li>New GitLab preset</li>
+                    <li>New app icon by Sam Hewitt</li>
+                </ul>
+           </description>
+       </release>
+    </releases>  
+
+    <screenshots>
+        <screenshot type="default">
+            <caption>Sync projects to your computer</caption>
+            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.png?raw=true</image>
+        </screenshot>
+        <screenshot>
+            <caption>View your team's file history</caption>
+            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.png?raw=true</image>
+        </screenshot>
+        <screenshot>
+            <caption>Quickly access your projects</caption>
+            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-3.png?raw=true</image>
+        </screenshot>
+    </screenshots>
+    
+    <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
+    <launchable id="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
+    <provides>
+        <binary>sparkleshare</binary>
+    </provides>
+    
+    <metadata_licence>CC0-1.0</metadata_licence>
+    <update_contact>hi_AT_planetpeanut.uk</update_contact>
+</component>
