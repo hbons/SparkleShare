@@ -1,39 +1,20 @@
 # SparkleShare for Linux
 
-To run SparkleShare, you'll need these packages:
-
-```
-curl
-git >= 2.3
-git-lfs >= 1.3.0
-gtk-sharp3
-gvfs
-mono-core >= 4.0
-notify-sharp
-webkit2gtk-sharp
-```
-
-On Ubuntu you'll also need:
-
-```
-libappindicator-sharp
-```
-
-
 ## Building on Linux
 
 ### Common build requirements
 
-Make sure to have the `git` package installed when you're building on Linux.
-You will need the packages listed below for the most used Linux distributions:  
+You will need the packages listed below for the most used Linux distributions (some are run requirements):  
 
 ```shell
 # On Ubuntu 16.04:
 sudo apt-get install \
+  curl \ # Run requirement
   desktop-file-utils \
   git \ # Run requirement
   git-lfs \ # Run requirement
   gtk-sharp3-gapi \ # To build webkit2-sharp
+  gvfs \ # Run requirement
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
@@ -43,10 +24,12 @@ sudo apt-get install \
 
 # On Fedora 27:
 sudo dnf install \
+  curl \ # Run requirement
   git \ # Run requirement
   git-lfs \ # Run requirement
   gtk-sharp3-devel \
   gtk-sharp3-gapi \ # To build webkit2-sharp
+  gvfs \ # Run requirement
   meson \
   notify-sharp3-devel \
   webkitgtk4-devel \
@@ -56,19 +39,11 @@ sudo dnf install \
 
 ### Additional source build requirements
 
-Install the `gtk-sharp3` bindings from:  
-https://github.com/mono/gtk-sharp  
-Or on Ubuntu, get it from this PPA:  
-https://launchpad.net/~meebey/+archive/mono-preview
-
-Install the `notify-sharp` bindings from:  
-https://download.gnome.org/sources/notify-sharp/3.0/
-
-Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:  
+Install the `soup-sharp` and `webkit2gtk-sharp` bindings from: 
 https://github.com/hbons/soup-sharp  
 https://github.com/hbons/webkit2gtk-sharp
 
-All with:
+Both with:
 
 ```bash
 ./autogen.sh
@@ -76,19 +51,29 @@ make
 sudo make install
 ```
 
-If you're using Ubuntu, also install the `appindicator-sharp` bindings from:  
+Om Ubuntu, also install the `appindicator-sharp` bindings from:
 https://github.com/hbons/appindicator-sharp
 
 
 ### Start the build
 
-You can build and install SparkleShare like this:
+You can build and install SparkleShare with `meson` like this:
 
 ```bash
 meson build/
-cd build/
-ninja
-sudo ninja install
+ninja -C build/
+sudo ninja install -C build/
+```
+
+
+If your distribution has an out of date meson package, you can install the latest version using the Python package manager:
+
+```bash
+# Install pip using your system's package manager
+sudo apt-get install python3-pip
+sudo dnf install python3-pip
+
+pip3 install meson
 ```
 
 
