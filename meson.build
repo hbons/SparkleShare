@@ -6,7 +6,7 @@ configuration = configuration_data()
 configuration.set('ABS_INSTALL_DIR', join_paths(get_option('prefix'), install_dir))
 
 # This line is changed by scripts/bump-version.sh, so keep it intact
-configuration.set('VERSION', '2.0.1')
+configuration.set('VERSION', '3.28.0')
 
 subdir('Sparkles')
 subdir('Sparkles/Git')
