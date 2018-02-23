@@ -779,12 +779,26 @@ namespace Sparkles.Git {
                     if (!entry_line.StartsWith (":") || entry_line.Contains ("\\177"))
                         continue;
 
-                    string file_path = entry_line.Substring (39);
+                    int file_path_pos = 33;
+                    int type_letter_pos = 31;
+
+                    // A recent version of Git changed the way raw commit file lines are displayed, so
+                    // we need to slightly offset the character positions for older versions of Git
+                    // Lines in older versions contained "...". For example:
+                    //
+                    // OLD: :000000 100644 0000000... 920a069... A   .sparkleshare
+                    // NEW: :000000 100644 0000000 920a069 A    .sparkleshare
+                    if (entry.IndexOf ("...") == 22) {
+                        file_path_pos   += 6;
+                        type_letter_pos += 6;
+                    }
+
+                    string file_path = entry_line.Substring (file_path_pos);
 
                     if (file_path.Equals (".sparkleshare"))
                         continue;
 
-                    string type_letter    = entry_line [37].ToString ();
+                    string type_letter    = entry_line [type_letter_pos].ToString ();
                     bool change_is_folder = false;
 
                     if (file_path.EndsWith (".empty")) { 
@@ -810,8 +824,11 @@ namespace Sparkles.Git {
                     };
 
                     if (type_letter.Equals ("R")) {
-                        int tab_pos         = entry_line.LastIndexOf ("\t");
-                        file_path           = entry_line.Substring (42, tab_pos - 42);
+                        // The type code is actually "R100", so offset a little bit
+                        file_path_pos += 3;
+
+                        int tab_pos = entry_line.LastIndexOf ("\t");
+                        file_path = entry_line.Substring (file_path_pos, tab_pos - file_path_pos);
                         string to_file_path = entry_line.Substring (tab_pos + 1);
 
                         try {
