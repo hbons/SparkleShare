@@ -340,10 +340,10 @@ namespace SparkleShare {
             html = html.Replace ("<!-- $a-color -->", "#009ff8");
             html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
-            html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added-12.png");
-            html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted-12.png");
-            html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited-12.png");
-            html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved-12.png");
+            html = html.Replace ("<!-- $document-added-background-image -->", pixmaps_path + "/document-added.png");
+            html = html.Replace ("<!-- $document-deleted-background-image -->", pixmaps_path + "/document-deleted.png");
+            html = html.Replace ("<!-- $document-edited-background-image -->", pixmaps_path + "/document-edited.png");
+            html = html.Replace ("<!-- $document-moved-background-image -->", pixmaps_path + "/document-moved.png");
 
             this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
                 Frame = new CGRect (new CGPoint (0, 0), new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
