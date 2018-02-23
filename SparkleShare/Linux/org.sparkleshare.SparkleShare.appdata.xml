@@ -41,15 +41,11 @@
     <screenshots>
         <screenshot type="default">
             <caption>Sync projects to your computer</caption>
-            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.png?raw=true</image>
+            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.png</image>
         </screenshot>
         <screenshot>
             <caption>View your team's file history</caption>
-            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.png?raw=true</image>
-        </screenshot>
-        <screenshot>
-            <caption>Quickly access your projects</caption>
-            <image type="source" width="1600" height="900">https://github.com/hbons/SparkleShare/blob/master/SparkleShare/Linux/Images/gnome-software-screenshot-3.png?raw=true</image>
+            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.png</image>
         </screenshot>
     </screenshots>
 
