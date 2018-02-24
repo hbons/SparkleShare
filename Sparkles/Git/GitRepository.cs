@@ -675,22 +675,20 @@ namespace Sparkles.Git {
             var change_sets = new List <ChangeSet> ();
             GitCommand git;
 
+            string log_args = "--since=1.month --name-status --date=iso --find-renames --no-merges --no-color";
+
             if (path == null) {
-                git = new GitCommand (LocalPath, "--no-pager log --since=1.month --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
+                git = new GitCommand (LocalPath, "--no-pager log " + log_args);
 
             } else {
                 path = path.Replace ("\\", "/");
-
-                git = new GitCommand (LocalPath, "--no-pager log --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges -- \"" + path + "\"");
+                git = new GitCommand (LocalPath, "--no-pager log " + log_args + " -- \"" + path + "\"");
             }
 
             string output = git.StartAndReadStandardOutput ();
 
             if (path == null && string.IsNullOrWhiteSpace (output)) {
-                git = new GitCommand (LocalPath, "--no-pager log -n 75 --raw --find-renames --date=iso " +
-                    "--format=medium --no-color --no-merges");
+                git = new GitCommand (LocalPath, "--no-pager log -n 75 " + log_args);
 
                 output = git.StartAndReadStandardOutput ();
             }
@@ -731,14 +729,14 @@ namespace Sparkles.Git {
                     match = this.merge_regex.Match (log_entry);
 
                     if (!match.Success)
-                        continue;
+                    continue;
                 }
 
                 ChangeSet change_set = new ChangeSet ();
 
-                change_set.Folder    = new SparkleFolder (Name);
-                change_set.Revision  = match.Groups [1].Value;
-                change_set.User      = new User (match.Groups [2].Value, match.Groups [3].Value);
+                change_set.Folder   = new SparkleFolder (Name);
+                change_set.Revision = match.Groups [1].Value;
+                change_set.User     = new User (match.Groups [2].Value, match.Groups [3].Value);
 
                 if (change_set.User.Name == "SparkleShare")
                     continue;
@@ -773,104 +771,13 @@ namespace Sparkles.Git {
 
                 string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
 
-                // Parse file list. Lines containing file changes start with ":"
                 foreach (string entry_line in entry_lines) {
-                    // Skip lines containing backspace characters
-                    if (!entry_line.StartsWith (":") || entry_line.Contains ("\\177"))
+                    Change change = ParseFileChange (entry_line);
+
+                    if (change == null)
                         continue;
 
-                    int file_path_pos = 33;
-                    int type_letter_pos = 31;
-
-                    // A recent version of Git changed the way raw commit file lines are displayed, so
-                    // we need to slightly offset the character positions for older versions of Git
-                    // Lines in older versions contained "...". For example:
-                    //
-                    // OLD: :000000 100644 0000000... 920a069... A   .sparkleshare
-                    // NEW: :000000 100644 0000000 920a069 A    .sparkleshare
-                    if (entry.IndexOf ("...") == 22) {
-                        file_path_pos   += 6;
-                        type_letter_pos += 6;
-                    }
-
-                    string file_path = entry_line.Substring (file_path_pos);
-
-                    if (file_path.Equals (".sparkleshare"))
-                        continue;
-
-                    string type_letter    = entry_line [type_letter_pos].ToString ();
-                    bool change_is_folder = false;
-
-                    if (file_path.EndsWith (".empty")) { 
-                        file_path        = file_path.Substring (0, file_path.Length - ".empty".Length);
-                        change_is_folder = true;
-                    }
-
-                    try {
-                        file_path = EnsureSpecialCharacters (file_path);
-                        
-                    } catch (Exception e) {
-                        Logger.LogInfo ("Local", "Error parsing file name '" + file_path + "'", e);
-                        continue;
-                    }
-
-                    file_path = file_path.Replace ("\\\"", "\"");
-
-                    Change change = new Change () {
-                        Path      = file_path,
-                        IsFolder  = change_is_folder,
-                        Timestamp = change_set.Timestamp,
-                        Type      = ChangeType.Added
-                    };
-
-                    if (type_letter.Equals ("R")) {
-                        // The type code is actually "R100", so offset a little bit
-                        file_path_pos += 3;
-
-                        int tab_pos = entry_line.LastIndexOf ("\t");
-                        file_path = entry_line.Substring (file_path_pos, tab_pos - file_path_pos);
-                        string to_file_path = entry_line.Substring (tab_pos + 1);
-
-                        try {
-                            file_path = EnsureSpecialCharacters (file_path);
-                            
-                        } catch (Exception e) {
-                            Logger.LogInfo ("Local", "Error parsing file name '" + file_path + "'", e);
-                            continue;
-                        }
-
-                        try {
-                            to_file_path = EnsureSpecialCharacters (to_file_path);
-
-                        } catch (Exception e) {
-                            Logger.LogInfo ("Local", "Error parsing file name '" + to_file_path + "'", e);
-                            continue;
-                        }
-
-                        file_path    = file_path.Replace ("\\\"", "\"");
-                        to_file_path = to_file_path.Replace ("\\\"", "\"");
-
-                        if (file_path.EndsWith (".empty")) {
-                            file_path = file_path.Substring (0, file_path.Length - 6);
-                            change_is_folder = true;
-                        }
-
-                        if (to_file_path.EndsWith (".empty")) {
-                            to_file_path = to_file_path.Substring (0, to_file_path.Length - 6);
-                            change_is_folder = true;
-                        }
-                               
-                        change.Path        = file_path;
-                        change.MovedToPath = to_file_path;
-                        change.Type        = ChangeType.Moved;
-
-                    } else if (type_letter.Equals ("M")) {
-                        change.Type = ChangeType.Edited;
-
-                    } else if (type_letter.Equals ("D")) {
-                        change.Type = ChangeType.Deleted;
-                    }
-
+                    change.Timestamp = change_set.Timestamp;
                     change_set.Changes.Add (change);
                 }
 
@@ -920,6 +827,79 @@ namespace Sparkles.Git {
             }
 
             return change_sets;
+        }
+
+
+        Change ParseFileChange (string line)
+        {
+            // Skip lines containing backspace characters or the .sparkleshare file
+            if (line.Contains ("\\177") || line.Contains (".sparkleshare"))
+                return null;
+
+            // File lines start with a change type letter and then a tab character
+            if (!line.StartsWith ("A\t") &&
+                !line.StartsWith ("M\t") &&
+                !line.StartsWith ("D\t") &&
+                !line.StartsWith ("R100\t")) {
+
+                return null;
+            }
+
+            Change change = new Change () { Type = ChangeType.Added };
+
+            string file_path;
+			int first_tab_pos = line.IndexOf ('\t');
+            int last_tab_pos = line.LastIndexOf ('\t');
+
+            if (first_tab_pos == last_tab_pos) {
+                char type_letter = line [0];
+
+                if (type_letter == 'M')
+                    change.Type = ChangeType.Edited;
+
+                if (type_letter == 'D')
+                    change.Type = ChangeType.Deleted;
+
+                file_path = line.Substring (first_tab_pos + 1);
+
+            } else {
+                change.Type = ChangeType.Moved;
+
+                // The "to" and "from" file paths are separated by a tab
+                string [] parts = line.Split ("\t".ToCharArray ());
+
+                file_path = parts [1];
+                string to_file_path = parts [2];
+
+                to_file_path = to_file_path.Replace ("\\\"", "\"");
+                change.MovedToPath = to_file_path;
+            }
+
+            file_path = file_path.Replace ("\\\"", "\"");
+            change.Path = file_path;
+
+            // Handle .empty files as if they were folders
+            if (change.Path.EndsWith (".empty")) {
+                change.Path = change.Path.Substring (0, change.Path.Length - ".empty".Length);
+
+                if (change.Type == ChangeType.Moved)
+                    change.MovedToPath = change.MovedToPath.Substring (0, change.MovedToPath.Length - ".empty".Length);
+
+                change.IsFolder = true;
+            }
+
+            try {
+                change.Path = EnsureSpecialCharacters (change.Path);
+
+                if (change.Type == ChangeType.Moved)
+                    change.MovedToPath = EnsureSpecialCharacters (change.MovedToPath);
+
+            } catch (Exception e) {
+                Logger.LogInfo ("Local", string.Format ("Error parsing line due to special character: '{0}'", line), e);
+                return null;
+            }
+
+            return change;
         }
 
 
