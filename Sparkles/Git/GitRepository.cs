@@ -848,7 +848,7 @@ namespace Sparkles.Git {
             Change change = new Change () { Type = ChangeType.Added };
 
             string file_path;
-			int first_tab_pos = line.IndexOf ('\t');
+            int first_tab_pos = line.IndexOf ('\t');
             int last_tab_pos = line.LastIndexOf ('\t');
 
             if (first_tab_pos == last_tab_pos) {
