@@ -18,6 +18,7 @@ sudo apt-get install \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
+  libnotify3.0-cil-dev \
   libsoup2.4-dev \
   libwebkit2gtk-4.0 \
   meson
