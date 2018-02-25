@@ -71,8 +71,8 @@ If your distribution has an out of date meson package, you can install the lates
 
 ```bash
 # Install pip using your system's package manager
-sudo apt-get install python3-pip
-sudo dnf install python3-pip
+sudo apt-get install python3-pip # Ubuntu
+sudo dnf install python3-pip # Fedora
 
 pip3 install meson
 ```
