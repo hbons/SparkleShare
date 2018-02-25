@@ -47,7 +47,7 @@ if get_option('ubuntu')
     args = [args, '-define:HAVE_APP_INDICATOR']
 endif
 
-appindicator = dependency('appindicator3-sharp', required: get_option('ubuntu'))
+appindicator = dependency('appindicator3-sharp-0.1', required: get_option('ubuntu'))
 
 sparkleshare = executable('SparkleShare',
     dependencies: [gtk, gdk, gio, glib, webkit, notify, appindicator],
