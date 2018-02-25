@@ -491,7 +491,7 @@ namespace Sparkles.Git {
 
             foreach (string line in lines) {
                 string conflicting_file_path = line.Substring (3);
-                conflicting_file_path        = EnsureSpecialCharacters (conflicting_file_path);
+                conflicting_file_path        = EnsureSpecialChars (conflicting_file_path);
                 conflicting_file_path        = conflicting_file_path.Trim ("\"".ToCharArray ());
 
                 // Remove possible rename indicators
@@ -689,90 +689,31 @@ namespace Sparkles.Git {
 
             if (path == null && string.IsNullOrWhiteSpace (output)) {
                 git = new GitCommand (LocalPath, "--no-pager log -n 75 " + log_args);
-
                 output = git.StartAndReadStandardOutput ();
             }
 
-            string [] lines      = output.Split ("\n".ToCharArray ());
-            List<string> entries = new List <string> ();
 
-            // Split up commit entries
-            int line_number = 0;
-            bool first_pass = true;
-            string entry = "", last_entry = "";
-            foreach (string line in lines) {
-                if (line.StartsWith ("commit") && !first_pass) {
-                    entries.Add (entry);
-                    entry = "";
-                    line_number = 0;
+            // Offset the output so our log_regex can be simpler
+            string commit_sep = "commit ";
 
-                } else {
-                    first_pass = false;
-                }
+            if (output.StartsWith (commit_sep))
+                output = output.Substring (commit_sep.Length) + "\n\n" + commit_sep;
 
-                // Only parse first 250 files to prevent memory issues
-                if (line_number < 250) {
-                    entry += line + "\n";
-                    line_number++;
-                }
 
-                last_entry = entry;
-            }
+			MatchCollection matches = this.log_regex.Matches (output);
 
-            entries.Add (last_entry);
+            foreach (Match match in matches) {
+                ChangeSet change_set = ParseChangeSet (match);
 
-            // Parse commit entries
-            foreach (string log_entry in entries) {
-                Match match = this.log_regex.Match (log_entry);
-
-                if (!match.Success) {
-                    match = this.merge_regex.Match (log_entry);
-
-                    if (!match.Success)
-                    continue;
-                }
-
-                ChangeSet change_set = new ChangeSet ();
-
-                change_set.Folder   = new SparkleFolder (Name);
-                change_set.Revision = match.Groups [1].Value;
-                change_set.User     = new User (match.Groups [2].Value, match.Groups [3].Value);
-
-                if (change_set.User.Name == "SparkleShare")
+                if (change_set == null)
                     continue;
 
-                change_set.RemoteUrl = RemoteUrl;
+                int count = 0;
+                foreach (string line in match.Groups ["files"].Value.Split ("\n".ToCharArray ())) {
+                    if (count++ == 256)
+                        break;
 
-                if (StorageType == StorageType.Encrypted) {
-                    string password_file_path = Path.Combine (LocalPath, ".git", "info", "encryption_password");
-                    string password = File.ReadAllText (password_file_path);
-
-                    try {
-                        change_set.User = new User (
-                            change_set.User.Name.AESDecrypt (password),
-                            change_set.User.Email.AESDecrypt (password));
-
-                    } catch (Exception e) {
-                        Console.WriteLine (e.StackTrace);
-                        change_set.User = new User (match.Groups [2].Value, match.Groups [3].Value);
-                    }
-                }
-
-                change_set.Timestamp = new DateTime (int.Parse (match.Groups [4].Value),
-                    int.Parse (match.Groups [5].Value), int.Parse (match.Groups [6].Value),
-                    int.Parse (match.Groups [7].Value), int.Parse (match.Groups [8].Value),
-                    int.Parse (match.Groups [9].Value));
-
-                string time_zone     = match.Groups [10].Value;
-                int our_offset       = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
-                int their_offset     = int.Parse (time_zone.Substring (0, 3));
-                change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
-                change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
-
-                string [] entry_lines = log_entry.Split ("\n".ToCharArray ());
-
-                foreach (string entry_line in entry_lines) {
-                    Change change = ParseFileChange (entry_line);
+                    Change change = ParseChange (line);
 
                     if (change == null)
                         continue;
@@ -781,21 +722,22 @@ namespace Sparkles.Git {
                     change_set.Changes.Add (change);
                 }
 
-                // Group commits per user, per day
-                if (change_sets.Count > 0 && path == null) {
+
+                if (path == null && change_sets.Count > 0) {
                     ChangeSet last_change_set = change_sets [change_sets.Count - 1];
 
-                    if (change_set.Timestamp.Year  == last_change_set.Timestamp.Year &&
+					// If a change set set already exists for this user and day, group into that one
+                    if (change_set.Timestamp.Year == last_change_set.Timestamp.Year &&
                         change_set.Timestamp.Month == last_change_set.Timestamp.Month &&
-                        change_set.Timestamp.Day   == last_change_set.Timestamp.Day &&
+                        change_set.Timestamp.Day == last_change_set.Timestamp.Day &&
                         change_set.User.Name.Equals (last_change_set.User.Name)) {
 
                         last_change_set.Changes.AddRange (change_set.Changes);
 
                         if (DateTime.Compare (last_change_set.Timestamp, change_set.Timestamp) < 1) {
                             last_change_set.FirstTimestamp = last_change_set.Timestamp;
-                            last_change_set.Timestamp      = change_set.Timestamp;
-                            last_change_set.Revision       = change_set.Revision;
+                            last_change_set.Timestamp = change_set.Timestamp;
+                            last_change_set.Revision = change_set.Revision;
 
                         } else {
                             last_change_set.FirstTimestamp = change_set.Timestamp;
@@ -805,23 +747,22 @@ namespace Sparkles.Git {
                         change_sets.Add (change_set);
                     }
 
-                } else {
-                    // Don't show removals or moves in the revision list of a file
-                    if (path != null) {
-                        List<Change> changes_to_skip = new List<Change> ();
+                } else if (path != null) {
+                    // Don't show removals or moves in the history list of a file
+                    var changes = new Change [change_set.Changes.Count];
+                    change_set.Changes.CopyTo (changes);
 
-                        foreach (Change change in change_set.Changes) {
-                            if ((change.Type == ChangeType.Deleted || change.Type == ChangeType.Moved)
-                                && change.Path.Equals (path)) {
+                    foreach (Change change in changes) {
+                        if (!change.Path.Equals (path))
+                            continue;
 
-                                changes_to_skip.Add (change);
-                            }
-                        }
-
-                        foreach (Change change_to_skip in changes_to_skip)
-                            change_set.Changes.Remove (change_to_skip);
+                        if (change.Type == ChangeType.Deleted || change.Type == ChangeType.Moved)
+                            change_set.Changes.Remove (change);
                     }
-                                    
+
+                    change_sets.Add (change_set);
+
+                } else {
                     change_sets.Add (change_set);
                 }
             }
@@ -830,7 +771,51 @@ namespace Sparkles.Git {
         }
 
 
-        Change ParseFileChange (string line)
+        ChangeSet ParseChangeSet (Match match)
+        {
+            ChangeSet change_set = new ChangeSet ();
+
+            // Set the name and email
+            if (match.Groups ["name"].Value == "SparkleShare")
+                return null;
+
+            change_set.Folder = new SparkleFolder (Name);
+            change_set.Revision = match.Groups ["commit"].Value;
+            change_set.User = new User (match.Groups ["name"].Value, match.Groups ["email"].Value);
+            change_set.RemoteUrl = RemoteUrl;
+
+            if (StorageType == StorageType.Encrypted) {
+                string password_file_path = Path.Combine (LocalPath, ".git", "info", "encryption_password");
+                string password = File.ReadAllText (password_file_path);
+
+                try {
+                    change_set.User = new User (
+                        change_set.User.Name.AESDecrypt (password),
+                        change_set.User.Email.AESDecrypt (password));
+
+                } catch (Exception e) {
+                    Console.WriteLine (e.StackTrace);
+                    change_set.User = new User (match.Groups ["name"].Value, match.Groups ["email"].Value);
+                }
+            }
+
+            // Get the right date and time by offsetting the timezones
+            change_set.Timestamp = new DateTime (
+                int.Parse (match.Groups ["year"].Value), int.Parse (match.Groups ["month"].Value), int.Parse (match.Groups ["day"].Value),
+                int.Parse (match.Groups ["hour"].Value), int.Parse (match.Groups ["minute"].Value), int.Parse (match.Groups ["second"].Value));
+
+            string time_zone = match.Groups ["timezone"].Value;
+            int our_offset = TimeZone.CurrentTimeZone.GetUtcOffset (DateTime.Now).Hours;
+            int their_offset = int.Parse (time_zone.Substring (0, 3));
+
+            change_set.Timestamp = change_set.Timestamp.AddHours (their_offset * -1);
+            change_set.Timestamp = change_set.Timestamp.AddHours (our_offset);
+
+            return change_set;
+        }
+
+
+        Change ParseChange (string line)
         {
             // Skip lines containing backspace characters or the .sparkleshare file
             if (line.Contains ("\\177") || line.Contains (".sparkleshare"))
@@ -846,8 +831,8 @@ namespace Sparkles.Git {
             }
 
             Change change = new Change () { Type = ChangeType.Added };
-
             string file_path;
+
             int first_tab_pos = line.IndexOf ('\t');
             int last_tab_pos = line.LastIndexOf ('\t');
 
@@ -878,21 +863,23 @@ namespace Sparkles.Git {
             file_path = file_path.Replace ("\\\"", "\"");
             change.Path = file_path;
 
+            string empty_name = ".empty";
+
             // Handle .empty files as if they were folders
-            if (change.Path.EndsWith (".empty")) {
-                change.Path = change.Path.Substring (0, change.Path.Length - ".empty".Length);
+            if (change.Path.EndsWith (empty_name)) {
+                change.Path = change.Path.Substring (0, change.Path.Length - empty_name.Length);
 
                 if (change.Type == ChangeType.Moved)
-                    change.MovedToPath = change.MovedToPath.Substring (0, change.MovedToPath.Length - ".empty".Length);
+                    change.MovedToPath = change.MovedToPath.Substring (0, change.MovedToPath.Length - empty_name.Length);
 
                 change.IsFolder = true;
             }
 
             try {
-                change.Path = EnsureSpecialCharacters (change.Path);
+                change.Path = EnsureSpecialChars (change.Path);
 
                 if (change.Type == ChangeType.Moved)
-                    change.MovedToPath = EnsureSpecialCharacters (change.MovedToPath);
+                    change.MovedToPath = EnsureSpecialChars (change.MovedToPath);
 
             } catch (Exception e) {
                 Logger.LogInfo ("Local", string.Format ("Error parsing line due to special character: '{0}'", line), e);
@@ -903,7 +890,7 @@ namespace Sparkles.Git {
         }
 
 
-        string EnsureSpecialCharacters (string path)
+        string EnsureSpecialChars (string path)
         {
             // The path is quoted if it contains special characters
             if (path.StartsWith ("\""))
@@ -1014,13 +1001,13 @@ namespace Sparkles.Git {
                     
                     change = new Change () {
                         Type = ChangeType.Moved,
-                        Path = EnsureSpecialCharacters (path),
-                        MovedToPath = EnsureSpecialCharacters (moved_to_path)
+                        Path = EnsureSpecialChars (path),
+                        MovedToPath = EnsureSpecialChars (moved_to_path)
                     };
                     
                 } else {
                     string path = line.Substring (2).Trim ("\" ".ToCharArray ());
-                    change = new Change () { Path = EnsureSpecialCharacters (path) };
+                    change = new Change () { Path = EnsureSpecialChars (path) };
                     change.Type = ChangeType.Added;
 
                     if (line.StartsWith ("M")) {
@@ -1048,8 +1035,8 @@ namespace Sparkles.Git {
 
             foreach (Change change in ParseStatus ()) {
                 if (change.Type == ChangeType.Moved) {
-                    message +=  "< ‘" + EnsureSpecialCharacters (change.Path) + "’\n";
-                    message +=  "> ‘" + EnsureSpecialCharacters (change.MovedToPath) + "’\n";
+                    message +=  "< ‘" + EnsureSpecialChars (change.Path) + "’\n";
+                    message +=  "> ‘" + EnsureSpecialChars (change.MovedToPath) + "’\n";
 
                 } else {
                     switch (change.Type) {
@@ -1122,17 +1109,13 @@ namespace Sparkles.Git {
         }
 
 
-        Regex log_regex = new Regex (@"commit ([a-f0-9]{40})*\n" +
-            "Author: (.+) <(.+)>\n" +
-            "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-            "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-            "*", RegexOptions.Compiled);
-
-        Regex merge_regex = new Regex (@"commit ([a-f0-9]{40})\n" +
-            "Merge: [a-f0-9]{7} [a-f0-9]{7}\n" +
-            "Author: (.+) <(.+)>\n" +
-            "Date:   ([0-9]{4})-([0-9]{2})-([0-9]{2}) " +
-            "([0-9]{2}):([0-9]{2}):([0-9]{2}) (.[0-9]{4})\n" +
-            "*", RegexOptions.Compiled);
+        Regex log_regex = new Regex (
+            "(?'commit'[a-f0-9]{40})\n" +
+            "Author: (?'name'.+?) <(?'email'.+?)>\n" +
+            "Date:   (?'year'[0-9]{4})-(?'month'[0-9]{2})-(?'day'[0-9]{2}) (?'hour'[0-9]{2}):(?'minute'[0-9]{2}):(?'second'[0-9]{2}) (?'timezone'.[0-9]{4})\n" +
+            "\n" +
+            "    (?'message'.+?)\n" +
+            "\n" +
+            "(?'files'.+?)\n\ncommit ", RegexOptions.Singleline | RegexOptions.Compiled);
     }
 }
