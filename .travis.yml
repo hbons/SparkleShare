@@ -24,3 +24,11 @@ before_deploy:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then mv SparkleShare/Mac/bin/ReleaseMac/SparkleShare.app . ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then zip --recurse-paths sparkleshare-mac-nightly-${TRAVIS_COMMIT}.zip SparkleShare.app ; fi
 
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/f1a1178baa78d1162385
+    on_success: change
+    on_failure: always
+    on_start: never
+
