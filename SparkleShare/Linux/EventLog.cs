@@ -184,15 +184,14 @@ namespace SparkleShare {
 
             this.spinner.Stop ();
             this.scrolled_window.Remove (this.scrolled_window.Child);
-            this.web_view.Dispose ();
 
-            this.web_view = CreateWebView ();
             this.web_view.LoadHtml (html, "file:///");
 
             this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
+
             this.scrolled_window.ShowAll ();
         }
 
