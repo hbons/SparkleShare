@@ -56,6 +56,9 @@ namespace SparkleShare {
 
             Controller.ShowWindowEvent += delegate {
                 Application.Invoke (delegate {
+                    if (Child != null)
+                        Remove (Child);
+
                     CreateNote ();
                     ShowAll ();
                     Present ();
