@@ -40,14 +40,13 @@ gio = dependency('gio-sharp-3.0')
 glib = dependency('glib-sharp-3.0')
 webkit = dependency('webkit2-sharp-4.0')
 notify = dependency('notify-sharp-3.0')
+appindicator = dependency('appindicator3-sharp-0.1', required: get_option('ubuntu'))
 
 args = '-r:Mono.Posix'
 
-if get_option('ubuntu')
+if appindicator.found()
     args = [args, '-define:HAVE_APP_INDICATOR']
 endif
-
-appindicator = dependency('appindicator3-sharp-0.1', required: get_option('ubuntu'))
 
 sparkleshare = executable('SparkleShare',
     dependencies: [gtk, gdk, gio, glib, webkit, notify, appindicator],
