@@ -15,6 +15,7 @@
 //   along with this program. If not, see (http://www.gnu.org/licenses/).
 
 
+using System.IO;
 using Gtk;
 
 namespace SparkleShare {
@@ -64,14 +65,17 @@ namespace SparkleShare {
             Controller.UpdateTitleEvent += delegate (string title) {
                 Application.Invoke (delegate { Title = title; });
             };
-
-            CreateNote ();
         }
 
 
         private void CreateNote ()
         {
-            var user_image = new Image (Controller.AvatarFilePath);
+            Image user_image;
+
+            if (File.Exists (Controller.AvatarFilePath))
+                user_image = new Image (Controller.AvatarFilePath);
+            else
+                user_image = UserInterfaceHelpers.GetImage ("user-icon-default.png");
 
             /* TODO: Style the entry neatly, multiple lines, and add placeholder text
             string balloon_image_path = new string [] { UserInterface.AssetsPath, "pixmaps", "text-balloon.png" }.Combine ();
