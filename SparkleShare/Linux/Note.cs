@@ -96,8 +96,9 @@ namespace SparkleShare {
 
 
             var cancel_button = new Button ("Cancel");
-            var sync_button   = new Button ("Sync"); // TODO: Make default button
-			sync_button.CanDefault = true;
+            var sync_button   = new Button ("Sync") { CanDefault = true };
+
+            sync_button.StyleContext.AddClass ("suggested-action");
 
             cancel_button.Clicked += delegate { Controller.CancelClicked (); };
             sync_button.Clicked   += delegate { Controller.SyncClicked (balloon.Buffer.Text); };
