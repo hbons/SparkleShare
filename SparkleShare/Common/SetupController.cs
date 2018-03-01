@@ -560,7 +560,7 @@ namespace SparkleShare {
 
         private bool IsValidEmail (string email)
         {
-            return new Regex (@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]+$", RegexOptions.IgnoreCase).IsMatch (email);
+            return email.Contains ("@");
         }
     }
 }
