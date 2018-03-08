@@ -224,5 +224,13 @@ namespace SparkleShare {
                 new NSObject ().InvokeOnMainThread (() => code ());
             }
         }
+
+
+        public override void PlatformQuit ()
+        {
+            watcher.Dispose ();
+            NSRunningApplication.CurrentApplication.Terminate ();
+        }
+
     }
 }

@@ -180,7 +180,10 @@ namespace SparkleShare {
         
         // Copies text to the clipboard
         public abstract void CopyToClipboard (string text);
-        
+
+        // Allows for platform-specific quit and cleanup methods to be called on exit
+        public abstract void PlatformQuit ();
+
         public abstract string EventLogHTML { get; }
         public abstract string DayEntryHTML { get; }
         public abstract string EventEntryHTML { get; }
@@ -715,14 +718,14 @@ namespace SparkleShare {
             int suffix = 2 + Directory.GetDirectories (folder_group_path, folder_name + " (*").Length;
             return string.Format ("{0} ({1})", folder_path, suffix);
         }
-        
-        
-        public virtual void Quit ()
+
+
+        public void Quit ()
         {
             foreach (BaseRepository repo in Repositories)
                 repo.Dispose ();
-            
-            Environment.Exit (0);
+
+            PlatformQuit ();
         }
 
 
