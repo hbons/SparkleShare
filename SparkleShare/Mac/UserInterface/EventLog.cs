@@ -52,8 +52,8 @@ namespace SparkleShare {
             int min_height = 640;
             int height     = (int) (NSScreen.MainScreen.Frame.Height * 0.85);
 
-            float x    = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
-            float y    = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
+            float x = (float) (NSScreen.MainScreen.Frame.Width * 0.61);
+            float y = (float) (NSScreen.MainScreen.Frame.Height * 0.5 - (height * 0.5));
 
             SetFrame (
                 new CGRect (
@@ -70,7 +70,6 @@ namespace SparkleShare {
             BackingType    = NSBackingStore.Buffered;
             TitlebarHeight = (float) (Frame.Height - ContentView.Frame.Height);
             Level          = NSWindowLevel.Floating;
-
 
 
             this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
@@ -180,6 +179,7 @@ namespace SparkleShare {
 
             this.progress_indicator.StartAnimation (this);
 
+
             ContentView.AddSubview (this.size_label);
             ContentView.AddSubview (this.size_label_value);
             ContentView.AddSubview (this.history_label);
@@ -189,73 +189,20 @@ namespace SparkleShare {
             ContentView.AddSubview (this.background);
             ContentView.AddSubview (this.hidden_close_button);
 
-            // Hook up the controller events
-            Controller.HideWindowEvent += delegate {
-                SparkleShare.Controller.Invoke (() => {
-                    this.progress_indicator.Hidden = true;
-                    PerformClose (this);
-                });
-            };
 
-            Controller.ShowWindowEvent += delegate {
-                SparkleShare.Controller.Invoke (() => OrderFrontRegardless ());
-            };
-            
-            Controller.UpdateChooserEvent += delegate (string [] folders) {
-                SparkleShare.Controller.Invoke (() => UpdateChooser (folders));
-            };
+            Controller.HideWindowEvent += HideWindowEventDelegate;
+            Controller.ShowWindowEvent += ShowWindowEventDelegate;
+			Controller.ShowSaveDialogEvent += ShowSaveDialogEventDelegate;
 
-            Controller.UpdateChooserEnablementEvent += delegate (bool enabled) {
-                SparkleShare.Controller.Invoke (() => { this.popup_button.Enabled = enabled; });
-            };
+            Controller.UpdateChooserEvent += UpdateChooserEventDelegate;
+            Controller.UpdateChooserEnablementEvent += UpdateChooserEnablementEventDelegate;
+            Controller.UpdateContentEvent += UpdateContentEventDelegate;
+            Controller.UpdateSizeInfoEvent += UpdateSizeInfoEventDelegate;
 
-            Controller.UpdateContentEvent += delegate (string html) {
-                SparkleShare.Controller.Invoke (() => {
-                    this.cover.RemoveFromSuperview ();
-                    this.progress_indicator.Hidden = true;
-                    UpdateContent (html);
-                });
-            };
-
-            Controller.ContentLoadingEvent += delegate {
-                SparkleShare.Controller.Invoke (() => {
-                    this.web_view.RemoveFromSuperview ();
-                    // FIXME: Hack to hide that the WebView sometimes doesn't disappear
-                    ContentView.AddSubview (this.cover);
-                    this.progress_indicator.Hidden = false;
-                    this.progress_indicator.StartAnimation (this);
-                });
-            };
-            
-            Controller.UpdateSizeInfoEvent += delegate (string size, string history_size) {
-                SparkleShare.Controller.Invoke (() => {
-                    this.size_label_value.StringValue    = size;
-                    this.history_label_value.StringValue = history_size;
-                });
-            };
-
-            Controller.ShowSaveDialogEvent += delegate (string file_name, string target_folder_path) {
-                SparkleShare.Controller.Invoke (() => {
-                    NSSavePanel panel = new NSSavePanel () {
-                        DirectoryUrl         = new NSUrl (target_folder_path, true),
-                        NameFieldStringValue = file_name,
-                        ParentWindow         = this,
-                        Title                = "Restore from History",
-                        PreventsApplicationTerminationWhenModal = false
-                    };
-
-                    if ((NSPanelButtonType) (int) panel.RunModal () == NSPanelButtonType.Ok) {
-                        string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
-                        Controller.SaveDialogCompleted (target_file_path);
-                    
-                    } else {
-                        Controller.SaveDialogCancelled ();
-                    }
-                });
-            };
-
+            Controller.ContentLoadingEvent += ContentLoadingEventDelegate;
 
         }
+
 
         public void UpdateChooser (string [] folders)
         {
@@ -314,6 +261,7 @@ namespace SparkleShare {
             };
 
             this.web_view.AutoresizingMask = NSViewResizingMask.WidthSizable | NSViewResizingMask.HeightSizable;
+            this.web_view.Preferences.PlugInsEnabled = false;
 
             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
@@ -323,6 +271,88 @@ namespace SparkleShare {
             (this.web_view.PolicyDelegate as SparkleWebPolicyDelegate).LinkClicked += Controller.LinkClicked;
 
             this.progress_indicator.Hidden = true;
+        }
+
+
+        void HideWindowEventDelegate ()
+        {
+            SparkleShare.Controller.Invoke (() => {
+                this.progress_indicator.Hidden = true;
+                PerformClose (this);
+
+            });
+        }
+
+
+        void ShowWindowEventDelegate ()
+        {
+            SparkleShare.Controller.Invoke(() => OrderFrontRegardless ());
+        }
+
+            
+        void UpdateChooserEventDelegate (string [] folders)
+        {
+            SparkleShare.Controller.Invoke(() => UpdateChooser (folders));
+        }
+
+
+        void UpdateChooserEnablementEventDelegate (bool enabled)
+        {
+            SparkleShare.Controller.Invoke(() => { this.popup_button.Enabled = enabled; });
+        }
+
+
+        void UpdateContentEventDelegate (string html)
+        {
+            SparkleShare.Controller.Invoke(() => {
+                this.cover.RemoveFromSuperview ();
+                this.progress_indicator.Hidden = true;
+                UpdateContent (html);
+            });
+        }
+
+
+        void ContentLoadingEventDelegate ()
+        {
+            SparkleShare.Controller.Invoke(() => {
+                this.web_view.RemoveFromSuperview ();
+
+                // FIXME: Hack to hide that the WebView sometimes doesn't disappear
+                ContentView.AddSubview (this.cover);
+                this.progress_indicator.Hidden = false;
+                this.progress_indicator.StartAnimation (this);
+            });
+        }
+
+        
+        void UpdateSizeInfoEventDelegate (string size, string history_size)
+        {
+            SparkleShare.Controller.Invoke(() => {
+                this.size_label_value.StringValue = size;
+                this.history_label_value.StringValue = history_size; 
+            });
+        }
+
+
+        void ShowSaveDialogEventDelegate (string file_name, string target_folder_path)
+        {
+            SparkleShare.Controller.Invoke(() => {
+                NSSavePanel panel = new NSSavePanel () {
+                    DirectoryUrl = new NSUrl (target_folder_path, true),
+                    NameFieldStringValue = file_name,
+                    ParentWindow = this,
+                    Title = "Restore from History",
+                    PreventsApplicationTerminationWhenModal = false
+                };
+
+                if ((NSPanelButtonType) (int) panel.RunModal () == NSPanelButtonType.Ok) {
+                    string target_file_path = Path.Combine (panel.DirectoryUrl.RelativePath, panel.NameFieldStringValue);
+                    Controller.SaveDialogCompleted(target_file_path);
+                
+                } else {
+                    Controller.SaveDialogCancelled();
+                }
+            });
         }
 
 
@@ -342,7 +372,7 @@ namespace SparkleShare {
     }
 
 
-    public class SparkleEventsDelegate : NSWindowDelegate {
+    class SparkleEventsDelegate : NSWindowDelegate {
 
         public event WindowResizedHandler WindowResized = delegate { };
         public delegate void WindowResizedHandler (CGSize new_window_size);
@@ -361,7 +391,7 @@ namespace SparkleShare {
     }
     
     
-    public class SparkleWebPolicyDelegate : WebPolicyDelegate {
+    class SparkleWebPolicyDelegate : WebPolicyDelegate {
 
         public event LinkClickedHandler LinkClicked = delegate { };
         public delegate void LinkClickedHandler (string href);
