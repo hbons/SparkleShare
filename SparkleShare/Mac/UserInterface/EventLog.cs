@@ -72,6 +72,7 @@ namespace SparkleShare {
             Level          = NSWindowLevel.Floating;
 
 
+
             this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
                 Frame = new CGRect (new CGPoint (0, 0),
                     new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
@@ -85,7 +86,8 @@ namespace SparkleShare {
                     new CGSize (Frame.Width + 2, this.web_view.Frame.Height + 1)),
                 FillColor = NSColor.White,
                 BorderType = NSBorderType.NoBorder,
-                BoxType = NSBoxType.NSBoxCustom
+                BoxType = NSBoxType.NSBoxCustom,
+                AutoresizingMask = NSViewResizingMask.WidthSizable | NSViewResizingMask.HeightSizable
             };
 
             this.hidden_close_button = new NSButton () {
@@ -106,7 +108,8 @@ namespace SparkleShare {
                 Frame           = new CGRect (
                     new CGPoint (0, ContentView.Frame.Height - 31),
                     new CGSize (60, 20)),
-                StringValue     = "Size:"
+                StringValue     = "Size:",
+                AutoresizingMask = NSViewResizingMask.MaxXMargin | NSViewResizingMask.MinYMargin
             };
 
             this.size_label_value = new NSTextField () {
@@ -118,9 +121,9 @@ namespace SparkleShare {
                     new CGPoint (60, ContentView.Frame.Height - 31),
                     new CGSize (60, 20)),
                 StringValue     = "…",
-                Font            = NSFont.BoldSystemFontOfSize (12)
+                Font            = NSFont.BoldSystemFontOfSize (12),
+                AutoresizingMask = NSViewResizingMask.MaxXMargin | NSViewResizingMask.MinYMargin
             };
-
 
             this.history_label = new NSTextField () {
                 Alignment       = NSTextAlignment.Right,
@@ -130,7 +133,8 @@ namespace SparkleShare {
                 Frame           = new CGRect (
                     new CGPoint (130, ContentView.Frame.Height - 31),
                     new CGSize (60, 20)),
-                StringValue     = "History:"
+                StringValue     = "History:",
+                AutoresizingMask = NSViewResizingMask.MaxXMargin | NSViewResizingMask.MinYMargin
             };
 
             this.history_label_value = new NSTextField () {
@@ -143,14 +147,16 @@ namespace SparkleShare {
                     new CGSize (60, 20)
                 ),
                 StringValue     = "…",
-                Font            = NSFont.BoldSystemFontOfSize (12)
+                Font            = NSFont.BoldSystemFontOfSize (12),
+                AutoresizingMask = NSViewResizingMask.MaxXMargin | NSViewResizingMask.MinYMargin
             };
 
             this.popup_button = new NSPopUpButton () {
                 Frame = new CGRect (
                     new CGPoint (ContentView.Frame.Width - 156 - 12, ContentView.Frame.Height - 33),
                     new CGSize (156, 26)),
-                PullsDown = false
+                PullsDown = false,
+                AutoresizingMask = NSViewResizingMask.MinXMargin | NSViewResizingMask.MinYMargin
             };
 
             this.background = new NSBox () {
@@ -159,14 +165,17 @@ namespace SparkleShare {
                     new CGSize (Frame.Width + 2, this.web_view.Frame.Height + 2)),
                 FillColor = NSColor.White,
                 BorderColor = NSColor.LightGray,
-                BoxType = NSBoxType.NSBoxCustom
+                BoxType = NSBoxType.NSBoxCustom,
+                AutoresizingMask = NSViewResizingMask.WidthSizable | NSViewResizingMask.HeightSizable
             };
 
             this.progress_indicator = new NSProgressIndicator () {
                 Frame = new CGRect (
                     new CGPoint (Frame.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
                     new CGSize (20, 20)),
-                Style = NSProgressIndicatorStyle.Spinning
+                Style = NSProgressIndicatorStyle.Spinning,
+                AutoresizingMask = NSViewResizingMask.MinXMargin | NSViewResizingMask.MaxXMargin |
+                                   NSViewResizingMask.MinYMargin | NSViewResizingMask.MaxYMargin
             };
 
             this.progress_indicator.StartAnimation (this);
@@ -179,11 +188,6 @@ namespace SparkleShare {
             ContentView.AddSubview (this.progress_indicator);
             ContentView.AddSubview (this.background);
             ContentView.AddSubview (this.hidden_close_button);
-
-            (Delegate as SparkleEventsDelegate).WindowResized += delegate (CGSize new_window_size) {
-                SparkleShare.Controller.Invoke (() => Relayout (new_window_size));
-            };
-
 
             // Hook up the controller events
             Controller.HideWindowEvent += delegate {
@@ -249,49 +253,9 @@ namespace SparkleShare {
                     }
                 });
             };
+
+
         }
-
-
-        public void Relayout (CGSize new_window_size)
-        {
-            this.web_view.Frame = new CGRect (this.web_view.Frame.Location,
-                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
-
-            this.cover.Frame = new CGRect (this.cover.Frame.Location,
-                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 39));
-
-            this.background.Frame = new CGRect (this.background.Frame.Location,
-                new CGSize (new_window_size.Width, new_window_size.Height - TitlebarHeight - 37));
-
-            this.size_label.Frame = new CGRect (
-                new CGPoint (this.size_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.size_label.Frame.Size);
-
-            this.size_label_value.Frame = new CGRect (
-                new CGPoint (this.size_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
-                this.size_label_value.Frame.Size);
-
-            this.history_label.Frame = new CGRect (
-                new CGPoint (this.history_label.Frame.X, new_window_size.Height - TitlebarHeight - 30),
-                this.history_label.Frame.Size);
-
-            this.history_label_value.Frame = new CGRect (
-                new CGPoint (this.history_label_value.Frame.X, new_window_size.Height - TitlebarHeight - 27),
-                this.history_label_value.Frame.Size);
-
-            this.progress_indicator.Frame = new CGRect (
-                new CGPoint (new_window_size.Width / 2 - 10, this.web_view.Frame.Height / 2 + 10),
-                this.progress_indicator.Frame.Size);
-
-            this.popup_button.RemoveFromSuperview (); // Needed to prevent redraw glitches
-
-            this.popup_button.Frame = new CGRect (
-                new CGPoint (new_window_size.Width - this.popup_button.Frame.Width - 12, new_window_size.Height - TitlebarHeight - 33),
-                this.popup_button.Frame.Size);
-
-            ContentView.AddSubview (this.popup_button);
-        }
-
 
         public void UpdateChooser (string [] folders)
         {
@@ -348,6 +312,8 @@ namespace SparkleShare {
             this.web_view = new WebView (new CGRect (0, 0, 481, 579), "", "") {
                 Frame = new CGRect (new CGPoint (0, 0), new CGSize (ContentView.Frame.Width, ContentView.Frame.Height - 39))
             };
+
+            this.web_view.AutoresizingMask = NSViewResizingMask.WidthSizable | NSViewResizingMask.HeightSizable;
 
             this.web_view.MainFrame.LoadHtmlString (html, new NSUrl (""));
 
