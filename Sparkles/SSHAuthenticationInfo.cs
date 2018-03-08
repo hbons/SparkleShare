@@ -34,10 +34,9 @@ namespace Sparkles {
 
         public string KnownHostsFilePath { get; private set; }
 
-
         readonly string Path;
 
-        // TODO: Store keys in the platform's secure key store
+
         public SSHAuthenticationInfo ()
         {
             Path = IO.Path.Combine (Configuration.DefaultConfiguration.DirectoryPath, "ssh");
