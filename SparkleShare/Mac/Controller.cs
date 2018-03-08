@@ -80,16 +80,12 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            if (Environment.OSVersion.Version.Major >= 14) {
-                NSWorkspace.SharedWorkspace.SetIconforFile (
-                    NSImage.ImageNamed ("sparkleshare-folder-yosemite.icns"),
-                    SparkleShare.Controller.FoldersPath, 0);
+            string folder_icon_name = "sparkleshare-folder.icns";
 
-            } else {
-                NSWorkspace.SharedWorkspace.SetIconforFile (
-                    NSImage.ImageNamed ("sparkleshare-folder.icns"),
-                    SparkleShare.Controller.FoldersPath, 0);
-            }
+            if (Environment.OSVersion.Version.Major >= 14)
+                folder_icon_name = "sparkleshare-folder-yosemite.icns";
+
+            NSWorkspace.SharedWorkspace.SetIconforFile (NSImage.ImageNamed (folder_icon_name), SparkleShare.Controller.FoldersPath, 0);
         }
 
 
@@ -228,5 +224,13 @@ namespace SparkleShare {
                 new NSObject ().InvokeOnMainThread (() => code ());
             }
         }
+
+
+        public override void PlatformQuit ()
+        {
+            watcher.Dispose ();
+            NSRunningApplication.CurrentApplication.Terminate ();
+        }
+
     }
 }

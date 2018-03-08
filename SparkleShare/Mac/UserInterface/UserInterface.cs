@@ -71,13 +71,7 @@ namespace SparkleShare {
 
 
     public partial class AppDelegate : NSApplicationDelegate {
-     
-        public override void WillTerminate (NSNotification notification)
-        {
-            SparkleShare.Controller.Quit ();
-        }
 
-        
         public override bool ApplicationShouldHandleReopen (NSApplication sender, bool has_visible_windows)
         {
             if (!has_visible_windows)

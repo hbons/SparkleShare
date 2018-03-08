@@ -29,8 +29,7 @@ namespace SparkleShare {
 
     public class Controller : BaseController {
 
-        public Controller (Configuration config)
-            : base (config)
+        public Controller (Configuration config) : base (config)
         {
             if (InstallationInfo.IsFlatpak)
                 GitCommand.ExecPath = Path.Combine ("/app", "libexec", "git-core");
@@ -141,6 +140,12 @@ namespace SparkleShare {
             get {
                 return Path.Combine (InstallationInfo.Directory, "presets");
             }
+        }
+
+
+        public override void PlatformQuit ()
+        {
+            Environment.Exit (0);
         }
     }
 }
