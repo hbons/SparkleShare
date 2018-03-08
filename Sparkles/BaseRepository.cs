@@ -664,7 +664,7 @@ namespace Sparkles {
 
             // this.listener.Dispose ();
 
-            if (!UseCustomWatcher)
+            if (!UseCustomWatcher && this.watcher != null)
                 this.watcher.Dispose ();
         }
     }
