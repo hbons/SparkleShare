@@ -247,7 +247,7 @@ namespace Sparkles.Git {
             string lfs_is_behind_file_path = Path.Combine (LocalPath, ".git", "lfs", "is_behind");
 
             if (StorageType == StorageType.LargeFiles)
-                File.Create (lfs_is_behind_file_path);
+                File.Create (lfs_is_behind_file_path).Close ();
 
             var git_fetch = new GitCommand (LocalPath, "fetch --progress origin " + branch, auth_info);
 
