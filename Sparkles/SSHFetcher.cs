@@ -25,6 +25,7 @@ namespace Sparkles {
 
         public static string SSHKeyScan = "ssh-keyscan";
 
+
         protected SSHFetcher (SparkleFetcherInfo info) : base (info)
         {
         }
@@ -32,18 +33,8 @@ namespace Sparkles {
 
         public override bool Fetch ()
         {
-            // Tor has special domain names called ".onion addresses". They can only be
-            // resolved by using a proxy via tor. While the rest of the openssh suite
-            // fully supports proxying, ssh-keyscan does not, so we can't use it for .onion
-            if (RemoteUrl.Host.EndsWith (".onion", StringComparison.InvariantCultureIgnoreCase)) {
-                Logger.LogInfo ("Auth", "using tor .onion address skipping ssh-keyscan");
-                return true;
-            }
-
-            if (RemoteUrl.Scheme.StartsWith ("http", StringComparison.InvariantCultureIgnoreCase))
-                return true;
-            
             string host_key = FetchHostKey ();
+            bool host_key_warning = false;
 
             if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
                 Logger.LogInfo ("Auth", "Could not fetch host key");
@@ -52,39 +43,24 @@ namespace Sparkles {
                 return false;
             }
 
-            bool warn = true;
-
             if (RequiredFingerprint != null) {
-                string host_fingerprint;
+                string host_fingerprint = DeriveFingerprint (host_key);
 
-                try {
-                    host_fingerprint = DeriveFingerprint (host_key);
-                
-                } catch (InvalidOperationException e) {
-                    // "Unapproved cryptographic algorithms" won't work when FIPS is enabled on Windows.
-                    // Software like Cisco AnyConnect can demand this feature is on, so we show an error
-                    Logger.LogInfo ("Auth", "Unable to derive fingerprint: ", e);
-                    errors.Add ("error: Can't check fingerprint due to FIPS being enabled");
-                    
-                    return false;
-                }
-
-                if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
+                if (host_fingerprint == null || RequiredFingerprint!= host_fingerprint) {
                     Logger.LogInfo ("Auth", "Fingerprint doesn't match");
                     errors.Add ("error: Host fingerprint doesn't match");
-                    
+
                     return false;
                 }
-                
-                warn = false;
+
                 Logger.LogInfo ("Auth", "Fingerprint matches");
-                
+
             } else {
                 Logger.LogInfo ("Auth", "Skipping fingerprint check");
+                host_key_warning = true;
             }
-            
-            AcceptHostKey (host_key, warn);
-            
+
+            AcceptHostKey (host_key, host_key_warning);
             return true;
         }
 
@@ -105,7 +81,7 @@ namespace Sparkles {
             return null;
         }
 
-        
+
         string DeriveFingerprint (string public_key)
         {
             try {
@@ -116,44 +92,45 @@ namespace Sparkles {
                 byte [] sha256_bytes = sha256.ComputeHash (base64_bytes);
 
                 string fingerprint = BitConverter.ToString (sha256_bytes);
-                Console.WriteLine( fingerprint.ToLower ().Replace ("-", ":"));
-                return fingerprint.ToLower ().Replace ("-", ":");
+                fingerprint = fingerprint.ToLower ().Replace ("-", ":");
+
+                return fingerprint;
 
             } catch (Exception e) {
-                Logger.LogInfo ("Fetcher", "Failed to create fingerprint: " + e.Message + " " + e.StackTrace);
+                Logger.LogInfo ("Fetcher", "Failed to create fingerprint: ", e);
                 return null;
             }
         }
-        
-        
+
+
         void AcceptHostKey (string host_key, bool warn)
         {
             string ssh_config_path = Path.Combine (Configuration.DefaultConfiguration.DirectoryPath, "ssh");
             string known_hosts_file_path = Path.Combine (ssh_config_path, "known_hosts");
-            
+
             if (!File.Exists (known_hosts_file_path)) {
                 if (!Directory.Exists (ssh_config_path))
                     Directory.CreateDirectory (ssh_config_path);
-                
+
                 File.Create (known_hosts_file_path).Close ();
             }
-            
+
             string host                 = RemoteUrl.Host;
             string known_hosts          = File.ReadAllText (known_hosts_file_path);
             string [] known_hosts_lines = File.ReadAllLines (known_hosts_file_path);
-            
+
             foreach (string line in known_hosts_lines) {
                 if (line.StartsWith (host + " ", StringComparison.InvariantCulture))
                     return;
             }
-            
+
             if (known_hosts.EndsWith ("\n", StringComparison.InvariantCulture))
                 File.AppendAllText (known_hosts_file_path, host_key + "\n");
             else
                 File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
-            
+
             Logger.LogInfo ("Auth", "Accepted host key for " + host);
-            
+
             if (warn)
                 warnings.Add ("The following host key has been accepted:\n" + DeriveFingerprint (host_key));
         }

@@ -25,17 +25,17 @@ namespace Sparkles {
 
         public static string SSHCommandPath {
             get {
-                return Path.Combine(SSHPath, "ssh").Replace("\\", "/");
+                return Path.Combine (SSHPath, "ssh").Replace ("\\", "/");
             }
         }
 
 
-        public SSHCommand(string command, string args) : this (command, args, null)
+        public SSHCommand (string command, string args) : this (command, args, null)
         {
         }
 
 
-        public SSHCommand(string command, string args, SSHAuthenticationInfo auth_info) :
+        public SSHCommand (string command, string args, SSHAuthenticationInfo auth_info) :
             base (Path.Combine (SSHPath, command), args)
         {
         }
