@@ -34,7 +34,7 @@ namespace Sparkles {
         public override bool Fetch ()
         {
             string host_key = FetchHostKey ();
-            bool host_key_warning;
+            bool host_key_warning = false;
 
             if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
                 Logger.LogInfo ("Auth", "Could not fetch host key");
