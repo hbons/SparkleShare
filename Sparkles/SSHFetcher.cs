@@ -25,6 +25,7 @@ namespace Sparkles {
 
         public static string SSHKeyScan = "ssh-keyscan";
 
+
         protected SSHFetcher (SparkleFetcherInfo info) : base (info)
         {
         }
@@ -105,7 +106,7 @@ namespace Sparkles {
             return null;
         }
 
-        
+
         string DeriveFingerprint (string public_key)
         {
             try {
@@ -116,44 +117,45 @@ namespace Sparkles {
                 byte [] sha256_bytes = sha256.ComputeHash (base64_bytes);
 
                 string fingerprint = BitConverter.ToString (sha256_bytes);
-                Console.WriteLine( fingerprint.ToLower ().Replace ("-", ":"));
-                return fingerprint.ToLower ().Replace ("-", ":");
+                fingerprint = fingerprint.ToLower ().Replace ("-", ":");
+
+                return fingerprint;
 
             } catch (Exception e) {
-                Logger.LogInfo ("Fetcher", "Failed to create fingerprint: " + e.Message + " " + e.StackTrace);
+                Logger.LogInfo ("Fetcher", "Failed to create fingerprint: ", e);
                 return null;
             }
         }
-        
-        
+
+
         void AcceptHostKey (string host_key, bool warn)
         {
             string ssh_config_path = Path.Combine (Configuration.DefaultConfiguration.DirectoryPath, "ssh");
             string known_hosts_file_path = Path.Combine (ssh_config_path, "known_hosts");
-            
+
             if (!File.Exists (known_hosts_file_path)) {
                 if (!Directory.Exists (ssh_config_path))
                     Directory.CreateDirectory (ssh_config_path);
-                
+
                 File.Create (known_hosts_file_path).Close ();
             }
-            
+
             string host                 = RemoteUrl.Host;
             string known_hosts          = File.ReadAllText (known_hosts_file_path);
             string [] known_hosts_lines = File.ReadAllLines (known_hosts_file_path);
-            
+
             foreach (string line in known_hosts_lines) {
                 if (line.StartsWith (host + " ", StringComparison.InvariantCulture))
                     return;
             }
-            
+
             if (known_hosts.EndsWith ("\n", StringComparison.InvariantCulture))
                 File.AppendAllText (known_hosts_file_path, host_key + "\n");
             else
                 File.AppendAllText (known_hosts_file_path, "\n" + host_key + "\n");
-            
+
             Logger.LogInfo ("Auth", "Accepted host key for " + host);
-            
+
             if (warn)
                 warnings.Add ("The following host key has been accepted:\n" + DeriveFingerprint (host_key));
         }
