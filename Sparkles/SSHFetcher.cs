@@ -34,6 +34,7 @@ namespace Sparkles {
         public override bool Fetch ()
         {
             string host_key = FetchHostKey ();
+            bool host_key_warning;
 
             if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
                 Logger.LogInfo ("Auth", "Could not fetch host key");
@@ -41,8 +42,6 @@ namespace Sparkles {
 
                 return false;
             }
-
-            bool warn = true;
 
             if (RequiredFingerprint != null) {
                 string host_fingerprint;
@@ -59,22 +58,21 @@ namespace Sparkles {
                     return false;
                 }
 
-                if (host_fingerprint == null || !RequiredFingerprint.Equals (host_fingerprint)) {
+                if (host_fingerprint == null || RequiredFingerprint!= host_fingerprint) {
                     Logger.LogInfo ("Auth", "Fingerprint doesn't match");
                     errors.Add ("error: Host fingerprint doesn't match");
-                    
+
                     return false;
                 }
-                
-                warn = false;
+
                 Logger.LogInfo ("Auth", "Fingerprint matches");
-                
+
             } else {
                 Logger.LogInfo ("Auth", "Skipping fingerprint check");
+                host_key_warning = true;
             }
-            
-            AcceptHostKey (host_key, warn);
-            
+
+            AcceptHostKey (host_key, host_key_warning);
             return true;
         }
 
