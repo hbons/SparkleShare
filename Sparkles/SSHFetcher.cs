@@ -33,17 +33,6 @@ namespace Sparkles {
 
         public override bool Fetch ()
         {
-            // Tor has special domain names called ".onion addresses". They can only be
-            // resolved by using a proxy via tor. While the rest of the openssh suite
-            // fully supports proxying, ssh-keyscan does not, so we can't use it for .onion
-            if (RemoteUrl.Host.EndsWith (".onion", StringComparison.InvariantCultureIgnoreCase)) {
-                Logger.LogInfo ("Auth", "using tor .onion address skipping ssh-keyscan");
-                return true;
-            }
-
-            if (RemoteUrl.Scheme.StartsWith ("http", StringComparison.InvariantCultureIgnoreCase))
-                return true;
-            
             string host_key = FetchHostKey ();
 
             if (string.IsNullOrEmpty (RemoteUrl.Host) || host_key == null) {
