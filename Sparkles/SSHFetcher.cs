@@ -44,19 +44,7 @@ namespace Sparkles {
             }
 
             if (RequiredFingerprint != null) {
-                string host_fingerprint;
-
-                try {
-                    host_fingerprint = DeriveFingerprint (host_key);
-                
-                } catch (InvalidOperationException e) {
-                    // "Unapproved cryptographic algorithms" won't work when FIPS is enabled on Windows.
-                    // Software like Cisco AnyConnect can demand this feature is on, so we show an error
-                    Logger.LogInfo ("Auth", "Unable to derive fingerprint: ", e);
-                    errors.Add ("error: Can't check fingerprint due to FIPS being enabled");
-                    
-                    return false;
-                }
+                string host_fingerprint = DeriveFingerprint (host_key);
 
                 if (host_fingerprint == null || RequiredFingerprint!= host_fingerprint) {
                     Logger.LogInfo ("Auth", "Fingerprint doesn't match");
