@@ -25,6 +25,7 @@ configure_file(
     output: 'sparkleshare',
     configuration: configuration, install_dir: get_option('bindir'))
 
+
 # .desktop and .appdata files
 apps_dir = join_paths(get_option('prefix'), 'share', 'applications')
 install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: apps_dir)
@@ -56,6 +57,6 @@ sparkleshare = executable('SparkleShare',
     install: true,
     install_dir: install_dir)
 
+
 subdir('Images')
 subdir('Images/icons')
-

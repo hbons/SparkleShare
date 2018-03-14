@@ -19,6 +19,7 @@ using System;
 using System.IO;
 
 using Gtk;
+using Sparkles;
 
 namespace SparkleShare {
 
@@ -35,7 +36,9 @@ namespace SparkleShare {
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
 
-            } catch {
+            } catch (Exception e) {
+				Logger.LogInfo ("UI", "Failed to load icon " + name + " of size " + size, e);
+
                 try {
                     return icon_theme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);
 

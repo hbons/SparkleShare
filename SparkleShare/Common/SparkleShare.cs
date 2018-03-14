@@ -36,7 +36,7 @@ namespace SparkleShare {
         public static void Main (string [] args)
         {
             if (args.Length != 0 && (args [0].Equals ("help") || args [0].Equals ("version")) &&
-                InstallationInfo.OperatingSystem != OS.Mac &&
+                InstallationInfo.OperatingSystem != OS.macOS &&
                 InstallationInfo.OperatingSystem != OS.Windows) {
 
                 string n = Environment.NewLine;

@@ -49,8 +49,14 @@ namespace Sparkles {
                 Console.WriteLine (line);
 
             lock (log_writer_lock) {
-                log_writer.WriteLine (line);
-                log_writer.Flush ();
+                try {
+                    log_writer.WriteLine (line);
+                    log_writer.Flush ();
+
+                } catch (Exception e) {
+                    Console.WriteLine (string.Format ("Could not write to log {0}: {1} {2}",
+                        (log_writer.BaseStream as FileStream).Name, e.Message, e.StackTrace));
+                }
             }
         }
 

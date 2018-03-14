@@ -346,8 +346,8 @@ namespace SparkleShare {
                         Logger.LogInfo ("Controller", "Added preset for " + uri.Host);
                     }
 
-                } catch {
-                    Logger.LogInfo ("Controller", "Failed adding preset for " + uri.Host);
+                } catch (Exception e) {
+                    Logger.LogInfo ("Controller", "Failed adding preset for " + uri.Host, e);
                 }
             }
 

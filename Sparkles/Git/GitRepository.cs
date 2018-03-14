@@ -102,7 +102,8 @@ namespace Sparkles.Git {
                     string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
-                } catch {
+                } catch (Exception e) {
+                    Logger.LogInfo ("Git", Name + " | Failed to parse " + file_path, e);
                     return 0;
                 }
             }
@@ -117,7 +118,8 @@ namespace Sparkles.Git {
                     string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
-                } catch {
+                } catch (Exception e) {
+                    Logger.LogInfo ("Git", Name + " | Failed to parse " + file_path, e);
                     return 0;
                 }
             }
@@ -207,7 +209,7 @@ namespace Sparkles.Git {
             string pre_push_hook_content;
 
             // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
-            if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
+            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
                 pre_push_hook_content =
                     "#!/bin/sh" + Environment.NewLine +
                     "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
@@ -638,15 +640,14 @@ namespace Sparkles.Git {
             try {
                 File.Move (local_file_path, target_file_path);
             
-            } catch {
-                Logger.LogInfo ("Git",
-                    Name + " | Could not move \"" + local_file_path + "\" to \"" + target_file_path + "\"");
+            } catch (Exception e) {
+                string message = string.Format ("Failed to move \"{0}\" to \"{1}\"", local_file_path, target_file_path);
+                Logger.LogInfo ("Git", Name + " | " + message, e);
             }
 
             // ...and restore the most recent revision
             git = new GitCommand (LocalPath, "checkout " + CurrentRevision + " \"" + path + "\"");
             git.StartAndWaitForExit ();
-
 
             if (target_file_path.StartsWith (LocalPath))
                 new Thread (() => OnFileActivity (null)).Start ();
@@ -966,8 +967,8 @@ namespace Sparkles.Git {
                             File.WriteAllText (Path.Combine (path, ".empty"), "I'm a folder!");
                             File.SetAttributes (Path.Combine (path, ".empty"), FileAttributes.Hidden);
 
-                        } catch {
-                            Logger.LogInfo ("Git", Name + " | Failed adding empty folder " + path);
+                        } catch (Exception e) {
+                            Logger.LogInfo ("Git", Name + " | Failed adding empty folder " + path, e);
                         }
                     }
                 }

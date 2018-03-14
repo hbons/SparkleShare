@@ -420,7 +420,7 @@ namespace Sparkles.Git {
             string smudge_command;
             string clean_command;
 
-            if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
+            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
                 smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' " +
                     Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/") + " smudge %f";
 

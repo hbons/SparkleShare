@@ -73,7 +73,8 @@ namespace SparkleShare {
                 else
                     UpdateLabelEvent ("✓ You are running the latest version");
 
-            } catch {
+            } catch (Exception e) {
+                Logger.LogInfo ("UI", "Failed to download " + uri , e);
                 UpdateLabelEvent ("Couldn’t check for updates\t");
             }
         }
