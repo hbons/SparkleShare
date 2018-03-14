@@ -28,7 +28,7 @@ namespace Sparkles {
         private static Lazy<Configuration> ConfigLazy = new Lazy<Configuration> (() => {
             string app_data_path = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
 
-            if (InstallationInfo.OperatingSystem != OS.Windows && InstallationInfo.OperatingSystem != OS.Mac)
+            if (InstallationInfo.OperatingSystem != OS.Windows && InstallationInfo.OperatingSystem != OS.macOS)
                 app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
 
             string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");

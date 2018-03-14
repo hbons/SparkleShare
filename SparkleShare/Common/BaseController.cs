@@ -214,11 +214,7 @@ namespace SparkleShare {
             Logger.LogInfo ("Environment", "SparkleShare " + version);
             Logger.LogInfo ("Environment", "Git LFS " + Sparkles.Git.GitCommand.GitLFSVersion);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
-
-            if (InstallationInfo.OperatingSystem == OS.Mac)
-                Logger.LogInfo ("Environment", InstallationInfo.MacOSVersion ());
-            else
-                Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " (" + Environment.OSVersion + ")");
+            Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " " + InstallationInfo.OperatingSystemVersion);
 
             UserAuthenticationInfo = new SSHAuthenticationInfo ();
             SSHAuthenticationInfo.DefaultAuthenticationInfo = UserAuthenticationInfo;

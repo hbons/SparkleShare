@@ -209,7 +209,7 @@ namespace Sparkles.Git {
             string pre_push_hook_content;
 
             // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
-            if (InstallationInfo.OperatingSystem == OS.Mac || InstallationInfo.OperatingSystem == OS.Windows) {
+            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
                 pre_push_hook_content =
                     "#!/bin/sh" + Environment.NewLine +
                     "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
