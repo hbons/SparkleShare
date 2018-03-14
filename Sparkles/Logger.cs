@@ -22,7 +22,7 @@ namespace Sparkles {
     
     public static class Logger {
 
-        static StreamWriter log_writer = File.AppendText (Configuration.DefaultConfiguration.LogFilePath);
+        static StreamWriter log_writer = File.CreateText (Configuration.DefaultConfiguration.LogFilePath);
         static object log_writer_lock = new object ();
 
 
@@ -63,6 +63,9 @@ namespace Sparkles {
 
         public static void WriteCrashReport (Exception e)
         {
+            if (log_writer != null)
+                log_writer.Close ();
+
             string home_path = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 
             if (InstallationInfo.OperatingSystem == OS.Windows)

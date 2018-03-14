@@ -24,10 +24,8 @@ using Sparkles;
 
 namespace SparkleShare
 {
-
     public class UserInterface
     {
-
         public static string AssetsPath = InstallationInfo.Directory;
 
         public StatusIcon StatusIcon;
@@ -53,7 +51,8 @@ namespace SparkleShare
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-            IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
+            if (IconTheme.Default != null)
+                IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 
             var label = new Label ();
             Gdk.Color color = UserInterfaceHelpers.RGBAToColor (label.StyleContext.GetColor (StateFlags.Insensitive));

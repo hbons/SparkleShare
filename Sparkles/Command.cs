@@ -52,7 +52,7 @@ namespace Sparkles {
         {
             string folder = "";
 
-            if (!string.IsNullOrEmpty (StartInfo.WorkingDirectory))
+            if (StartInfo.WorkingDirectory != Path.GetTempPath ())
                 folder = Path.GetFileName (StartInfo.WorkingDirectory) + " | ";
                 
             if (write_output)

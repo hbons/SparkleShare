@@ -50,8 +50,8 @@ namespace SparkleShare {
             var gvfs_set_attribute = new Command ("gvfs-set-attribute", "\"" + Configuration.DefaultConfiguration.FoldersPath + "\" " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
-            gvfs_set_attribute.StartInfo.EnvironmentVariables ["XDG_DATA_HOME"] =
-                Path.Combine (Config.HomePath, ".local", "share");
+            string XDG_DATA_HOME = Path.Combine (Config.HomePath, ".local", "share");
+            gvfs_set_attribute.StartInfo.EnvironmentVariables ["XDG_DATA_HOME"] = XDG_DATA_HOME;
 
             gvfs_set_attribute.StartAndWaitForExit ();
         }
