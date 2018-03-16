@@ -1,8 +1,23 @@
-3.28.0 (???):
+3.28.0 (Fri Mar 16, 2018):
 
-    -
-    -
-    -
+    Fixed a bunch of crashes and lots of under-the-hood improvements.
+    SparkleShare will now follow the GNOME release schedule and version 
+    number scheme as much as possible.
+
+    Please make sure to install the TopIcons GNOME Shell extension
+    (https://extensions.gnome.org/extension/495/topicons/) to display
+    status icons in GNOME 3.26 or later.
+
+
+    Linux:
+    - Use the Meson build system
+    - Fix status icon lookup for some cases
+    - Fix eventlog parsing for newer versions of Git
+    - Flatpak improvements
+
+    macOS:
+    - Fix the system font in eventlog and related crash 
+    - Fix hang when quitting the app
 
 
 2.0.1 (Tue 19 Dec, 2017):
