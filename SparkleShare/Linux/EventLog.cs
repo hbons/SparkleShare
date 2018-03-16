@@ -167,24 +167,15 @@ namespace SparkleShare {
 
             html = html.Replace ("<!-- $a-hover-color -->", "#009ff8");
             html = html.Replace ("<!-- $a-color -->", "#0085cf");
-
             html = html.Replace ("<!-- $body-font-family -->", StyleContext.GetFont (StateFlags.Normal).Family);
             html = html.Replace ("<!-- $body-font-size -->", (double) (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
             html = html.Replace ("<!-- $body-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Normal)));
-
-            // TODO
-            // html = html.Replace ("<!-- $body-background-color -->",
-            // UserInterfaceHelpers.RGBAToHex (new TreeView ().StyleContext.GetStyleProperty ("background-color")));
-
+            html = html.Replace ("<!-- $body-background-color -->",UserInterfaceHelpers.RGBAToHex (new TreeView ().StyleContext.GetBackgroundColor (StateFlags.Normal)));
             html = html.Replace ("<!-- $day-entry-header-font-size -->", (StyleContext.GetFont (StateFlags.Normal).Size / 1024 + 3) + "px");
-            html = html.Replace ("<!-- $day-entry-header-background-color -->",
-                UserInterfaceHelpers.RGBAToHex (StyleContext.GetBackgroundColor (StateFlags.Normal)));
-
+            html = html.Replace ("<!-- $day-entry-header-background-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetBackgroundColor (StateFlags.Normal)));
             html = html.Replace ("<!-- $secondary-font-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
-
             html = html.Replace ("<!-- $small-color -->", UserInterfaceHelpers.RGBAToHex (StyleContext.GetColor (StateFlags.Insensitive)));
             html = html.Replace ("<!-- $small-font-size -->", "90%");
-
             html = html.Replace ("<!-- $pixmaps-path -->", pixmaps_path);
             html = html.Replace ("<!-- $document-added-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-added.png"));
             html = html.Replace ("<!-- $document-edited-background-image -->", "file://" + IO.Path.Combine (icons_path, "document-edited.png"));
@@ -193,15 +184,14 @@ namespace SparkleShare {
 
             this.spinner.Stop ();
             this.scrolled_window.Remove (this.scrolled_window.Child);
-            this.web_view.Dispose ();
 
-            this.web_view = CreateWebView ();
             this.web_view.LoadHtml (html, "file:///");
 
             this.scrolled_window.Add (this.web_view);
 
             this.content_wrapper.Remove (this.content_wrapper.Child);
             this.content_wrapper.Add (this.scrolled_window);
+
             this.scrolled_window.ShowAll ();
         }
 
