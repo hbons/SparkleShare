@@ -39,18 +39,7 @@ namespace SparkleShare {
                 InstallationInfo.OperatingSystem != OS.macOS &&
                 InstallationInfo.OperatingSystem != OS.Windows) {
 
-                string n = Environment.NewLine;
-
-                Console.WriteLine (n +
-                    "Share and collaborate by syncing with any Git repository instantly." + n +
-                    n +
-                   "Version: " + InstallationInfo.Version + n +
-                    "Copyright (C) 2010 Hylke Bons and others" + n +
-                    "This program comes with ABSOLUTELY NO WARRANTY." + n +
-                    n +
-                    "This is free software, and you are welcome to redistribute it" + n +
-                    "under certain conditions. Please read the GNU GPLv3 for details." + n);
-
+                DisplayHelp ();
                 Environment.Exit (0);
             }
 
@@ -73,6 +62,22 @@ namespace SparkleShare {
             GC.Collect (GC.MaxGeneration, GCCollectionMode.Forced);
             GC.WaitForPendingFinalizers ();
             #endif
+        }
+
+
+        void DisplayHelp ()
+        {
+            string n = Environment.NewLine;
+
+            Console.WriteLine (n +
+                "Share and collaborate by syncing with any Git repository instantly." + n +
+                n +
+               "Version: " + InstallationInfo.Version + n +
+                "Copyright (C) 2010 Hylke Bons and others" + n +
+                "This program comes with ABSOLUTELY NO WARRANTY." + n +
+                n +
+                "This is free software, and you are welcome to redistribute it" + n +
+                "under certain conditions. Please read the GNU GPLv3 for details." + n);
         }
 
 
