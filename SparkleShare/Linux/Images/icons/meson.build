@@ -11,6 +11,8 @@ foreach size : icon_sizes
         install_dir: join_paths(theme_dir, icon_dir))
 endforeach
 
+
+# Don't forget the symbolic icons
 install_data(
     sources: join_paths('hicolor', 'symbolic', 'apps', app_icon_name + '-symbolic.svg'),
     install_dir: join_paths(theme_dir, 'symbolic', 'apps'))
@@ -54,30 +56,4 @@ foreach size : sizes
     install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'process-syncing-error.png'),
         install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
 endforeach
-
-
-# Install Ubuntu icons
-if get_option('ubuntu')
-    themes = ['ubuntu-mono-dark', 'ubuntu-mono-light']
-    size = '24'
-
-    foreach theme : themes
-        theme_dir = join_paths(get_option('prefix'), 'share', 'icons', theme)
-
-        install_data(sources: join_paths(theme, category, size, 'process-syncing.png'),
-            install_dir: join_paths(theme_dir, category, size))
-
-        install_data(sources: join_paths(theme, category, size, 'process-syncing-idle.png'),
-            install_dir: join_paths(theme_dir, category, size))
-
-        install_data(sources: join_paths(theme, category, size, 'process-syncing-up.png'),
-            install_dir: join_paths(theme_dir, category, size))
-
-        install_data(sources: join_paths(theme, category, size, 'process-syncing-down.png'),
-            install_dir: join_paths(theme_dir, category, size))
-
-        install_data(sources: join_paths(theme, category, size, 'process-syncing-error.png'),
-            install_dir: join_paths(theme_dir, category, size))
-    endforeach
-endif
 
