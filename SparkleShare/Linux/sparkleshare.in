@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $UID -eq 0 ]]; then
-  echo "Please don't run SparkleShare as root. Things would go utterly wrong."
+  echo "SparkleShare can not be run as root. Things would go utterly wrong."
   exit 1
 fi
 
@@ -16,23 +16,14 @@ case $1 in
       echo @VERSION@
     ;;
     help|--help)
-      echo
-      echo "Share and collaborate by syncing with any Git repository instantly."
-      echo
-      echo "Version: @VERSION@"
-      echo "Copyright (C) 2010 Hylke Bons and others" + n +
-      echo "This program comes with ABSOLUTELY NO WARRANTY." + n +
-      echo
-      echo "This is free software, and you are welcome to redistribute it"
-      echo "under certain conditions. Please read the GNU GPLv3 for details."
-      echo
-      echo "Usage: sparkelshare [options]"
+      echo "Usage:"
+      echo "  sparkleshare [OPTION]"
       echo
       echo "Options:"
-      echo "  --open sparkleshare://<URL>         Opens an invite"
-      echo "  --status-icon=[gtk|appindicator]    Use a specific statusicon implementation"
+      echo "  --open sparkleshare://URL         Open invite file at URL"
+      echo "  --status-icon=[appindicator|gtk]  Use a specific status icon implementation."
     ;;
   *)
-    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $1
+    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $@
     ;;
 esac
