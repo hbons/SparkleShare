@@ -48,12 +48,14 @@ namespace SparkleShare {
         public StatusIcon ()
         {
             if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-                #if HAVE_APP_INDICATOR
+#if HAVE_APP_INDICATOR
                 indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus) {
-                    IconName = "process-syncing-idle",
+                    IconName = "org.sparkleshare.SparkleShare",
                     Status   = (int) IndicatorStatus.Active
                 };
-                #endif
+
+                Console.WriteLine ("INDICATOR: " + indicator.IconName);
+#endif
 
             } else {
                 this.status_icon = new Gtk.StatusIcon { IconName = "org.sparkleshare.SparkleShare" };
@@ -67,9 +69,9 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     string icon_name = "org.sparkleshare.SparkleShare";
 
-                    if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-                        icon_name = "process-syncing-idle";
-                    }
+                    // if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                    //     icon_name = "process-syncing-idle";
+                    // }
 
                     if (state == IconState.SyncingUp)
                         icon_name = "process-syncing-up";
