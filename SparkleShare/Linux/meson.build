@@ -45,9 +45,9 @@ appindicator = dependency('appindicator3-sharp-0.1', required: get_option('ubunt
 
 args = '-r:Mono.Posix'
 
-# if appindicator.found()
-#    args = [args, '-define:HAVE_APP_INDICATOR']
-# endif
+if appindicator.found()
+   args = [args, '-define:HAVE_APP_INDICATOR']
+endif
 
 sparkleshare = executable('SparkleShare',
     dependencies: [gtk, gdk, gio, glib, webkit, notify, appindicator],
