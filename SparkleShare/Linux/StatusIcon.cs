@@ -129,7 +129,7 @@ namespace SparkleShare {
             this.menu       = new Menu ();
             this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
-            ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
+            ImageMenuItem folder_item = new SparkleMenuItem ("Projects");
             folder_item.Image = new Image (UserInterfaceHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
 
             this.menu.Add (this.state_item);
@@ -236,29 +236,6 @@ namespace SparkleShare {
 
             folder_item.Submenu = new Menu ();
                 (folder_item.Submenu as Menu).Add (this.recent_events_item);
-
-            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-                MenuItem notify_item;
-
-                if (SparkleShare.Controller.NotificationsEnabled)
-                    notify_item = new MenuItem ("Turn Notifications Off");
-                else
-                    notify_item = new MenuItem ("Turn Notifications On");
-
-                notify_item.Activated += delegate {
-                    SparkleShare.Controller.ToggleNotifications ();
-
-                    Application.Invoke (delegate {              
-                        if (SparkleShare.Controller.NotificationsEnabled)
-                            (notify_item.Child as Label).Text = "Turn Notifications Off";
-                        else
-                            (notify_item.Child as Label).Text = "Turn Notifications On";
-                    });
-                };
-
-                (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-                (folder_item.Submenu as Menu).Add (notify_item);
-            }
 
             (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
             (folder_item.Submenu as Menu).Add (link_code_item);
