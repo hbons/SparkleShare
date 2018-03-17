@@ -55,7 +55,7 @@ namespace Sparkles {
                     operating_system = OS.Ubuntu;
 
                 } else {
-                    operating_system = OS.Ubuntu;
+                    operating_system = OS.GNOME;
                 }
 
                 return operating_system;

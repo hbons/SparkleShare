@@ -16,6 +16,6 @@ case $1 in
     mono "@ABS_INSTALL_DIR@/SparkleShare.exe" help
     ;;
   *)
-    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $2
+    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $1
     ;;
 esac
