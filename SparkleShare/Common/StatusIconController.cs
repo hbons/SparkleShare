@@ -66,7 +66,7 @@ namespace SparkleShare {
                 }
 
                 if (IsPaused)
-                    return "Syncing Paused";
+                    return "Paused";
 
                 if (HasError) {
                     switch (repo.Error) {

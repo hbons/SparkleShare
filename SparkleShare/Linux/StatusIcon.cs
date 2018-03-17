@@ -44,18 +44,18 @@ namespace SparkleShare {
         Indicator indicator;
         #endif
 
+        bool use_appindicator = true;
+
 
         public StatusIcon ()
         {
-            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-#if HAVE_APP_INDICATOR
+            if (use_appindicator) {
+                #if HAVE_APP_INDICATOR
                 indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus) {
-                    IconName = "org.sparkleshare.SparkleShare",
+                    IconName = "org.sparkleshare.SparkleShare-symbolic",
                     Status   = (int) IndicatorStatus.Active
                 };
-
-                Console.WriteLine ("INDICATOR: " + indicator.IconName);
-#endif
+                #endif
 
             } else {
                 this.status_icon = new Gtk.StatusIcon { IconName = "org.sparkleshare.SparkleShare" };
@@ -67,11 +67,7 @@ namespace SparkleShare {
 
             Controller.UpdateIconEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                    string icon_name = "org.sparkleshare.SparkleShare";
-
-                    // if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
-                    //     icon_name = "process-syncing-idle";
-                    // }
+                    string icon_name = "org.sparkleshare.SparkleShare-symbolic";
 
                     if (state == IconState.SyncingUp)
                         icon_name = "process-syncing-up";
@@ -82,7 +78,7 @@ namespace SparkleShare {
                     else if (state == IconState.Error)
                         icon_name = "process-syncing-error";
 
-                    if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+                    if (use_appindicator) {
                         #if HAVE_APP_INDICATOR
                         indicator.IconName = icon_name;
 
@@ -129,8 +125,9 @@ namespace SparkleShare {
             this.menu       = new Menu ();
             this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
-            ImageMenuItem folder_item = new SparkleMenuItem ("Projects");
+            ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
             folder_item.Image = new Image (UserInterfaceHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
+            folder_item.Submenu = new Menu ();
 
             this.menu.Add (this.state_item);
             this.menu.Add (new SeparatorMenuItem ());                
@@ -150,7 +147,9 @@ namespace SparkleShare {
                     this.state_menu_items [i] = new SparkleMenuItem (project.StatusMessage) { Sensitive = false };
 
                     (item.Submenu as Menu).Add (this.state_menu_items [i]);
-                    (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
+                    if (!use_appindicator)
+                        (item.Submenu as Menu).Add (new SeparatorMenuItem ());
 
                     if (project.IsPaused) {
                         MenuItem resume_item;
@@ -172,8 +171,10 @@ namespace SparkleShare {
                                     Sensitive = false
                                 });
                             }
-                            
-                            (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
+                            if (!use_appindicator)
+                                (item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
                             resume_item = new MenuItem ("Sync and Resume…"); 
                             
                         } else {
@@ -200,14 +201,17 @@ namespace SparkleShare {
 
                     (item.Child as Label).UseUnderline = false;
                     item.Image = new Image (folder_icon);
-                    this.menu.Add (item);
+                    (folder_item.Submenu as Menu).Add (item);
 
                     i++;
                 };
             }
 
-            this.recent_events_item = new MenuItem ("History…");
+            this.recent_events_item = new MenuItem ("Recent Changes…");
             this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
+            (folder_item.Submenu as Menu).Add (this.recent_events_item);
+
+
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Sync Remote Project…");
 
@@ -223,7 +227,10 @@ namespace SparkleShare {
                 copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
                 
                 (link_code_item.Submenu as Menu).Add (code_item);
-                (link_code_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
+                if (!use_appindicator)
+                    (link_code_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
                 (link_code_item.Submenu as Menu).Add (copy_item);
             }
 
@@ -234,21 +241,16 @@ namespace SparkleShare {
             this.recent_events_item.Activated += delegate { Controller.RecentEventsClicked (); };
             this.quit_item.Activated          += delegate { Controller.QuitClicked (); };
 
-            folder_item.Submenu = new Menu ();
-                (folder_item.Submenu as Menu).Add (this.recent_events_item);
-
-            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-            (folder_item.Submenu as Menu).Add (link_code_item);
-            (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-            (folder_item.Submenu as Menu).Add (about_item);
-
             this.menu.Add (new SeparatorMenuItem ());
             this.menu.Add (add_item);
+            this.menu.Add (link_code_item);
+            this.menu.Add (new SeparatorMenuItem ());            
+            this.menu.Add (about_item);
             this.menu.Add (new SeparatorMenuItem ());            
             this.menu.Add (this.quit_item);
             this.menu.ShowAll ();
 
-            if (InstallationInfo.OperatingSystem == OS.Ubuntu) {
+            if (use_appindicator) {
                 #if HAVE_APP_INDICATOR
                 indicator.Menu = this.menu;
                 #endif
@@ -279,4 +281,3 @@ namespace SparkleShare {
         }
     }
 }
-
