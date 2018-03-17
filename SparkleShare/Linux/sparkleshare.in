@@ -12,8 +12,25 @@ case $1 in
     curl --insecure --output ~/SparkleShare/.$invite.xml $open
     mono "@ABS_INSTALL_DIR@/SparkleShare.exe"
     ;;
-  help|--help|version|--version)
-    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" help
+    version|--version)
+      echo @VERSION@
+    ;;
+    help|--help)
+      echo
+      echo "Share and collaborate by syncing with any Git repository instantly."
+      echo
+      echo "Version: @VERSION@"
+      echo "Copyright (C) 2010 Hylke Bons and others" + n +
+      echo "This program comes with ABSOLUTELY NO WARRANTY." + n +
+      echo
+      echo "This is free software, and you are welcome to redistribute it"
+      echo "under certain conditions. Please read the GNU GPLv3 for details."
+      echo
+      echo "Usage: sparkelshare [options]"
+      echo
+      echo "Options:"
+      echo "  --open sparkleshare://<URL>         Opens an invite"
+      echo "  --status-icon=[gtk|appindicator]    Use a specific statusicon implementation"
     ;;
   *)
     mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $1

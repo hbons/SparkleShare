@@ -91,5 +91,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="InstallationInfo.Directory.cs.in" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
