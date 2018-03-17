@@ -65,7 +65,7 @@ namespace SparkleShare {
         }
 
 
-        void DisplayHelp ()
+        static void DisplayHelp ()
         {
             string n = Environment.NewLine;
 
