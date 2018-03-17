@@ -71,6 +71,18 @@ namespace SparkleShare
 
         public void Run (string [] args)
         {
+            if (Array.IndexOf (args, "--status-icon=gtk") > -1) {
+                StatusIcon.use_appindicator = false;
+                Logger.LogInfo ("Environment", "Arguments: --status-icon=gtk");
+            }
+
+            #if HAVE_APPINDICATOR
+            if (Array.IndexOf (args, "--status-icon=appindicator") > -1) {
+                StatusIcon.use_appindicator = true;
+                Logger.LogInfo ("Environment", "Arguments: --status-icon=appindicator");
+            }
+            #endif
+
             MethodInfo [] methods = typeof (GLib.Application).GetMethods (BindingFlags.Instance | BindingFlags.Public);
             ParameterInfo [] run_parameters = new ParameterInfo [0];
             MethodInfo run_method = methods [0];

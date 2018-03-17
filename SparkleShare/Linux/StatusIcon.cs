@@ -31,6 +31,7 @@ namespace SparkleShare {
     public class StatusIcon {
 
         public StatusIconController Controller = new StatusIconController ();
+		public static bool use_appindicator = true;
 
         Gtk.StatusIcon status_icon;
 
@@ -43,8 +44,6 @@ namespace SparkleShare {
         #if HAVE_APP_INDICATOR
         Indicator indicator;
         #endif
-
-        bool use_appindicator = true;
 
 
         public StatusIcon ()
@@ -67,7 +66,10 @@ namespace SparkleShare {
 
             Controller.UpdateIconEvent += delegate (IconState state) {
                 Application.Invoke (delegate {
-                    string icon_name = "org.sparkleshare.SparkleShare-symbolic";
+                    string icon_name = "org.sparkleshare.SparkleShare";
+
+                    if (use_appindicator)
+                        icon_name += "-symbolic";
 
                     if (state == IconState.SyncingUp)
                         icon_name = "process-syncing-up";
@@ -209,6 +211,10 @@ namespace SparkleShare {
 
             this.recent_events_item = new MenuItem ("Recent Changes…");
             this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
+
+            if (!use_appindicator)
+                (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
+
             (folder_item.Submenu as Menu).Add (this.recent_events_item);
 
 
