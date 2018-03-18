@@ -15,8 +15,10 @@
     - Flatpak improvements
 
     macOS:
-    - Fix the system font in eventlog and related crash 
+    - Fix the system font in eventlog and related crash
     - Fix hang when quitting the app
+
+    Special thanks to Renpytom for supporting the project on Patreon.
 
 
 2.0.1 (Tue 19 Dec, 2017):
