@@ -50,11 +50,15 @@
     <screenshots>
         <screenshot type="default">
             <caption>Sync projects to your computer</caption>
-            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.png</image>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.jpg</image>
+        </screenshot>
+        <screenshot>
+            <caption>Projects added to your SparkleShare folder sync automatically</caption>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.jpg</image>
         </screenshot>
         <screenshot>
             <caption>View your team's file history</caption>
-            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.png</image>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-3.jpg</image>
         </screenshot>
     </screenshots>
 
