@@ -109,9 +109,14 @@ namespace SparkleShare
             if (Array.IndexOf (args, "--status-icon=gtk") > -1)
                 StatusIcon.use_appindicator = false;
 
-            #if HAVE_APPINDICATOR
+            #if HAVE_APP_INDICATOR
             if (Array.IndexOf (args, "--status-icon=appindicator") > -1)
                 StatusIcon.use_appindicator = true;
+            #else
+            if (StatusIcon.use_appindicator) {
+                Console.WriteLine ("AppIndicator not installed.");
+                Environment.Exit (-1);
+            }
             #endif
 
             if (StatusIcon.use_appindicator)
