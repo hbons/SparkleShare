@@ -8,11 +8,10 @@
     (https://extensions.gnome.org/extension/495/topicons/) to display
     status icons in GNOME 3.26 or later.
 
-
     Linux:
     - Use the Meson build system
-    - Fix status icon lookup for some cases
-    - Fix eventlog parsing for newer versions of Git
+    - Use appindicator as the default status icon
+    - Fix event log parsing for newer versions of Git
     - Flatpak improvements
 
     macOS:
