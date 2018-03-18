@@ -14,6 +14,15 @@
     </description>
 
     <releases>
+        <release version="3.28.0" date="2018-03-18" urgency="medium">
+            <description>
+                <p>Fixes and improvements:</p>
+                <ul>
+                    <li>Use appindicator as the default status icon and supported by the flatpak</li>
+                    <li>Fix recent changes window showing broken entries with newer versions of Git</li>
+                </ul>
+           </description>
+        </release>
         <release version="2.0.1" date="2017-12-04" urgency="low">
             <description>
                 <p>Fixes and improvements:</p>

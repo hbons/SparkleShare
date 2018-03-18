@@ -1,4 +1,4 @@
-3.28.0 (Fri Mar 16, 2018):
+3.28.0 (Sun Mar 18, 2018):
 
     Fixed a bunch of crashes and lots of under-the-hood improvements.
     SparkleShare will now follow the GNOME release schedule and version 
