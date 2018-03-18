@@ -68,17 +68,17 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     string icon_name = "org.sparkleshare.SparkleShare";
 
-                    if (state == IconState.SyncingUp)
-                        icon_name = "process-syncing-up";
-                    else if (state == IconState.SyncingDown)
-                        icon_name = "process-syncing-down";
-                    else if (state == IconState.Syncing)
-                        icon_name = "process-syncing";
-                    else if (state == IconState.Error)
-                        icon_name = "process-syncing-error";
-
                     if (use_appindicator) {
                         #if HAVE_APP_INDICATOR
+                        if (state == IconState.SyncingUp)
+                            icon_name += "-syncing-up";
+                        else if (state == IconState.SyncingDown)
+                            icon_name += "-syncing-down";
+                        else if (state == IconState.Syncing)
+                            icon_name += "-syncing";
+                        else if (state == IconState.Error)
+                            icon_name += "-syncing-error";
+
                         icon_name += "-symbolic";
                         indicator.IconName = icon_name;
 
@@ -88,6 +88,15 @@ namespace SparkleShare {
                         #endif
 
                     } else {
+                        if (state == IconState.SyncingUp)
+                            icon_name += "process-syncing-up";
+                        else if (state == IconState.SyncingDown)
+                            icon_name += "process-syncing-down";
+                        else if (state == IconState.Syncing)
+                            icon_name += "process-syncing";
+                        else if (state == IconState.Error)
+                            icon_name += "process-syncing-error";
+
                         this.status_icon.IconName = icon_name;
                     }
                 });
@@ -158,12 +167,17 @@ namespace SparkleShare {
                             string icons_path = Path.Combine (UserInterface.AssetsPath, "icons", "hicolor", "12x12", "status");
 
                             foreach (KeyValuePair<string, string> pair in project.UnsyncedChangesInfo) {
-                                string icon_path = Path.Combine (icons_path, pair.Value.Replace ("-12", ""));
 
-                                (item.Submenu as Menu).Add (new SparkleMenuItem (pair.Key) {
-                                    Image     = new Image (icon_path),
+                                var change_item = new SparkleMenuItem (pair.Key) {
                                     Sensitive = false
-                                });
+                                };
+
+                                if (!use_appindicator) {
+                                    string icon_path = Path.Combine (icons_path, pair.Value.Replace ("-12", ""));
+                                    change_item.Image = new Image (icon_path);
+                                }
+
+                                (item.Submenu as Menu).Add (change_item);
                             }
 
                             if (!string.IsNullOrEmpty (project.MoreUnsyncedChanges)) {
