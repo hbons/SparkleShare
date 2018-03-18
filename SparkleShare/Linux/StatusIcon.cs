@@ -68,9 +68,6 @@ namespace SparkleShare {
                 Application.Invoke (delegate {
                     string icon_name = "org.sparkleshare.SparkleShare";
 
-                    if (use_appindicator)
-                        icon_name += "-symbolic";
-
                     if (state == IconState.SyncingUp)
                         icon_name = "process-syncing-up";
                     else if (state == IconState.SyncingDown)
@@ -82,6 +79,7 @@ namespace SparkleShare {
 
                     if (use_appindicator) {
                         #if HAVE_APP_INDICATOR
+                        icon_name += "-symbolic";
                         indicator.IconName = icon_name;
 
                         // Force update of the status icon
