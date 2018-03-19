@@ -51,8 +51,7 @@ namespace SparkleShare
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-
-            //if (IconTheme.Default != null)
+            if (IconTheme.Default != null)
                 IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 
             var label = new Label ();

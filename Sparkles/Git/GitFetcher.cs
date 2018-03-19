@@ -335,7 +335,6 @@ namespace Sparkles.Git {
         void InstallConfiguration ()
         {
             string [] settings = {
-                "advice.ignoredHook false",
                 "core.autocrlf input",
                 "core.quotepath false", // For commands to output Unicode characters "as is". e.g. '"h\303\251"' becomes 'hé'.
                 "core.precomposeunicode true", // Use the same Unicode form on all filesystems
