@@ -11,21 +11,29 @@ foreach size : icon_sizes
         install_dir: join_paths(theme_dir, icon_dir))
 endforeach
 
-
-# Install the symbolic icons
 install_data(
     sources: join_paths('hicolor', 'symbolic', 'apps', app_icon_name + '-symbolic.svg'),
     install_dir: join_paths(theme_dir, 'symbolic', 'apps'))
 
-symbolic_icons = ['syncing',
-                  'syncing-up',
-                  'syncing-down',
-                  'syncing-error']
 
-foreach icon : symbolic_icons
+# Install the status icons
+status_icons = ['syncing',
+                'syncing-up',
+                'syncing-down',
+                'syncing-error']
+
+foreach icon : status_icons
     install_data(
-        sources: join_paths('hicolor', 'symbolic', 'status', 'org.sparkleshare.SparkleShare-' + icon + '-symbolic.svg'),
-        install_dir: join_paths(theme_dir, 'symbolic', 'status'))
+        sources: join_paths('hicolor', '24x24', 'status', app_icon_name + '-' + icon + '.png'),
+        install_dir: join_paths(theme_dir, '24x24', 'apps'))
+
+    install_data(
+        sources: join_paths('hicolor', '48x48', 'status', app_icon_name + '-' + icon + '.png'),
+        install_dir: join_paths(theme_dir, '48x48', 'apps'))
+
+    install_data(
+        sources: join_paths('hicolor', 'symbolic', 'status', app_icon_name + '-' + icon + '-symbolic.svg'),
+        install_dir: join_paths(theme_dir, 'symbolic', 'apps'))
 endforeach
 
 
@@ -51,20 +59,4 @@ size = '16'
 
 install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'list-point.png'),
     install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
-
-sizes = ['24', '48']
-
-foreach size : sizes
-    install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'process-syncing.png'),
-        install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
-
-    install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'process-syncing-up.png'),
-        install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
-
-    install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'process-syncing-down.png'),
-        install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
-
-    install_data(sources: join_paths('hicolor', size + 'x' + size, category, 'process-syncing-error.png'),
-        install_dir: join_paths(app_theme_dir, size + 'x' + size, category))
-endforeach
 
