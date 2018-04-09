@@ -41,11 +41,11 @@ namespace SparkleShare {
                 Controller.WindowClosed ();
                 args.RetVal = true;
             };
-            
+
             KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
                 if (args.Event.Key == Gdk.Key.Escape ||
                     (args.Event.State == Gdk.ModifierType.ControlMask && args.Event.Key == Gdk.Key.w)) {
-                    
+
                     Controller.WindowClosed ();
                 }
             };
@@ -144,4 +144,3 @@ namespace SparkleShare {
         }
     }
 }
-

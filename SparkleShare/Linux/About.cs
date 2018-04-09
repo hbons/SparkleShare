@@ -45,11 +45,11 @@ namespace SparkleShare {
                 Controller.WindowClosed ();
                 args.RetVal = true;
             };
-            
+
             KeyPressEvent += delegate (object o, KeyPressEventArgs args) {
                 if (args.Event.Key == Gdk.Key.Escape ||
                     (args.Event.State == Gdk.ModifierType.ControlMask && args.Event.Key == Gdk.Key.w)) {
-                    
+
                     Controller.WindowClosed ();
                 }
             };
@@ -151,13 +151,13 @@ namespace SparkleShare {
             Add (layout_horizontal);
         }
     }
-    
-    
+
+
     class Link : Label {
 
         public Link (string label, string url)
         {
-            Markup   = string.Format ("<a href=\"{0}\">{1}</a>", url, label);	
+            Markup   = string.Format ("<a href=\"{0}\">{1}</a>", url, label);
             CanFocus = false;
 
             CssProvider css_provider = new CssProvider ();

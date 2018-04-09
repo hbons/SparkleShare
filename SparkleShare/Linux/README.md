@@ -4,7 +4,7 @@
 
 ### Common build requirements
 
-You will need the packages listed below for the most used Linux distributions (some are run requirements):  
+You will need the packages listed below for the most used Linux distributions (some are run requirements):
 
 ```shell
 # On Ubuntu 16.04:
@@ -40,8 +40,8 @@ sudo dnf install \
 
 ### Additional source build requirements
 
-Install the `soup-sharp` and `webkit2gtk-sharp` bindings from: 
-https://github.com/hbons/soup-sharp  
+Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:
+https://github.com/hbons/soup-sharp
 https://github.com/hbons/webkit2gtk-sharp
 
 Both with:

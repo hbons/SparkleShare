@@ -2,8 +2,8 @@
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU Lesser General Public License as 
-//   published by the Free Software Foundation, either version 3 of the 
+//   it under the terms of the GNU Lesser General Public License as
+//   published by the Free Software Foundation, either version 3 of the
 //   License, or (at your option) any later version.
 //
 //   This program is distributed in the hope that it will be useful,
@@ -34,7 +34,7 @@ namespace Sparkles.Git {
 
         string branch {
             get {
-                if (!string.IsNullOrEmpty (this.cached_branch)) 
+                if (!string.IsNullOrEmpty (this.cached_branch))
                     return this.cached_branch;
 
                 var git = new GitCommand (LocalPath, "config core.ignorecase true");
@@ -44,7 +44,7 @@ namespace Sparkles.Git {
                 while (this.in_merge && HasLocalChanges) {
                     try {
                         ResolveConflict ();
-                        
+
                     } catch (IOException e) {
                         Logger.LogInfo ("Git", Name + " | Failed to resolve conflict, trying again...", e);
                     }
@@ -177,7 +177,7 @@ namespace Sparkles.Git {
 
                         Error = ErrorStatus.None;
                         return true;
-                    
+
                     } else {
                         Logger.LogInfo ("Git", Name + " | Remote " + remote_revision + " is already in our history");
                         return false;
@@ -406,7 +406,7 @@ namespace Sparkles.Git {
         bool Merge ()
         {
             string message = FormatCommitMessage ();
-            
+
             if (message != null) {
                 Add ();
                 Commit (message);
@@ -418,7 +418,7 @@ namespace Sparkles.Git {
             if (this.in_merge) {
                  git = new GitCommand (LocalPath, "merge --abort");
                  git.StartAndWaitForExit ();
-            
+
                  return false;
             }
 
@@ -446,11 +446,11 @@ namespace Sparkles.Git {
                     git.StartAndWaitForExit ();
 
                     return false;
-                
+
                 } else {
                     Logger.LogInfo ("Git", error_output);
                     Logger.LogInfo ("Git", Name + " | Conflict detected, trying to get out...");
-                    
+
                     while (this.in_merge && HasLocalChanges) {
                         try {
                             ResolveConflict ();
@@ -546,7 +546,7 @@ namespace Sparkles.Git {
                     string file_name_B = Path.GetFileNameWithoutExtension (conflicting_file_path) + clue_B + Path.GetExtension (conflicting_file_path);
 
                     string abs_conflicting_file_path = Path.Combine (LocalPath, conflicting_file_path);
-                    
+
                     string abs_file_path_A = Path.Combine (Path.GetDirectoryName (abs_conflicting_file_path), file_name_A);
                     string abs_file_path_B = Path.Combine (Path.GetDirectoryName (abs_conflicting_file_path), file_name_B);
 
@@ -583,15 +583,15 @@ namespace Sparkles.Git {
                     var git_add = new GitCommand (LocalPath, "add \"" + conflicting_file_path + "\"");
                     git_add.StartAndWaitForExit ();
 
-                
+
                 // The local version has been modified, but the server version was removed
                 } else if (line.StartsWith ("UD")) {
-                    
+
                     // Recover our version
                     var git_theirs = new GitCommand (LocalPath, "checkout --ours \"" + conflicting_file_path + "\"");
                     git_theirs.StartAndWaitForExit ();
 
-            
+
                 // Server and local versions were removed
                 } else if (line.StartsWith ("DD")) {
                     Logger.LogInfo ("Git", Name + " | No need to resolve: " + line);
@@ -599,7 +599,7 @@ namespace Sparkles.Git {
                 // New local files
                 } else if (line.StartsWith ("??")) {
                     Logger.LogInfo ("Git", Name + " | Found new file, no need to resolve: " + line);
-                
+
                 } else {
                     Logger.LogInfo ("Git", Name + " | Don't know what to do with: " + line);
                 }
@@ -639,7 +639,7 @@ namespace Sparkles.Git {
             // ...move it...
             try {
                 File.Move (local_file_path, target_file_path);
-            
+
             } catch (Exception e) {
                 string message = string.Format ("Failed to move \"{0}\" to \"{1}\"", local_file_path, target_file_path);
                 Logger.LogInfo ("Git", Name + " | " + message, e);
@@ -669,7 +669,7 @@ namespace Sparkles.Git {
         public override List<ChangeSet> GetChangeSets (string path)
         {
             return GetChangeSetsInternal (path);
-        }   
+        }
 
         List<ChangeSet> GetChangeSetsInternal (string path)
         {
@@ -946,18 +946,18 @@ namespace Sparkles.Git {
                             continue;
 
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
-    
+
                         if (File.Exists (HEAD_file_path)) {
                             File.Move (HEAD_file_path, HEAD_file_path + ".backup");
                             Logger.LogInfo ("Git", Name + " | Renamed " + HEAD_file_path);
                         }
-    
+
                         continue;
                     }
-    
+
                     PrepareDirectories (child_path);
                 }
-    
+
                 if (Directory.GetFiles (path).Length == 0 &&
                     Directory.GetDirectories (path).Length == 0 &&
                     !path.Equals (LocalPath)) {
@@ -986,26 +986,26 @@ namespace Sparkles.Git {
 
             var git_status = new GitCommand (LocalPath, "status --porcelain");
             git_status.Start ();
-            
+
             while (!git_status.StandardOutput.EndOfStream) {
                 string line = git_status.StandardOutput.ReadLine ();
                 line        = line.Trim ();
-                
+
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     line = line.Replace (".empty", "");
 
                 Change change;
-                
+
                 if (line.StartsWith ("R")) {
                     string path = line.Substring (3, line.IndexOf (" -> ") - 3).Trim ("\" ".ToCharArray ());
                     string moved_to_path = line.Substring (line.IndexOf (" -> ") + 4).Trim ("\" ".ToCharArray ());
-                    
+
                     change = new Change () {
                         Type = ChangeType.Moved,
                         Path = EnsureSpecialChars (path),
                         MovedToPath = EnsureSpecialChars (moved_to_path)
                     };
-                    
+
                 } else {
                     string path = line.Substring (2).Trim ("\" ".ToCharArray ());
                     change = new Change () { Path = EnsureSpecialChars (path) };
@@ -1013,7 +1013,7 @@ namespace Sparkles.Git {
 
                     if (line.StartsWith ("M")) {
                         change.Type = ChangeType.Edited;
-                        
+
                     } else if (line.StartsWith ("D")) {
                         change.Type = ChangeType.Deleted;
                     }
@@ -1021,7 +1021,7 @@ namespace Sparkles.Git {
 
                 changes.Add (change);
             }
-            
+
             git_status.StandardOutput.ReadToEnd ();
             git_status.WaitForExit ();
 
@@ -1071,7 +1071,7 @@ namespace Sparkles.Git {
             try {
                 foreach (DirectoryInfo directory in parent.GetDirectories ()) {
                     if (directory.FullName.IsSymlink () ||
-                        directory.Name.Equals (".git") || 
+                        directory.Name.Equals (".git") ||
                         directory.Name.Equals ("rebase-apply")) {
 
                         continue;
@@ -1088,13 +1088,13 @@ namespace Sparkles.Git {
                 foreach (FileInfo file in parent.GetFiles ()) {
                     if (file.FullName.IsSymlink ())
                         continue;
-                    
+
                     if (file.Name.Equals (".empty"))
                         File.SetAttributes (file.FullName, FileAttributes.Hidden);
                     else
                         size += file.Length;
                 }
-                
+
             } catch (Exception e) {
                 Logger.LogInfo ("Local", "Error calculating file size", e);
             }
@@ -1102,7 +1102,7 @@ namespace Sparkles.Git {
             return size;
         }
 
-        
+
         bool IsSymlink (string file)
         {
             FileAttributes attributes = File.GetAttributes (file);

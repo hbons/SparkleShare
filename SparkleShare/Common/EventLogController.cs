@@ -36,16 +36,16 @@ namespace SparkleShare {
 
         public event UpdateContentEventEventHandler UpdateContentEvent = delegate { };
         public delegate void UpdateContentEventEventHandler (string html);
-        
+
         public event UpdateChooserEventHandler UpdateChooserEvent = delegate { };
         public delegate void UpdateChooserEventHandler (string [] folders);
-        
+
         public event UpdateChooserEnablementEventHandler UpdateChooserEnablementEvent = delegate { };
         public delegate void UpdateChooserEnablementEventHandler (bool enabled);
-        
+
         public event UpdateSizeInfoEventHandler UpdateSizeInfoEvent = delegate { };
         public delegate void UpdateSizeInfoEventHandler (string size, string history_size);
-        
+
         public event ShowSaveDialogEventHandler ShowSaveDialogEvent = delegate { };
         public delegate void ShowSaveDialogEventHandler (string file_name, string target_folder_path);
 
@@ -162,7 +162,7 @@ namespace SparkleShare {
 
 							if (!string.IsNullOrEmpty (html))
                             	UpdateContentEvent (html);
-                            
+
 							UpdateSizeInfoEvent (Size, HistorySize);
 
                         }).Start ();
@@ -172,7 +172,7 @@ namespace SparkleShare {
                 WindowIsOpen = true;
                 ShowWindowEvent ();
             };
-			
+
             SparkleShare.Controller.OnIdle += delegate {
                 if (this.history_view_active)
                     return;
@@ -189,7 +189,7 @@ namespace SparkleShare {
 
                 UpdateSizeInfoEvent (Size, HistorySize);
             };
-			
+
             SparkleShare.Controller.FolderListChanged += delegate {
                 if (this.selected_folder != null && !SparkleShare.Controller.Folders.Contains (this.selected_folder))
                     this.selected_folder = null;
@@ -212,16 +212,16 @@ namespace SparkleShare {
         {
             if (string.IsNullOrEmpty (href) || href.StartsWith ("about:"))
                 return;
-				
+
             href = href.Replace ("%20", " ");
-            
+
             if (href.StartsWith ("http")) {
                 SparkleShare.Controller.OpenWebsite (href);
-            
+
             } else if (href.StartsWith ("restore://") && this.restore_revision_info == null) {
                 Regex regex = new Regex ("restore://(.+)/([a-f0-9]+)/(.+)/(.{3} [0-9]+ [0-9]+h[0-9]+)/(.+)");
                 Match match = regex.Match (href);
-                
+
                 if (match.Success) {
                     string author_name = match.Groups [3].Value;
                     string timestamp   = match.Groups [4].Value;
@@ -240,7 +240,7 @@ namespace SparkleShare {
 
                     ShowSaveDialogEvent (file_name, target_folder_path);
                 }
-                
+
             } else if (href.StartsWith ("back://")) {
                 this.history_view_active = false;
                 SelectedFolder           = this.selected_folder; // TODO: Return to the same position on the page
@@ -283,9 +283,9 @@ namespace SparkleShare {
             } else {
                 if (href.StartsWith ("file:///"))
                     href = href.Substring (7);
-                
+
                 SparkleShare.Controller.OpenFile (href);
-            }   
+            }
         }
 
 
@@ -374,13 +374,13 @@ namespace SparkleShare {
                 html += "<tr>" +
                             "<td class='avatar'><img src='" + GetAvatarFilePath (change_set.User) + "'></td>" +
                             "<td class='name'>" + change_set.User.Name + "</td>" +
-                            "<td class='date'>" + 
-                                change_set.Timestamp.ToString ("d MMM yyyy", CultureInfo.InvariantCulture) + 
+                            "<td class='date'>" +
+                                change_set.Timestamp.ToString ("d MMM yyyy", CultureInfo.InvariantCulture) +
                             "</td>" +
                             "<td class='time'>" + change_set.Timestamp.ToString ("HH:mm") + "</td>" +
                             "<td class='restore'>" +
-                                "<a href='restore://" + change_set.Folder.Name + "/" + 
-                                change_set.Revision + "/" + change_set.User.Name + "/" + 
+                                "<a href='restore://" + change_set.Folder.Name + "/" +
+                                change_set.Revision + "/" + change_set.User.Name + "/" +
                                 change_set.Timestamp.ToString ("MMM d H\\hmm", CultureInfo.InvariantCulture) + "/" +
                                 file_path + "'>Restore&hellip;</a>" +
                             "</td>" +
@@ -407,7 +407,7 @@ namespace SparkleShare {
 
             foreach (ChangeSet change_set in change_sets) {
                 bool change_set_inserted = false;
-            
+
                 foreach (ActivityDay stored_activity_day in activity_days) {
                     if (stored_activity_day.Date.Year  == change_set.Timestamp.Year &&
                         stored_activity_day.Date.Month == change_set.Timestamp.Month &&
@@ -443,7 +443,7 @@ namespace SparkleShare {
                             event_entry += "<dd class='" + change.Type.ToString ().ToLower () + "'>";
 
                             if (!change.IsFolder) {
-                                event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" + 
+                                event_entry += "<small><a href=\"history://" + change_set.Folder.Name + "/" +
                                     change.Path + "\" title=\"View revisions\">" + change.Timestamp.ToString ("HH:mm") +
                                     " &#x25BE;</a></small> &nbsp;";
 
@@ -582,7 +582,7 @@ namespace SparkleShare {
         private string SafeCombine (string path1, string path2)
         {
             string result = path1;
-            
+
             if (!result.EndsWith (Path.DirectorySeparatorChar.ToString ()))
                 result += Path.DirectorySeparatorChar;
 
@@ -597,9 +597,9 @@ namespace SparkleShare {
         {
             if (!SparkleShare.Controller.AvatarsEnabled)
                 return "<!-- $pixmaps-path -->/user-icon-default.png";
-              
+
             string fetched_avatar = Avatars.GetAvatar (user.Email, 48, SparkleShare.Controller.Config.DirectoryPath);
-                
+
             if (!string.IsNullOrEmpty (fetched_avatar))
                 return "file://" + fetched_avatar.Replace ("\\", "/");
             else

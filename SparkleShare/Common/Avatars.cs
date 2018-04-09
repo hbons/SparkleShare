@@ -39,10 +39,10 @@ namespace SparkleShare
             #endif
 
             email = email.ToLower ();
-            
+
             if (skipped_avatars.Contains (email))
                 return null;
-            
+
             string avatars_path = Path.Combine (Path.GetDirectoryName (target_path), "avatars", size + "x" + size);
 
             // Search avatars by file name, ignore extension
@@ -66,10 +66,10 @@ namespace SparkleShare
                 Logger.LogInfo ("Avatars", "Error fetching avatar for " + email, e);
                 return null;
             }
-            
+
             var client = new WebClient ();
             string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
-            
+
             try {
                 byte [] buffer = client.DownloadData (url);
 
@@ -78,30 +78,30 @@ namespace SparkleShare
 
                 } else if (client.ResponseHeaders ["content-type"].Equals (MediaTypeNames.Image.Gif, StringComparison.InvariantCultureIgnoreCase)) {
                     avatar_file_path += ".gif";
-                
+
                 } else {
                     avatar_file_path += ".png";
                 }
-                
+
                 if (buffer.Length > 255) {
                     if (!Directory.Exists (avatars_path)) {
                         Directory.CreateDirectory (avatars_path);
                         Logger.LogInfo ("Avatars", "Created '" + avatars_path + "'");
                     }
-                    
+
                     File.WriteAllBytes (avatar_file_path, buffer);
                     Logger.LogInfo ("Avatars", "Fetched " + size + "x" + size + " avatar for " + email);
-                    
+
                     return avatar_file_path;
-                    
+
                 } else {
                     return null;
                 }
-                
+
             } catch (Exception e) {
                 Logger.LogInfo ("Avatars", "Error fetching avatar for " + email, e);
                 skipped_avatars.Add (email);
-                
+
                 return null;
             }
         }
@@ -111,11 +111,11 @@ namespace SparkleShare
             X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
-            
+
             // On some systems (mostly Linux) we can't assume the needed certificates are
             // available, so we have to check the certificate's SHA-1 fingerprint manually.
             //
-            // SHA1 fingerprinter obtained from https://www.gravatar.com/ on Oct 16 2015 
+            // SHA1 fingerprinter obtained from https://www.gravatar.com/ on Oct 16 2015
             // Set to expire on Oct 14 2018
             string gravatar_cert_fingerprint = "1264B3F00814C6077D3853238771EE67FB6321C9";
 
@@ -123,7 +123,7 @@ namespace SparkleShare
                 Logger.LogInfo ("Avatars", "Invalid certificate for https://www.gravatar.com/");
                 return false;
             }
-            
+
             return true;
         }
     }

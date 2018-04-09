@@ -82,7 +82,7 @@ namespace SparkleShare {
 
 
         public void AddOption (Widget widget)
-        {            
+        {
             this.option_area.Add (widget);
         }
 
@@ -99,7 +99,7 @@ namespace SparkleShare {
                     LineWrap = true,
                     LineWrapMode = Pango.WrapMode.WordChar
                 };
-                
+
                 layout_vertical.PackStart (description, false, false, 0);
             }
 
@@ -109,7 +109,7 @@ namespace SparkleShare {
             this.content_area.Add (layout_vertical);
         }
 
-    
+
         public void Reset ()
         {
             Header      = "";
@@ -124,13 +124,13 @@ namespace SparkleShare {
             foreach (Button button in this.buttons)
                 this.buttons.Remove (button);
         }
-        
-        
+
+
         new public void ShowAll ()
         {
             if (this.buttons.Children.Length > 0) {
                 Button default_button = (Button) this.buttons.Children [this.buttons.Children.Length - 1];
-            
+
                 default_button.CanDefault = true;
                 Default = default_button;
                 default_button.StyleContext.AddClass ("suggested-action");
@@ -141,4 +141,3 @@ namespace SparkleShare {
         }
     }
 }
-

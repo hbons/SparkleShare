@@ -16,7 +16,7 @@
 
 
 using System;
-using System.ComponentModel; 
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -38,7 +38,7 @@ namespace SparkleShare {
 			Height     = 288;
 			Width      = 720;
             Icon       = UserInterfaceHelpers.GetImageSource("sparkleshare-app", "ico");
-            
+
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Closing += Close;
 
@@ -73,10 +73,10 @@ namespace SparkleShare {
 				Width  = 720,
                 Height = 260
             };
-        
+
             image.Source = UserInterfaceHelpers.GetImageSource ("about");
-            
-            
+
+
             Label version = new Label () {
                 Content    = "version " + Controller.RunningVersion,
                 FontSize   = 11,
@@ -88,7 +88,7 @@ namespace SparkleShare {
                 FontSize   = 11,
                 Foreground = new SolidColorBrush (Color.FromArgb (128, 255, 255, 255))
             };
-            
+
             TextBlock credits = new TextBlock () {
                 FontSize     = 11,
                 Foreground   = new SolidColorBrush (Colors.White),
@@ -99,14 +99,14 @@ namespace SparkleShare {
                 TextWrapping = TextWrapping.Wrap,
                 Width        = 318
             };
-            
+
             SparkleLink website_link = new SparkleLink ("Website", Controller.WebsiteLinkAddress);
             SparkleLink credits_link = new SparkleLink ("Credits", Controller.CreditsLinkAddress);
             SparkleLink report_problem_link = new SparkleLink ("Report a problem", Controller.ReportProblemLinkAddress);
             SparkleLink debug_log_link = new SparkleLink ("Debug log", Controller.DebugLogLinkAddress);
 
             Canvas canvas = new Canvas ();
-            
+
             canvas.Children.Add (image);
             Canvas.SetLeft (image, 0);
             Canvas.SetTop (image, 0);
@@ -114,18 +114,18 @@ namespace SparkleShare {
             canvas.Children.Add (version);
             Canvas.SetLeft (version, 289);
             Canvas.SetTop (version, 92);
-            
+
             canvas.Children.Add (this.updates);
             Canvas.SetLeft (this.updates, 289);
             Canvas.SetTop (this.updates, 109);
-            
+
             canvas.Children.Add (credits);
             Canvas.SetLeft (credits, 294);
-            Canvas.SetTop (credits, 142);   
+            Canvas.SetTop (credits, 142);
 
             canvas.Children.Add (website_link);
             Canvas.SetLeft (website_link, 289);
-            Canvas.SetTop (website_link, 222);   
+            Canvas.SetTop (website_link, 222);
 
             canvas.Children.Add (credits_link);
             Canvas.SetLeft (credits_link, 289 + website_link.ActualWidth + 60);
@@ -133,21 +133,21 @@ namespace SparkleShare {
 
             canvas.Children.Add (report_problem_link);
             Canvas.SetLeft (report_problem_link, 289 + website_link.ActualWidth + credits_link.ActualWidth + 115);
-            Canvas.SetTop (report_problem_link, 222);  
+            Canvas.SetTop (report_problem_link, 222);
 
             canvas.Children.Add (debug_log_link);
             Canvas.SetLeft (debug_log_link, 289 + website_link.ActualWidth + credits_link.ActualWidth +
                 report_problem_link.ActualWidth + 220);
-            Canvas.SetTop (debug_log_link, 222);  
-            
+            Canvas.SetTop (debug_log_link, 222);
+
             Content = canvas;
         }
-        
-        
+
+
         private void Close (object sender, CancelEventArgs args)
         {
             Controller.WindowClosed ();
-            args.Cancel = true;    
+            args.Cancel = true;
         }
     }
 
@@ -177,7 +177,7 @@ namespace SparkleShare {
 
             MouseUp += delegate {
                 SparkleShare.Controller.OpenWebsite (url);
-            };            
+            };
         }
     }
 }
