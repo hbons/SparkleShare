@@ -436,7 +436,7 @@ namespace Sparkles.Git {
 
             var git_config_clean = new GitCommand (TargetFolder,
                 string.Format ("config filter.lfs.clean '{0}'", clean_command));
-            
+
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
