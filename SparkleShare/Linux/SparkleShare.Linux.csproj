@@ -134,6 +134,11 @@
     <None Include="..\Common\Presets\planio%402x.png">
       <Link>Presets\planio%402x.png</Link>
     </None>
+    <None Include="org.sparkleshare.SparkleShare.appdata.xml" />
+    <None Include="org.sparkleshare.SparkleShare.desktop" />
+    <None Include="org.sparkleshare.SparkleShare.Invites.desktop" />
+    <None Include="SparkleShare.Autostart.desktop" />
+    <None Include="sparkleshare.in" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller.cs" />
