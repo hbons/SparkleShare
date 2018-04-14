@@ -273,7 +273,7 @@ namespace SparkleShare {
                     };
                 }
                 
-                TableView.SelectRow (Controller.SelectedPresetIndex, false);
+                TableView.SelectRow (Controller.SelectedPresetIndex, byExtendingSelection: false);
                 TableView.ScrollRowToVisible (Controller.SelectedPresetIndex);
                 MakeFirstResponder ((NSResponder) TableView);
 

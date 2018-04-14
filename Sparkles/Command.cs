@@ -26,7 +26,7 @@ namespace Sparkles {
         bool write_output;
 
 
-        public Command (string path, string args) : this (path, args, true)
+        public Command (string path, string args) : this (path, args, write_output: true)
         {
         }
 

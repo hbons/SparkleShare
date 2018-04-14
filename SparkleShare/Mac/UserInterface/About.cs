@@ -38,7 +38,7 @@ namespace SparkleShare {
 
         public About () : base ()
         {
-            SetFrame (new CGRect (0, 0, 640, 281), true);
+            SetFrame (new CGRect (0, 0, 640, 281), display: true);
             Center ();
 
             Delegate    = new SparkleAboutDelegate ();

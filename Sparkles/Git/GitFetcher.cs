@@ -151,7 +151,7 @@ namespace Sparkles.Git {
 
             if (Directory.Exists (TargetFolder)) {
                 try {
-                    Directory.Delete (TargetFolder, true /* Recursive */ );
+                    Directory.Delete (TargetFolder, recursive: true);
                     Logger.LogInfo ("Fetcher", "Deleted '" + TargetFolder + "'");
 
                 } catch (Exception e) {
@@ -225,7 +225,7 @@ namespace Sparkles.Git {
             string git_lfs_tmp_path = Path.Combine (Configuration.DefaultConfiguration.TmpPath, "lfs");
 
             if (Directory.Exists (git_lfs_tmp_path))
-                Directory.Delete (git_lfs_tmp_path, true);
+                Directory.Delete (git_lfs_tmp_path, recursive: true);
 
             return identifier;
         }

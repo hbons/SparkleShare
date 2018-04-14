@@ -29,7 +29,7 @@ namespace SparkleShare {
         {
             IconTheme icon_theme = new IconTheme ();
             icon_theme.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
-			
+
             foreach (string search_path in IconTheme.Default.SearchPath)
                icon_theme.AppendSearchPath (search_path);	
 
@@ -37,7 +37,7 @@ namespace SparkleShare {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
 
             } catch (Exception e) {
-				Logger.LogInfo ("UI", "Failed to load icon " + name + " of size " + size, e);
+                Logger.LogInfo ("UI", "Failed to load icon " + name + " of size " + size, e);
 
                 try {
                     return icon_theme.LoadIcon ("gtk-missing-image", size, IconLookupFlags.GenericFallback);

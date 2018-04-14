@@ -43,7 +43,7 @@ namespace Sparkles {
                     return operating_system;
                 }
 
-                var uname = new Command ("uname", "-a", false);
+                var uname = new Command ("uname", "-a", write_output: false);
                 string output = uname.StartAndReadStandardOutput ();
 
                 // Environment.OSVersion.Platform.PlatformID.MacOSX is broken in Mono
@@ -66,7 +66,7 @@ namespace Sparkles {
         public static string OperatingSystemVersion {
             get {
                 if (OperatingSystem == OS.macOS) {
-                    var uname = new Command ("sw_vers", "-productVersion", false);
+                    var uname = new Command ("sw_vers", "-productVersion", write_output: false);
                     string output = uname.StartAndReadStandardOutput ();
                     string version = output;
 

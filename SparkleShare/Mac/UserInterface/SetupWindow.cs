@@ -38,7 +38,7 @@ namespace SparkleShare {
 
         public SetupWindow ()
         {
-            SetFrame (new CGRect (0, 0, 640, 420), true);
+            SetFrame (new CGRect (0, 0, 640, 420), display: true);
 
             StyleMask   = NSWindowStyle.Titled;
             MaxSize     = new CGSize (640, 420);
@@ -120,7 +120,7 @@ namespace SparkleShare {
 
         public override void OrderFrontRegardless ()
         {
-            NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", false);
+            NSApplication.SharedApplication.AddWindowsItem (this, "SparkleShare Setup", isFilename: false);
             NSApplication.SharedApplication.ActivateIgnoringOtherApps (true);
             MakeKeyAndOrderFront (this);
 

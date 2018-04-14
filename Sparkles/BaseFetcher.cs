@@ -127,7 +127,7 @@ namespace Sparkles {
 
             try {
                 if (Directory.Exists (TargetFolder))
-                    Directory.Delete (TargetFolder, true);
+                    Directory.Delete (TargetFolder, recursive: true);
             
             } catch (IOException) {
                 errors.Add ("\"" + TargetFolder + "\" is read-only.");

@@ -565,7 +565,7 @@ namespace SparkleShare {
             info.TargetDirectory = Path.Combine (Config.TmpPath, canonical_name);
 
             if (Directory.Exists (info.TargetDirectory))
-                Directory.Delete (info.TargetDirectory, true);
+                Directory.Delete (info.TargetDirectory, recursive: true);
 
             try {
                 this.fetcher = (BaseFetcher) Activator.CreateInstance (

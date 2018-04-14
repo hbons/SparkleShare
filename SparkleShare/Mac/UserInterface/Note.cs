@@ -38,7 +38,7 @@ namespace SparkleShare {
 
         public Note () : base ()
         {
-            SetFrame (new CGRect (0, 0, 480, 240), true);
+            SetFrame (new CGRect (0, 0, 480, 240), display: true);
             Center ();
 
             Delegate    = new SparkleNoteDelegate ();

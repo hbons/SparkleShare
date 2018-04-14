@@ -338,7 +338,7 @@ namespace SparkleShare {
         {
             SparkleShare.Controller.Invoke(() => {
                 NSSavePanel panel = new NSSavePanel () {
-                    DirectoryUrl = new NSUrl (target_folder_path, true),
+                    DirectoryUrl = new NSUrl (target_folder_path, isDir: true),
                     NameFieldStringValue = file_name,
                     ParentWindow = this,
                     Title = "Restore from History",
