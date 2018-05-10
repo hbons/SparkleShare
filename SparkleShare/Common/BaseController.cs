@@ -650,24 +650,27 @@ namespace SparkleShare {
             string target_folder_path = DetermineFolderPath ();
             string target_folder_name = Path.GetFileName (target_folder_path);
 
+            ClearDirectoryAttributes (this.fetcher.TargetFolder);
+
             try {
                 Directory.Move (this.fetcher.TargetFolder, target_folder_path);
 
+            } catch (IOException) {
+                Logger.LogInfo ("Controller", "Moving directory across devices/partitions/volumes...");
+
+                // Moving doesn't work across devices/partitions/volumes, so copy recursively and then delete
+                CopyDirectoryRecursively (new DirectoryInfo (this.fetcher.TargetFolder), new DirectoryInfo (target_folder_path));
+                Directory.Delete (this.fetcher.TargetFolder, recursive: true);
+
             } catch (Exception e) {
-                Logger.LogInfo ("Controller", "Error moving directory, trying again...", e);
+                Logger.LogInfo ("Controller", "Error moving directory", e);
 
-                try {
-                    ClearDirectoryAttributes (this.fetcher.TargetFolder);
-                    Directory.Move (this.fetcher.TargetFolder, target_folder_path);
+                this.fetcher.Dispose ();
+                this.fetcher = null;
 
-                } catch (Exception x) {
-                    Logger.LogInfo ("Controller", "Error moving directory", x);
+                this.watcher.EnableRaisingEvents = true;
 
-                    this.fetcher.Dispose ();
-                    this.fetcher = null;
-                    this.watcher.EnableRaisingEvents = true;
-                    return;
-                }
+                return;
             }
 
             string backend = BaseFetcher.GetBackend (this.fetcher.RemoteUrl.ToString ());
@@ -740,6 +743,16 @@ namespace SparkleShare {
             foreach (string file in files)
                 if (file.IsSymlink ())
                     File.SetAttributes (file, FileAttributes.Normal);
+        }
+
+
+        void CopyDirectoryRecursively (DirectoryInfo source_dir, DirectoryInfo target_dir)
+        {
+            foreach (DirectoryInfo dir in source_dir.GetDirectories ())
+                CopyDirectoryRecursively (dir, target_dir.CreateSubdirectory (dir.Name));
+
+            foreach (FileInfo file in source_dir.GetFiles ())
+                file.CopyTo (Path.Combine (target_dir.FullName, file.Name));
         }
     }
 }
