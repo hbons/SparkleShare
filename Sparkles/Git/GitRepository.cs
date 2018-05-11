@@ -98,8 +98,12 @@ namespace Sparkles.Git {
             get {
                 string file_path = Path.Combine (LocalPath, ".git", "info", "size");
 
+                if (!File.Exists (file_path))
+                    File.WriteAllText (file_path, "0");
+
+                string size = File.ReadAllText (file_path);
+
                 try {
-                    string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
                 } catch (Exception e) {
@@ -114,8 +118,12 @@ namespace Sparkles.Git {
             get {
                 string file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
 
+                if (!File.Exists (file_path))
+                    File.WriteAllText (file_path, "0");
+
+                string size = File.ReadAllText (file_path);
+
                 try {
-                    string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
                 } catch (Exception e) {
