@@ -379,17 +379,17 @@ namespace Sparkles.Git {
         // Commits the made changes
         void Commit (string message)
         {
-            GitCommand git;
+            GitCommand git_config;
 
             string user_name  = base.local_config.User.Name;
             string user_email = base.local_config.User.Email;
 
             if (!this.user_is_set) {
-                git = new GitCommand (LocalPath, "config user.name \"" + user_name + "\"");
-                git.StartAndWaitForExit ();
+                git_config = new GitCommand (LocalPath, "config user.name \"" + user_name + "\"");
+                git_config.StartAndWaitForExit ();
 
-                git = new GitCommand (LocalPath, "config user.email \"" + user_email + "\"");
-                git.StartAndWaitForExit ();
+                git_config = new GitCommand (LocalPath, "config user.email \"" + user_email + "\"");
+                git_config.StartAndWaitForExit ();
 
                 this.user_is_set = true;
             }
