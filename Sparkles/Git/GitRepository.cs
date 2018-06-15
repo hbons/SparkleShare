@@ -511,7 +511,7 @@ namespace Sparkles.Git {
             // ??    unmerged, new files       -> Stage the new files
 
             var git_status = new GitCommand (LocalPath, "status --porcelain");
-            string output         = git_status.StartAndReadStandardOutput ();
+            string output = git_status.StartAndReadStandardOutput ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
             bool trigger_conflict_event = false;
@@ -1014,7 +1014,7 @@ namespace Sparkles.Git {
 
             while (!git_status.StandardOutput.EndOfStream) {
                 string line = git_status.StandardOutput.ReadLine ();
-                line        = line.Trim ();
+                line = line.Trim ();
 
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     line = line.Replace (".empty", "");
