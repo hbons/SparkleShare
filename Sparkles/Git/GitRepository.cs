@@ -81,6 +81,12 @@ namespace Sparkles.Git {
 
             git_config = new GitCommand (LocalPath, "config core.sshCommand " + GitCommand.FormatGitSSHCommand (auth_info));
             git_config.StartAndWaitForExit();
+
+            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
+
+            // TODO: Use proper API
+            var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
+            chmod.StartAndWaitForExit ();
         }
 
 
