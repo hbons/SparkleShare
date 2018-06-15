@@ -205,7 +205,7 @@ namespace Sparkles.Git {
                 return false;
             }
 
-            string message = base.status_message.Replace ("\"", "\\\"");
+            string message = base.status_message;
 
             if (string.IsNullOrEmpty (message))
                 message = FormatCommitMessage ();
@@ -1061,8 +1061,8 @@ namespace Sparkles.Git {
 
             foreach (Change change in ParseStatus ()) {
                 if (change.Type == ChangeType.Moved) {
-                    message +=  "< ‘" + EnsureSpecialChars (change.Path) + "’\n";
-                    message +=  "> ‘" + EnsureSpecialChars (change.MovedToPath) + "’\n";
+                    message +=  "< ‘" + change.Path + "’\n";
+                    message +=  "> ‘" + change.MovedToPath + "’\n";
 
                 } else {
                     switch (change.Type) {
