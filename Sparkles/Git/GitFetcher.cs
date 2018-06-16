@@ -336,10 +336,10 @@ namespace Sparkles.Git {
         {
             string [] settings = {
                 "core.autocrlf input",
-                "core.quotepath false", // Don't quote "unusual" characters in path names
+                "core.quotepath false", // For commands to output Unicode characters "as is". e.g. '"h\303\251"' becomes 'hé'.
+                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.ignorecase false", // Be case sensitive explicitly to work on Mac
                 "core.filemode false", // Ignore permission changes
-                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
                 "core.excludesfile \"\"",
                 "core.packedGitLimit 128m", // Some memory limiting options
@@ -440,6 +440,14 @@ namespace Sparkles.Git {
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
+
+            if (InstallationInfo.OperatingSystem != OS.Windows) {
+                string pre_push_hook_path = Path.Combine (TargetFolder, ".git", "hooks", "pre-push");
+
+                // TODO: Use proper API
+                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
+                chmod.StartAndWaitForExit ();
+            }
         }
     }
 }
