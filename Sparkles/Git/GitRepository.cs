@@ -526,8 +526,7 @@ namespace Sparkles.Git {
 
             foreach (string line in lines) {
                 string conflicting_file_path = line.Substring (3);
-                conflicting_file_path        = EnsureSpecialChars (conflicting_file_path);
-                conflicting_file_path        = conflicting_file_path.Trim ("\"".ToCharArray ());
+                conflicting_file_path = conflicting_file_path.Trim ("\"".ToCharArray ());
 
                 // Remove possible rename indicators
                 string [] separators = {" -> \"", " -> "};
@@ -827,8 +826,7 @@ namespace Sparkles.Git {
                         change_set.User.Name.AESDecrypt (password),
                         change_set.User.Email.AESDecrypt (password));
 
-                } catch (Exception e) {
-                    Console.WriteLine (e.StackTrace);
+                } catch (Exception) {
                     change_set.User = new User (match.Groups ["name"].Value, match.Groups ["email"].Value);
                 }
             }
@@ -909,56 +907,7 @@ namespace Sparkles.Git {
                 change.IsFolder = true;
             }
 
-            try {
-                change.Path = EnsureSpecialChars (change.Path);
-
-                if (change.Type == ChangeType.Moved)
-                    change.MovedToPath = EnsureSpecialChars (change.MovedToPath);
-
-            } catch (Exception e) {
-                Logger.LogInfo ("Local", string.Format ("Error parsing line due to special character: '{0}'", line), e);
-                return null;
-            }
-
             return change;
-        }
-
-
-        string EnsureSpecialChars (string path)
-        {
-            // The path is quoted if it contains special characters
-            if (path.StartsWith ("\""))
-                path = ResolveSpecialChars (path.Substring (1, path.Length - 2));
-
-            return path;
-        }
-
-
-        string ResolveSpecialChars (string s)
-        {
-            StringBuilder builder = new StringBuilder (s.Length);
-            List<byte> codes      = new List<byte> ();
-
-            for (int i = 0; i < s.Length; i++) {
-                while (s [i] == '\\' &&
-                    s.Length - i > 3 &&
-                    char.IsNumber (s [i + 1]) &&
-                    char.IsNumber (s [i + 2]) &&
-                    char.IsNumber (s [i + 3])) {
-
-                    codes.Add (Convert.ToByte (s.Substring (i + 1, 3), 8));
-                    i += 4;
-                }
-
-                if (codes.Count > 0) {
-                    builder.Append (Encoding.UTF8.GetString (codes.ToArray ()));
-                    codes.Clear ();
-                }
-
-                builder.Append (s [i]);
-            }
-
-            return builder.ToString ();
         }
 
 
@@ -1035,13 +984,13 @@ namespace Sparkles.Git {
 
                     change = new Change () {
                         Type = ChangeType.Moved,
-                        Path = EnsureSpecialChars (path),
-                        MovedToPath = EnsureSpecialChars (moved_to_path)
+                        Path = path,
+                        MovedToPath = moved_to_path
                     };
 
                 } else {
                     string path = line.Substring (2).Trim ("\" ".ToCharArray ());
-                    change = new Change () { Path = EnsureSpecialChars (path) };
+                    change = new Change () { Path = path };
                     change.Type = ChangeType.Added;
 
                     if (line.StartsWith ("M")) {
