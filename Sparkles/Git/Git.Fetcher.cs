@@ -414,7 +414,7 @@ namespace Sparkles.Git {
 
         void InstallGitLFS ()
         {
-			var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
+            var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
 
             string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
             string smudge_command;
@@ -427,7 +427,7 @@ namespace Sparkles.Git {
                 clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/") + " clean %f";
 
             } else {
-				smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
+                smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
                 clean_command = "git-lfs clean %f";
             }
 
@@ -440,14 +440,6 @@ namespace Sparkles.Git {
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
-
-            if (InstallationInfo.OperatingSystem != OS.Windows) {
-                string pre_push_hook_path = Path.Combine (TargetFolder, ".git", "hooks", "pre-push");
-
-                // TODO: Use proper API
-                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
-                chmod.StartAndWaitForExit ();
-            }
         }
     }
 }

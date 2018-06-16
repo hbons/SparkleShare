@@ -82,13 +82,7 @@ namespace Sparkles.Git {
             git_config = new GitCommand (LocalPath, "config core.sshCommand " + GitCommand.FormatGitSSHCommand (auth_info));
             git_config.StartAndWaitForExit();
 
-            if (InstallationInfo.OperatingSystem != OS.Windows) {
-                string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
-
-                // TODO: Use proper API
-                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
-                chmod.StartAndWaitForExit ();
-            }
+            PrepareGitLFS ();
         }
 
 
@@ -221,25 +215,7 @@ namespace Sparkles.Git {
             if (message != null)
                 Commit (message);
 
-            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
-            string pre_push_hook_content;
-
-            // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
-            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
-
-            } else {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    "git-lfs pre-push \"$@\"";
-            }
-
-            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
-            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
+            PrepareGitLFS ();
 
             var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
             git_push.StartInfo.RedirectStandardError = true;
@@ -908,6 +884,36 @@ namespace Sparkles.Git {
             }
 
             return change;
+        }
+
+
+        // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
+        void PrepareGitLFS ()
+        {
+            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
+            string pre_push_hook_content;
+
+            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
+                pre_push_hook_content =
+                    "#!/bin/sh" + Environment.NewLine +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
+
+            } else {
+                pre_push_hook_content =
+                    "#!/bin/sh" + Environment.NewLine +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    "git-lfs pre-push \"$@\"";
+            }
+
+            if (InstallationInfo.OperatingSystem != OS.Windows) {
+                // TODO: Use proper API
+                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
+                chmod.StartAndWaitForExit ();
+            }
+
+            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
+            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
         }
 
 
