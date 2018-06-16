@@ -93,6 +93,12 @@ namespace Sparkles.Git {
 
             SetEnvironmentVariable ("GIT_SSH_COMMAND", GIT_SSH_COMMAND);
             SetEnvironmentVariable ("GIT_TERMINAL_PROMPT", "0");
+
+            // Don't let Git try to read the config options in PREFIX/etc or ~
+            SetEnvironmentVariable ("GIT_CONFIG_NOSYSTEM", "1");
+            SetEnvironmentVariable ("PREFIX", "");
+            SetEnvironmentVariable ("HOME", "");
+
             SetEnvironmentVariable ("LANG", "en_US");
         }
 
