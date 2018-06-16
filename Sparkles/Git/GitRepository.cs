@@ -410,11 +410,40 @@ namespace Sparkles.Git {
                 user_email = user_email.AESEncrypt (password);
             }
 
+            // Create a temporary file for the commit message.
+            // Borrowed from SO, with the following changes:
+            //  - fileName -> commit_file_path
+            //  - extension bits removed
+            //  - path tweaked: GetTempPath() -> .git/sparkleshare/
+            //  - bump the number of attempts: 10 -> 20
+            //
+            // https://stackoverflow.com/a/10152460
+            string commit_file_path;
+            int attempt = 0;
+            while (true) {
+                commit_file_path = Path.Combine (LocalPath, ".git", "sparkleshare");
+                Directory.CreateDirectory (commit_file_path);
+
+                commit_file_path = Path.Combine (commit_file_path, Path.GetRandomFileName());
+
+                try {
+                    using (new FileStream (commit_file_path, FileMode.CreateNew)) { }
+                    break;
+                } catch (IOException ex) {
+                    if (++attempt == 20)
+                        throw new IOException("Cannot create temporary file for the commit message.", ex);
+                }
+            }
+
+            File.WriteAllText (commit_file_path, text);
+
             git = new GitCommand (LocalPath,
-                string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
-                    message, user_name, user_email));
+                string.Format ("commit --all --file \"{0}\" --author=\"{1} <{2}>\"",
+                    commit_file_path, user_name, user_email));
 
             git.StartAndReadStandardOutput ();
+
+            File.Delete (commit_file_path);
         }
 
 
