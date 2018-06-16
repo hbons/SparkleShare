@@ -440,6 +440,14 @@ namespace Sparkles.Git {
             git_config_required.StartAndWaitForExit ();
             git_config_clean.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
+
+            if (InstallationInfo.OperatingSystem != OS.Windows) {
+                string pre_push_hook_path = Path.Combine (TargetFolder, ".git", "hooks", "pre-push");
+
+                // TODO: Use proper API
+                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
+                chmod.StartAndWaitForExit ();
+            }
         }
     }
 }
