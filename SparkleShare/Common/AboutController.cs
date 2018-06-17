@@ -62,7 +62,7 @@ namespace SparkleShare {
             Thread.Sleep (500);
 
             var web_client = new WebClient ();
-            var uri = new Uri ("http://www.sparkleshare.org/version");
+            var uri = new Uri ("https://www.sparkleshare.org/version");
 
             try {
                 string latest_version = web_client.DownloadString (uri);
