@@ -51,6 +51,9 @@ namespace SparkleShare
             application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
+		foreach (string s in IconTheme.Default.SearchPath)
+            Console.WriteLine(s);
+
             if (IconTheme.Default != null)
                 IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 
