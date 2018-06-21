@@ -417,17 +417,15 @@ namespace Sparkles.Git {
                 File.WriteAllText (message_file_path, message);
 
                 // Commit from message stored in temporary file to avoid special character conflicts on the command line
-                git_commit = new GitCommand (LocalPath,
-                    string.Format ("commit --all --file=\"{0}\" --author=\"{1} <{2}>\"",
-                        message_file_path, user_name, user_email));
+                git_commit = new GitCommand (LocalPath, string.Format ("commit --all --file=\"{0}\" --author=\"{1} <{2}>\"",
+		    message_file_path, user_name, user_email));
 
             } catch (IOException e) {
                 Logger.LogInfo ("Git", Name + " | Could not create commit message file: " + message_file_path, e);
 
                 // If committing with a temporary file fails, use a simple static commit message
-                git_commit = new GitCommand (LocalPath,
-                    string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
-                        "Changes by SparkleShare", user_name, user_email));
+                git_commit = new GitCommand (LocalPath, string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
+	            "Changes by SparkleShare", user_name, user_email));
             }
 
             git_commit.StartAndReadStandardOutput ();
