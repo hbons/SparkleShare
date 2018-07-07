@@ -72,8 +72,9 @@ namespace Sparkles {
 
                     // Parse the version number between the periods (e.g. "10.12.1" -> 12)
                     output = output.Substring (output.IndexOf (".") + 1);
-                    output = output.Substring (0, output.LastIndexOf ("."));
-
+                    if (output.LastIndexOf (".") != -1) {
+                        output = output.Substring (0, output.LastIndexOf ("."));
+                    }
                     string release = "Unreleased Version";
 
                     switch (int.Parse (output)) {
@@ -84,6 +85,7 @@ namespace Sparkles {
                     case 11: release = "El Capitan"; break;
                     case 12: release = "Sierra"; break;
                     case 13: release = "High Sierra"; break;
+                    case 14: release = "Mojave"; break;
                     }
 
                     return string.Format ("{0} ({1})", version, release);
