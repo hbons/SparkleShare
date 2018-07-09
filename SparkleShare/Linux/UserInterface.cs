@@ -35,8 +35,8 @@ namespace SparkleShare
         public About About;
         public Note Note;
 
-        public readonly string SecondaryTextColor;
-        public readonly string SecondaryTextColorSelected;
+        public string SecondaryTextColor;
+        public string SecondaryTextColorSelected;
 
         Application application;
 
@@ -47,25 +47,12 @@ namespace SparkleShare
             Logger.LogInfo ("Environment", "GTK+ " + gtk_version);
 
             application = new Application ("org.sparkleshare.SparkleShare", GLib.ApplicationFlags.None);
-
-            application.Register (null);
             application.Activated += ApplicationActivatedDelegate;
 
-            if (IconTheme.Default != null)
-                IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
+            if (!application.IsRemote)
+                return;
 
-            var label = new Label ();
-            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (label.StyleContext.GetColor (StateFlags.Insensitive));
-            SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
-
-            var tree_view = new TreeView ();
-
-            color = UserInterfaceHelpers.MixColors (
-                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetColor (StateFlags.Selected)),
-                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetBackgroundColor (StateFlags.Selected)),
-                0.39);
-
-            SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (color);
+            application.Register (null);
         }
 
 
@@ -143,6 +130,9 @@ namespace SparkleShare
                 return;
             }
 
+            if (IconTheme.Default != null)
+                IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
+
             Setup      = new Setup ();
             EventLog   = new EventLog ();
             About      = new About ();
@@ -155,7 +145,24 @@ namespace SparkleShare
             About.Application    = application;
             Note.Application     = application;
 
+            DetectTextColors ();
+
             SparkleShare.Controller.UIHasLoaded ();
+        }
+
+
+        void DetectTextColors ()
+        {
+            Gdk.Color text_color = UserInterfaceHelpers.RGBAToColor (new Label ().StyleContext.GetColor (StateFlags.Insensitive));
+            var tree_view_style = new TreeView ().StyleContext;
+
+            Gdk.Color text_color_selected = UserInterfaceHelpers.MixColors (
+                UserInterfaceHelpers.RGBAToColor (tree_view_style.GetColor (StateFlags.Selected)),
+                UserInterfaceHelpers.RGBAToColor (tree_view_style.GetBackgroundColor (StateFlags.Selected)),
+                0.25);
+
+            SecondaryTextColor = UserInterfaceHelpers.ColorToHex (text_color);
+            SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (text_color_selected);
         }
     }
 }

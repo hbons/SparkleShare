@@ -21,7 +21,7 @@ case $1 in
       echo
       echo "Options:"
       echo "  --open sparkleshare://URL         Open invite file at URL"
-      echo "  --status-icon=[appindicator|gtk]  Use a specific status icon implementation."
+      echo "  --status-icon=[appindicator|gtk]  Use a specific status icon implementation"
     ;;
   *)
     mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $@
