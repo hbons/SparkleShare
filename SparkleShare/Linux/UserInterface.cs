@@ -159,7 +159,7 @@ namespace SparkleShare
             Gdk.Color text_color_selected = UserInterfaceHelpers.MixColors (
                 UserInterfaceHelpers.RGBAToColor (tree_view_style.GetColor (StateFlags.Selected)),
                 UserInterfaceHelpers.RGBAToColor (tree_view_style.GetBackgroundColor (StateFlags.Selected)),
-                0.25);
+                0.2);
 
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (text_color);
             SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (text_color_selected);
