@@ -34,17 +34,20 @@ sudo dnf install \
   meson \
   notify-sharp3-devel \
   webkitgtk4-devel \
-  webkit2-sharp
+  webkit2-sharp \
+  xsltproc
 ```
 
 
 ### Additional source build requirements
 
+Install mono-complete, [see instructions](https://www.mono-project.com/download/stable/#download-lin-ubuntu)
+
 Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:
 https://github.com/hbons/soup-sharp
 https://github.com/hbons/webkit2gtk-sharp
 
-Both with:
+Both with (clone repo and cd into it):
 
 ```bash
 ./autogen.sh
@@ -53,7 +56,7 @@ sudo make install
 ```
 
 Om Ubuntu, also install the `appindicator-sharp` bindings from:
-https://github.com/hbons/appindicator-sharp
+https://github.com/hbons/appindicator-sharp (this will require `libappindicator3-dev` to be installed with `sudo apt install libappindicator3-dev`)
 
 
 ### Start the build
