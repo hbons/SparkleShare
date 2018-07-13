@@ -21,7 +21,8 @@ sudo apt-get install \
   libnotify3.0-cil-dev \
   libsoup2.4-dev \
   libwebkit2gtk-4.0 \
-  meson
+  meson \
+  xsltproc
 
 # On Fedora 27:
 sudo dnf install \
@@ -34,8 +35,7 @@ sudo dnf install \
   meson \
   notify-sharp3-devel \
   webkitgtk4-devel \
-  webkit2-sharp \
-  xsltproc
+  webkit2-sharp
 ```
 
 
