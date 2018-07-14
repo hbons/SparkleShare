@@ -21,7 +21,8 @@ sudo apt-get install \
   libnotify3.0-cil-dev \
   libsoup2.4-dev \
   libwebkit2gtk-4.0 \
-  meson
+  meson \
+  xsltproc
 
 # On Fedora 27:
 sudo dnf install \
@@ -40,11 +41,13 @@ sudo dnf install \
 
 ### Additional source build requirements
 
+Install mono-complete, [see instructions](https://www.mono-project.com/download/stable/#download-lin-ubuntu)
+
 Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:
 https://github.com/hbons/soup-sharp
 https://github.com/hbons/webkit2gtk-sharp
 
-Both with:
+Both with (clone repo and cd into it):
 
 ```bash
 ./autogen.sh
@@ -53,7 +56,7 @@ sudo make install
 ```
 
 Om Ubuntu, also install the `appindicator-sharp` bindings from:
-https://github.com/hbons/appindicator-sharp
+https://github.com/hbons/appindicator-sharp (this will require `libappindicator3-dev` to be installed with `sudo apt install libappindicator3-dev`)
 
 
 ### Start the build
