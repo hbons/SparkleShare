@@ -4,34 +4,49 @@
 
 ### Common build requirements
 
-You will need the packages listed below for the most used Linux distributions (some are run requirements):
+You will need the packages listed below for the most used Linux distributions:
 
 ```shell
 # On Ubuntu 16.04:
+
+# Run requirements
 sudo apt-get install \
-  curl \ # Run requirement
+  curl \
+  git \
+  git-lfs \
+  gvfs  
+
+# Build requirements
+sudo apt-get install \
   desktop-file-utils \
-  git \ # Run requirement
-  git-lfs \ # Run requirement
-  gtk-sharp3-gapi \ # To build webkit2-sharp
-  gvfs \ # Run requirement
+  gtk-sharp3-gapi \
   libappindicator3-0.1-cil-dev \
   libdbus-glib2.0-cil-dev \
   libgtk3.0-cil-dev \
   libnotify3.0-cil-dev \
   libsoup2.4-dev \
+  libtool-bin \
   libwebkit2gtk-4.0 \
   meson \
+  mono-devel \
+  mono-mcs \
   xsltproc
 
+
 # On Fedora 27:
+
+# Run requirements
 sudo dnf install \
-  curl \ # Run requirement
-  git \ # Run requirement
-  git-lfs \ # Run requirement
+  curl \
+  git \
+  git-lfs \
+  gvfs
+
+# Build requirements
+sudo dnf install \
   gtk-sharp3-devel \
-  gtk-sharp3-gapi \ # To build webkit2-sharp
-  gvfs \ # Run requirement
+  gtk-sharp3-gapi \
+  libtool \
   meson \
   notify-sharp3-devel \
   webkitgtk4-devel \
@@ -43,20 +58,34 @@ sudo dnf install \
 
 Install mono-complete, [see instructions](https://www.mono-project.com/download/stable/#download-lin-ubuntu)
 
-Install the `soup-sharp` and `webkit2gtk-sharp` bindings from:
-https://github.com/hbons/soup-sharp
-https://github.com/hbons/webkit2gtk-sharp
-
-Both with (clone repo and cd into it):
+Install these `soup-sharp` and `webkit2gtk-sharp` bindings:
 
 ```bash
+git clone https://github.com/hbons/soup-sharp
+cd soup-sharp/
 ./autogen.sh
 make
 sudo make install
 ```
 
-Om Ubuntu, also install the `appindicator-sharp` bindings from:
-https://github.com/hbons/appindicator-sharp (this will require `libappindicator3-dev` to be installed with `sudo apt install libappindicator3-dev`)
+```bash
+git clone https://github.com/hbons/webkit2-sharp
+cd webkit2-sharp/
+./autogen.sh
+make
+sudo make install
+```
+
+On Ubuntu, also install these `appindicator-sharp` bindings:
+
+```bash
+sudo apt-get install libappindicator3-dev
+git clone https://github.com/hbons/appindicator-sharp
+cd appindicator-sharp/
+./autogen.sh
+make
+sudo make install
+```
 
 
 ### Start the build
