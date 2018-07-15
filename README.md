@@ -9,6 +9,23 @@
 
 SparkleShare creates a special folder on your computer. You can add remotely hosted folders (or "projects") to this folder. These projects will be automatically kept in sync with both the host and all of your peers when someone adds, removes or edits a file.
 
+## Install on Ubuntu or Fedora
+
+You can install the package from your distribution (likely old and not updated often), but we recommend to get our Flatpak with automatic updates to always enjoy the latest and greatest:
+
+```bash
+flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub org.sparkleshare.SparkleShare
+```
+
+Now you can run SparkleShare from the apps menu.
+
+
+
+## Install on macOS
+
+Download the app from the [releases page](https://github.com/hbons/SparkleShare/releases).
+
 
 ## Set up a host
 
