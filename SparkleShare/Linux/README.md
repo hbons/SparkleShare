@@ -1,5 +1,11 @@
 # SparkleShare for Linux
 
+## Building with Flatpak
+
+If you want to test SparkleShare from Git, it's easiest to build a flatpak locally using [this spec](
+https://github.com/hbons/org.sparkleshare.SparkleShare/) and run it.
+
+
 ## Building on Linux
 
 ### Common build requirements
@@ -56,8 +62,6 @@ sudo dnf install \
 
 ### Additional source build requirements
 
-Install mono-complete, [see instructions](https://www.mono-project.com/download/stable/#download-lin-ubuntu)
-
 Install these `soup-sharp` and `webkit2gtk-sharp` bindings:
 
 ```bash
@@ -99,7 +103,7 @@ sudo ninja install -C build/
 ```
 
 
-If your distribution has an out of date meson package, you can install the latest version using the Python package manager:
+If your distribution has an out of date `meson` package, you can install the latest version using the Python package manager:
 
 ```bash
 # Install pip using your system's package manager
