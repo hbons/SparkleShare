@@ -70,4 +70,10 @@
     
     <metadata_licence>CC0-1.0</metadata_licence>
     <update_contact>hi_AT_planetpeanut.uk</update_contact>
+
+    <content_rating type="oars-1.0">
+      <content_attribute id="social-chat">moderate</content_attribute>
+      <content_attribute id="social-info">mild</content_attribute>
+      <content_attribute id="social-contacts">intense</content_attribute>
+  </content_rating>
 </component>
