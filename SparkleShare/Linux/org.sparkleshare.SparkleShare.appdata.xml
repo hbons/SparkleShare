@@ -4,7 +4,8 @@
     <summary>Magic self hosted Git file sync</summary>
     <developer_name>Hylke Bons</developer_name>
     <project_license>GPL-3.0+</project_license>
-    <url type="homepage">http://www.sparkleshare.org/</url>
+    
+    <url type="homepage">https://www.sparkleshare.org/</url>
     <url type="bugtracker">https://www.github.com/hbons/SparkleShare/issues</url>
     <url type="donation">https://www.patreon.com/SparkleShare</url>
     
