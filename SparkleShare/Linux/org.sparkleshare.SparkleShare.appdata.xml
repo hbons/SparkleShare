@@ -6,6 +6,7 @@
     <project_license>GPL-3.0+</project_license>
     <url type="homepage">http://www.sparkleshare.org/</url>
     <url type="bugtracker">https://www.github.com/hbons/SparkleShare/issues</url>
+    <url type="donation">https://www.patreon.com/SparkleShare</url>
     
     <description>
         <p>SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server.</p>
