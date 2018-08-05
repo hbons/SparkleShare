@@ -51,13 +51,13 @@ namespace SparkleShare {
             if (use_appindicator) {
                 #if HAVE_APP_INDICATOR
                 indicator = new Indicator ("sparkleshare", "sparkleshare", (int) IndicatorCategory.ApplicationStatus) {
-                    IconName = "org.sparkleshare.SparkleShare-symbolic",
+                    IconName = UserInterface.APP_ID + "-symbolic",
                     Status   = (int) IndicatorStatus.Active
                 };
                 #endif
 
             } else {
-                this.status_icon = new Gtk.StatusIcon { IconName = "org.sparkleshare.SparkleShare" };
+                this.status_icon = new Gtk.StatusIcon { IconName = UserInterface.APP_ID };
                 this.status_icon.Activate  += ShowMenu; // Primary mouse button click
                 this.status_icon.PopupMenu += ShowMenu; // Secondary mouse button click
             }
@@ -127,7 +127,7 @@ namespace SparkleShare {
             this.state_item = new MenuItem (Controller.StateText) { Sensitive = false };
 
             ImageMenuItem folder_item = new SparkleMenuItem ("SparkleShare");
-            folder_item.Image = new Image (UserInterfaceHelpers.GetIcon ("org.sparkleshare.SparkleShare", 16));
+            folder_item.Image = new Image (UserInterfaceHelpers.GetIcon (UserInterface.APP_ID, 16));
             folder_item.Submenu = new Menu ();
 
             this.menu.Add (this.state_item);

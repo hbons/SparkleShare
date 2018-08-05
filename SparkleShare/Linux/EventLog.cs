@@ -40,8 +40,6 @@ namespace SparkleShare {
 
         public EventLog () : base ("Recent Changes")
         {
-            SetWmclass ("SparkleShare", "SparkleShare");
-
             TypeHint = Gdk.WindowTypeHint.Dialog;
             IconName = "org.sparkleshare.SparkleShare";
 
