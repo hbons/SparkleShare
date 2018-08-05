@@ -3,25 +3,24 @@ theme_dir = join_paths(get_option('prefix'), 'share', 'icons', 'hicolor')
 icon_sizes = ['16', '24', '48', '256', '512']
 
 app_icon_name = 'org.sparkleshare.SparkleShare'
-target_icon_name = app_icon_name
+source_icon_name = app_icon_name
 
 if get_option('nightly')
-    target_icon_name = app_icon_name + '.Nightly'
+    source_icon_name = app_icon_name + '.Nightly'
 endif
 
 foreach size : icon_sizes
     icon_dir = join_paths(size + 'x' + size, 'apps')
 
     install_data(
-        sources: join_paths('hicolor', icon_dir, app_icon_name + '.png'),
+        sources: join_paths('hicolor', icon_dir, source_icon_name + '.png'),
         install_dir: join_paths(theme_dir, icon_dir),
-        rename: target_icon_name + '.png')
+        rename: app_icon_name + '.png')
 endforeach
 
 install_data(
     sources: join_paths('hicolor', 'symbolic', 'apps', app_icon_name + '-symbolic.svg'),
-    install_dir: join_paths(theme_dir, 'symbolic', 'apps'),
-    rename: target_icon_name + '-symbolic.svg')
+    install_dir: join_paths(theme_dir, 'symbolic', 'apps'))
 
 
 # Install the status icons
@@ -33,18 +32,15 @@ status_icons = ['syncing',
 foreach icon : status_icons
     install_data(
         sources: join_paths('hicolor', '24x24', 'status', app_icon_name + '-' + icon + '.png'),
-        install_dir: join_paths(theme_dir, '24x24', 'apps'),
-        rename: target_icon_name + '-' + icon + '.png')
+        install_dir: join_paths(theme_dir, '24x24', 'apps'))
 
     install_data(
         sources: join_paths('hicolor', '48x48', 'status', app_icon_name + '-' + icon + '.png'),
-        install_dir: join_paths(theme_dir, '48x48', 'apps'),
-        rename: target_icon_name + '-' + icon + '.png')
+        install_dir: join_paths(theme_dir, '48x48', 'apps'))
 
     install_data(
         sources: join_paths('hicolor', 'symbolic', 'status', app_icon_name + '-' + icon + '-symbolic.svg'),
-        install_dir: join_paths(theme_dir, 'symbolic', 'apps'),
-        rename: target_icon_name + '-' + icon + '-symbolic.svg')
+        install_dir: join_paths(theme_dir, 'symbolic', 'apps'))
 endforeach
 
 
