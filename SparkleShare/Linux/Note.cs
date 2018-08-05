@@ -27,8 +27,6 @@ namespace SparkleShare {
 
         public Note () : base ("Add Note")
         {
-            SetWmclass ("SparkleShare", "SparkleShare");
-
             IconName       = "org.sparkleshare.SparkleShare";
             Resizable      = false;
             WindowPosition = WindowPosition.CenterAlways;
