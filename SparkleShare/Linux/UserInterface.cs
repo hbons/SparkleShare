@@ -38,7 +38,7 @@ namespace SparkleShare
         public string SecondaryTextColor;
         public string SecondaryTextColorSelected;
 
-        public readonly string APP_ID = "org.sparkleshare.SparkleShare";
+        public readonly string APP_ID = "org.sparkleshare.SparkleShare.Nightly";
         Application application;
 
 
