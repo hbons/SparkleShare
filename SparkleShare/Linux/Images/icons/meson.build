@@ -9,6 +9,10 @@ foreach size : icon_sizes
     install_data(
         sources: join_paths('hicolor', icon_dir, app_icon_name + '.png'),
         install_dir: join_paths(theme_dir, icon_dir))
+
+    install_data(
+        sources: join_paths('hicolor', icon_dir, app_icon_name + '.Nightly.png'),
+        install_dir: join_paths(theme_dir, icon_dir))
 endforeach
 
 install_data(
