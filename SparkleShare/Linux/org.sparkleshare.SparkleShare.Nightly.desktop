@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=SparkleShare
+Name=SparkleShare – Nightly
 Exec=sparkleshare
-Icon=org.sparkleshare.SparkleShare
+Icon=org.sparkleshare.SparkleShare.Nightly
 Terminal=false
 Categories=Network;FileTransfer;GNOME;GTK;
 X-GNOME-UsesNotifications=true

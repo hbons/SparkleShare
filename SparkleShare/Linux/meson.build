@@ -29,6 +29,7 @@ configure_file(
 # .desktop and .appdata files
 apps_dir = join_paths(get_option('prefix'), 'share', 'applications')
 install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: apps_dir)
+install_data(sources: 'org.sparkleshare.SparkleShare.Nightly.desktop', install_dir: apps_dir)
 install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: apps_dir)
 install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: apps_dir)
 install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths(get_option('prefix'), 'share', 'appdata'))
