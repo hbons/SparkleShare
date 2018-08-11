@@ -19,21 +19,26 @@ using System;
 
 namespace SparkleShare {
 
-    public abstract class Page {
+    public abstract class Page : IDisposable {
 
-        public SetupController Controller;
+        protected SetupController Controller;
+        protected PageType? RequestedType;
 
         public string Header;
         public string Description;
 
+        public object OptionArea;
+        public object [] Buttons;
 
-        public Page (SetupController controller)
+
+        public Page (PageType? page_type, SetupController controller)
         {
+            RequestedType = page_type;
             Controller = controller;
         }
 
 
         public abstract object Render ();
+        public virtual void Dispose () {}
     }
 }
-

@@ -16,15 +16,15 @@
 
 
 using System;
-using Gtk;
 
 using Sparkles;
+using Gtk;
 
 namespace SparkleShare {
 
     public class AddPage : Page {
 
-        TreeView tree_view;
+        SparkleTreeView tree_view;
         TreeViewColumn service_column;
 
         Entry address_entry;
@@ -33,8 +33,10 @@ namespace SparkleShare {
         Entry path_entry;
         Label path_example;
 
+        Button add_button;
 
-        public Add (SetupController controller) : base (controller)
+
+        public AddPage (PageType page_type, SetupController controller) : base (page_type, controller)
         {
             Header = "Where’s your project hosted?";
             Description = "";
@@ -45,7 +47,7 @@ namespace SparkleShare {
         }
 
 
-        public void Dispose ()
+        public override void Dispose ()
         {
             Controller.ChangeAddressFieldEvent -= ChangeAddressFieldEventHandler;
             Controller.ChangePathFieldEvent -= ChangePathFieldEventHandler;
@@ -55,11 +57,6 @@ namespace SparkleShare {
 
         public override object Render ()
         {
-            HBox layout_fields  = new HBox (true, 32);
-            VBox layout_address = new VBox (true, 0);
-            VBox layout_path    = new VBox (true, 0);
-
-
             // Host selection
             ListStore store = new ListStore (typeof (string), typeof (Gdk.Pixbuf), typeof (string), typeof (Preset));
 
@@ -86,19 +83,17 @@ namespace SparkleShare {
             CellRendererText service_cell = new CellRendererText () { Ypad = 12 };
             service_column.PackStart (service_cell, true);
             service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
-
-            foreach (Preset preset in Controller.Presets) {
-                store.AppendValues ("", new Gdk.Pixbuf (preset.ImagePath),
-                    "<span><b>" + preset.Name + "</b>\n" +
-                    "<span size=\"small\" fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + preset.Description + "</span>" +
-                    "</span>", preset);
-            }
-
             tree_view.AppendColumn (service_column);
 
-            ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
-            scrolled_window.SetPolicy (PolicyType.Never, PolicyType.Automatic);
-            scrolled_window.Add (tree_view);
+
+            // Fill the list
+            foreach (Preset preset in Controller.Presets) {
+                store.AppendValues ("", new Gdk.Pixbuf (preset.ImagePath),
+                    string.Format ("<span><b>{0}</b>\n<span size='small' fgcolor='{1}'>{2}</span></span>",
+                        preset.Name, SparkleShare.UI.SecondaryTextColor, preset.Description),
+                    preset);
+            }
+
 
             tree_view.Model.Foreach (new TreeModelForeachFunc (TreeModelForeachFuncHandler));
 
@@ -108,17 +103,15 @@ namespace SparkleShare {
 
             tree_view.ScrollToCell (new TreePath ("" + Controller.SelectedPresetIndex), null, true, 0, 0);
 
+            ScrolledWindow scrolled_window = new ScrolledWindow () { ShadowType = ShadowType.In };
+            scrolled_window.SetPolicy (PolicyType.Never, PolicyType.Automatic);
+            scrolled_window.Add (tree_view);
 
-            // Entries
+
+            // Address entry
             address_entry = new Entry () {
                 Text = Controller.PreviousAddress,
                 Sensitive = (Controller.SelectedPreset.Address == null),
-                ActivatesDefault = true
-            };
-
-            path_entry = new Entry () {
-                Text = Controller.PreviousPath,
-                Sensitive = (Controller.SelectedPreset.Path == null),
                 ActivatesDefault = true
             };
 
@@ -129,12 +122,11 @@ namespace SparkleShare {
                     SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.AddressExample + "</span>"
             };
 
-            path_example = new Label () {
-                Xalign = 0,
-                UseMarkup = true,
-                Markup = "<span size=\"small\" fgcolor=\"" +
-                    SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
+            address_entry.Changed += delegate {
+                Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
             };
+
+            VBox layout_address = new VBox (true, 0);
 
             layout_address.PackStart (new Label () {
                     Markup = "<b>" + "Address" + "</b>",
@@ -144,13 +136,26 @@ namespace SparkleShare {
             layout_address.PackStart (address_entry, false, false, 0);
             layout_address.PackStart (address_example, false, false, 0);
 
-            address_entry.Changed += delegate {
-                Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
+
+
+            path_entry = new Entry () {
+                Text = Controller.PreviousPath,
+                Sensitive = (Controller.SelectedPreset.Path == null),
+                ActivatesDefault = true
+            };
+
+            path_example = new Label () {
+                Xalign = 0,
+                UseMarkup = true,
+                Markup = "<span size=\"small\" fgcolor=\"" +
+                    SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
             };
 
             path_entry.Changed += delegate {
                 Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
             };
+
+            VBox layout_path = new VBox (true, 0);
 
             layout_path.PackStart (new Label () {
                 Markup = "<b>" + "Remote Path" + "</b>",
@@ -159,9 +164,6 @@ namespace SparkleShare {
 
             layout_path.PackStart (path_entry, false, false, 0);
             layout_path.PackStart (path_example, false, false, 0);
-
-            layout_fields.PackStart (layout_address, true, true, 0);
-            layout_fields.PackStart (layout_path, true, true, 0);
 
 
             if (string.IsNullOrEmpty (path_entry.Text)) {
@@ -173,30 +175,29 @@ namespace SparkleShare {
                 path_entry.Position = -1;
             }
 
+            HBox layout_fields  = new HBox (true, 32);
+            layout_fields.PackStart (layout_address, true, true, 0);
+            layout_fields.PackStart (layout_path, true, true, 0);
 
-            // Extra option area
-            CheckButton check_button = new CheckButton ("Fetch prior revisions") { Active = false };
-            check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
 
-            AddOption (check_button);
+             // Extra option area
+             CheckButton check_button = new CheckButton ("Fetch prior revisions") { Active = false };
+             check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
+
+             OptionArea = (Widget) check_button;
 
 
             // Buttons
             Button cancel_button = new Button ("Cancel");
-            Button add_button = new Button ("Add") { Sensitive = false };
+            add_button = new Button ("Add") { Sensitive = false };
 
             cancel_button.Clicked += delegate { Controller.PageCancelled (); };
             add_button.Clicked += delegate { Controller.AddPageCompleted (address_entry.Text, path_entry.Text); };
 
-            AddButton (cancel_button);
-            AddButton (add_button);
+            Buttons = new Button [] { cancel_button, add_button };
 
 
-            Controller.HistoryItemChanged (check_button.Active);
-            Controller.CheckAddPage (address_entry.Text, path_entry.Text, 1);
-
-
-            // Finish layout
+            // Layout
             VBox layout_vertical = new VBox (false, 16);
             layout_vertical.PackStart (scrolled_window, true, true, 0);
             layout_vertical.PackStart (layout_fields, false, false, 0);

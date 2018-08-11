@@ -33,7 +33,7 @@ namespace SparkleShare {
         Syncing,
         Error,
         Finished,
-        StorageSetup,
+        Storage,
         CryptoSetup,
         CryptoPassword
     }
@@ -146,7 +146,7 @@ namespace SparkleShare {
             };
 
             SparkleShare.Controller.ShowSetupWindowEvent += delegate (PageType page_type) {
-                if (page_type == PageType.StorageSetup ||
+                if (page_type == PageType.Storage ||
                     page_type == PageType.CryptoSetup ||
                     page_type == PageType.CryptoPassword) {
 

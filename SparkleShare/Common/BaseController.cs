@@ -593,7 +593,7 @@ namespace SparkleShare {
         void FetcherFinishedDelegate (StorageType storage_type, string [] warnings)
         {
             if (storage_type == StorageType.Unknown) {
-                ShowSetupWindow (PageType.StorageSetup);
+                ShowSetupWindow (PageType.Storage);
                 return;
             }
 
