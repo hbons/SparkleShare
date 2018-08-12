@@ -27,31 +27,11 @@ namespace SparkleShare {
         SparkleTreeView tree_view;
         TreeViewColumn service_column;
 
-        Entry address_entry;
-        Label address_example;
-
-        Entry path_entry;
-        Label path_example;
-
-        Button add_button;
-
 
         public AddPage (PageType page_type, SetupController controller) : base (page_type, controller)
         {
             Header = "Where’s your project hosted?";
             Description = "";
-
-            Controller.ChangeAddressFieldEvent += ChangeAddressFieldEventHandler;
-            Controller.ChangePathFieldEvent += ChangePathFieldEventHandler;
-            Controller.UpdateAddProjectButtonEvent += UpdateAddProjectButtonEventHandler;
-        }
-
-
-        public override void Dispose ()
-        {
-            Controller.ChangeAddressFieldEvent -= ChangeAddressFieldEventHandler;
-            Controller.ChangePathFieldEvent -= ChangePathFieldEventHandler;
-            Controller.UpdateAddProjectButtonEvent -= UpdateAddProjectButtonEventHandler;
         }
 
 
@@ -66,7 +46,6 @@ namespace SparkleShare {
                 EnableSearch = false
             };
 
-            tree_view.ButtonReleaseEvent += delegate { path_entry.GrabFocus (); };
             tree_view.CursorChanged += delegate { Controller.SelectedPresetChanged (tree_view.SelectedRow); };
 
 
@@ -108,131 +87,21 @@ namespace SparkleShare {
             scrolled_window.Add (tree_view);
 
 
-            // Address entry
-            address_entry = new Entry () {
-                Text = Controller.PreviousAddress,
-                Sensitive = (Controller.SelectedPreset.Address == null),
-                ActivatesDefault = true
-            };
-
-            address_example = new Label () {
-                Xalign = 0,
-                UseMarkup = true,
-                Markup = "<span size=\"small\" fgcolor=\"" +
-                    SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.AddressExample + "</span>"
-            };
-
-            address_entry.Changed += delegate {
-                Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
-            };
-
-            VBox layout_address = new VBox (true, 0);
-
-            layout_address.PackStart (new Label () {
-                    Markup = "<b>" + "Address" + "</b>",
-                    Xalign = 0
-                }, true, true, 0);
-
-            layout_address.PackStart (address_entry, false, false, 0);
-            layout_address.PackStart (address_example, false, false, 0);
-
-
-
-            path_entry = new Entry () {
-                Text = Controller.PreviousPath,
-                Sensitive = (Controller.SelectedPreset.Path == null),
-                ActivatesDefault = true
-            };
-
-            path_example = new Label () {
-                Xalign = 0,
-                UseMarkup = true,
-                Markup = "<span size=\"small\" fgcolor=\"" +
-                    SparkleShare.UI.SecondaryTextColor + "\">" + Controller.SelectedPreset.PathExample + "</span>"
-            };
-
-            path_entry.Changed += delegate {
-                Controller.CheckAddPage (address_entry.Text, path_entry.Text, tree_view.SelectedRow);
-            };
-
-            VBox layout_path = new VBox (true, 0);
-
-            layout_path.PackStart (new Label () {
-                Markup = "<b>" + "Remote Path" + "</b>",
-                Xalign = 0
-            }, true, true, 0);
-
-            layout_path.PackStart (path_entry, false, false, 0);
-            layout_path.PackStart (path_example, false, false, 0);
-
-
-            if (string.IsNullOrEmpty (path_entry.Text)) {
-                address_entry.GrabFocus ();
-                address_entry.Position = -1;
-
-            } else {
-                path_entry.GrabFocus ();
-                path_entry.Position = -1;
-            }
-
-            HBox layout_fields  = new HBox (true, 32);
-            layout_fields.PackStart (layout_address, true, true, 0);
-            layout_fields.PackStart (layout_path, true, true, 0);
-
-
-             // Extra option area
-             CheckButton check_button = new CheckButton ("Fetch prior revisions") { Active = false };
-             check_button.Toggled += delegate { Controller.HistoryItemChanged (check_button.Active); };
-
-             OptionArea = (Widget) check_button;
-
-
             // Buttons
             Button cancel_button = new Button ("Cancel");
-            add_button = new Button ("Add") { Sensitive = false };
+            Button continue_button = new Button ("Continue");
 
             cancel_button.Clicked += delegate { Controller.PageCancelled (); };
-            add_button.Clicked += delegate { Controller.AddPageCompleted (address_entry.Text, path_entry.Text); };
+            continue_button.Clicked += delegate { Controller.AddPageCompleted (); };
 
-            Buttons = new Button [] { cancel_button, add_button };
+            Buttons = new Button [] { cancel_button, continue_button };
 
 
             // Layout
             VBox layout_vertical = new VBox (false, 16);
             layout_vertical.PackStart (scrolled_window, true, true, 0);
-            layout_vertical.PackStart (layout_fields, false, false, 0);
 
             return layout_vertical;
-        }
-
-
-        void ChangeAddressFieldEventHandler (string text, string example_text, FieldState state)
-        {
-            Application.Invoke (delegate {
-                address_entry.Text = text;
-                address_entry.Sensitive = (state == FieldState.Enabled);
-
-                address_example.Markup =  "<span size=\"small\" fgcolor=\"" +
-                    SparkleShare.UI.SecondaryTextColor + "\">" + example_text + "</span>";
-            });
-        }
-
-
-        void ChangePathFieldEventHandler (string text, string example_text, FieldState state)
-        {
-            Application.Invoke (delegate {
-                path_entry.Text = text;
-                path_entry.Sensitive = (state == FieldState.Enabled);
-
-                path_example.Markup = "<span size=\"small\" fgcolor=\""
-                    + SparkleShare.UI.SecondaryTextColor + "\">" + example_text + "</span>";
-            });
-        }
-
-
-        void UpdateAddProjectButtonEventHandler (bool button_enabled)
-        {
-            Application.Invoke (delegate { add_button.Sensitive = button_enabled; });
         }
 
 
@@ -267,12 +136,6 @@ namespace SparkleShare {
 
                 tree_view.SetCursor (path, service_column, false);
                 Preset preset = (Preset) model.GetValue (iter, 2);
-
-                if (preset.Address != null)
-                    address_entry.Sensitive = false;
-
-                if (preset.Path != null)
-                    path_entry.Sensitive = false;
 
                 return true;
 

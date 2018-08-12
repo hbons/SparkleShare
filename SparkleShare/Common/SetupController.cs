@@ -29,6 +29,7 @@ namespace SparkleShare {
         None,
         Setup,
         Add,
+        Address,
         Invite,
         Syncing,
         Error,
@@ -269,7 +270,13 @@ namespace SparkleShare {
         }
 
 
-        public void CheckAddPage (string address, string remote_path, int selected_preset)
+        public void AddPageCompleted ()
+        {
+            ChangePageEvent (PageType.Address, null);
+        }
+
+
+        public void CheckAddressPage (string address, string remote_path, int selected_preset)
         {
             address     = address.Trim ();
             remote_path = remote_path.Trim ();
@@ -286,7 +293,7 @@ namespace SparkleShare {
         }
 
 
-        public void AddPageCompleted (string address, string remote_path)
+        public void AddressPageCompleted (string address, string remote_path)
         {
             SyncingFolder = Path.GetFileName (remote_path);
 
@@ -308,8 +315,8 @@ namespace SparkleShare {
             PreviousAddress = address;
             PreviousPath    = remote_path;
 
-            SparkleShare.Controller.FolderFetched    += AddPageFetchedDelegate;
-            SparkleShare.Controller.FolderFetchError += AddPageFetchErrorDelegate;
+            SparkleShare.Controller.FolderFetched    += AddressPageFetchedDelegate;
+            SparkleShare.Controller.FolderFetchError += AddressPageFetchErrorDelegate;
             SparkleShare.Controller.FolderFetching   += SyncingPageFetchingDelegate;
 
             SparkleFetcherInfo info = new SparkleFetcherInfo {
@@ -327,7 +334,7 @@ namespace SparkleShare {
         // The following private methods are
         // delegates used by the previous method
 
-        private void AddPageFetchedDelegate (string remote_url, string [] warnings)
+        private void AddressPageFetchedDelegate (string remote_url, string [] warnings)
         {
             SyncingFolder = "";
 
@@ -353,20 +360,20 @@ namespace SparkleShare {
 
             ChangePageEvent (PageType.Finished, warnings);
 
-            SparkleShare.Controller.FolderFetched    -= AddPageFetchedDelegate;
-            SparkleShare.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            SparkleShare.Controller.FolderFetched    -= AddressPageFetchedDelegate;
+            SparkleShare.Controller.FolderFetchError -= AddressPageFetchErrorDelegate;
             SparkleShare.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
-        private void AddPageFetchErrorDelegate (string remote_url, string [] errors)
+        private void AddressPageFetchErrorDelegate (string remote_url, string [] errors)
         {
             SyncingFolder = "";
             PreviousUrl   = remote_url;
 
             ChangePageEvent (PageType.Error, errors);
 
-            SparkleShare.Controller.FolderFetched    -= AddPageFetchedDelegate;
-            SparkleShare.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            SparkleShare.Controller.FolderFetched    -= AddressPageFetchedDelegate;
+            SparkleShare.Controller.FolderFetchError -= AddressPageFetchErrorDelegate;
             SparkleShare.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
@@ -428,8 +435,8 @@ namespace SparkleShare {
 
             ChangePageEvent (PageType.Finished, warnings);
 
-            SparkleShare.Controller.FolderFetched    -= AddPageFetchedDelegate;
-            SparkleShare.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            SparkleShare.Controller.FolderFetched    -= AddressPageFetchedDelegate;
+            SparkleShare.Controller.FolderFetchError -= AddressPageFetchErrorDelegate;
             SparkleShare.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
@@ -440,8 +447,8 @@ namespace SparkleShare {
 
             ChangePageEvent (PageType.Error, errors);
 
-            SparkleShare.Controller.FolderFetched    -= AddPageFetchedDelegate;
-            SparkleShare.Controller.FolderFetchError -= AddPageFetchErrorDelegate;
+            SparkleShare.Controller.FolderFetched    -= AddressPageFetchedDelegate;
+            SparkleShare.Controller.FolderFetchError -= AddressPageFetchErrorDelegate;
             SparkleShare.Controller.FolderFetching   -= SyncingPageFetchingDelegate;
         }
 
