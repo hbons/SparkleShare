@@ -3,8 +3,7 @@ directory_info_file = configure_file(
     output: 'InstallationInfo.Directory.cs',
     configuration: configuration)
 
-sparkles_src = ['AuthenticationInfo.cs',
-    'BaseFetcher.cs',
+sparkles_src = ['BaseFetcher.cs',
     'BaseListener.cs',
     'BaseRepository.cs',
     'ChangeSet.cs',
@@ -17,9 +16,9 @@ sparkles_src = ['AuthenticationInfo.cs',
     'ListenerFactory.cs',
     'Logger.cs',
     'Preset.cs',
-    'SSHAuthenticationInfo.cs',
-    'SSHCommand.cs',
-    'SSHFetcher.cs',
+    'SSH/SSH.AuthenticationInfo.cs',
+    'SSH/SSH.Command.cs',
+    'SSH/SSH.Fetcher.cs',
     'TcpListener.cs',
     'User.cs',
     'Watcher.cs']
@@ -30,4 +29,3 @@ sparkles = library('Sparkles',
     cs_args: '-r:System.Xml.Linq',
     install: true,
     install_dir: install_dir)
-

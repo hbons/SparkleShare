@@ -25,7 +25,7 @@ namespace Sparkles {
 
     public class SparkleInvite : XmlDocument {
 
-        public string Address { get; private set; }
+        public string Address { get; private set; } // TODO: uri
         public string RemotePath { get; private set; }
         public string Fingerprint { get; private set; }
         public string AcceptUrl { get; private set; }

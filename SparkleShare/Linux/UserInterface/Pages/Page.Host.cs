@@ -22,13 +22,13 @@ using Gtk;
 
 namespace SparkleShare {
 
-    public class AddPage : Page {
+    public class HostPage : Page {
 
         SparkleTreeView tree_view;
         TreeViewColumn service_column;
 
 
-        public AddPage (PageType page_type, SetupController controller) : base (page_type, controller)
+        public HostPage (PageType page_type, PageController controller) : base (page_type, controller)
         {
             Header = "Where’s your project hosted?";
             Description = "";
@@ -67,7 +67,7 @@ namespace SparkleShare {
 
             // Fill the list
             foreach (Preset preset in Controller.Presets) {
-                store.AppendValues ("", new Gdk.Pixbuf (preset.ImagePath),
+                store.AppendValues ("", new Gdk.Pixbuf (preset.IconPath),
                     string.Format ("<span><b>{0}</b>\n<span size='small' fgcolor='{1}'>{2}</span></span>",
                         preset.Name, SparkleShare.UI.SecondaryTextColor, preset.Description),
                     preset);
@@ -91,10 +91,13 @@ namespace SparkleShare {
             Button cancel_button = new Button ("Cancel");
             Button continue_button = new Button ("Continue");
 
-            cancel_button.Clicked += delegate { Controller.PageCancelled (); };
-            continue_button.Clicked += delegate { Controller.AddPageCompleted (); };
+            cancel_button.Clicked += delegate { Controller.CancelClicked (RequestedType); };
+            continue_button.Clicked += delegate { Controller.HostPageCompleted (); };
 
-            Buttons = new Button [] { cancel_button, continue_button };
+            Button back_button = new Button ("Back");
+            back_button.Clicked += delegate { Controller.BackClicked (RequestedType); };
+
+            Buttons = new Button [] { cancel_button, null, back_button, continue_button };
 
 
             // Layout
@@ -105,8 +108,7 @@ namespace SparkleShare {
         }
 
 
-        void RenderServiceColumn (TreeViewColumn column, CellRenderer cell,
-            ITreeModel model, TreeIter iter)
+        void RenderServiceColumn (TreeViewColumn column, CellRenderer cell, ITreeModel model, TreeIter iter)
         {
             string markup = (string) model.GetValue (iter, 2);
             TreeSelection selection = (column.TreeView as TreeView).Selection;
@@ -132,10 +134,10 @@ namespace SparkleShare {
             }
 
             if (!string.IsNullOrEmpty (address) &&
-                address.Equals (Controller.PreviousAddress)) {
+                address.Equals (Controller.FetchAddress.Host)) { // TODO Check selection
 
                 tree_view.SetCursor (path, service_column, false);
-                Preset preset = (Preset) model.GetValue (iter, 2);
+                //Preset preset = (Preset) model.GetValue (iter, 2);
 
                 return true;
 

@@ -22,9 +22,8 @@ using System.Threading;
 
 namespace Sparkles {
 
-    public class SparkleFetcherInfo {
-        public string Address; // TODO: Uri object
-        public string RemotePath;
+    public class FetcherInfo {
+        public readonly Uri Address;
 
         public string Fingerprint;
 
@@ -33,22 +32,45 @@ namespace Sparkles {
         public bool FetchPriorHistory;
 
         public string AnnouncementsUrl; // TODO: Uri object
+
+
+        public FetcherInfo (Uri address)
+        {
+            Address = address;
+        }
     }
+
+
+    public enum FetchResult {
+        Unknown,
+        BackendMissing,
+        NoNetwork,
+        HostNotSupported,
+        HostChanged,
+        NotAuthenticated,
+        UserInterrupted,
+        Success
+    }
+
+
+    public class NetworkException : Exception { }
 
 
     public abstract class BaseFetcher {
 
         public event Action Started = delegate { };
-        public event Action Failed = delegate { };
+
+        public event FailedEventHandler Failed = delegate { };
+        public delegate void FailedEventHandler (FetchResult result);
 
         public event FinishedEventHandler Finished = delegate { };
-        public delegate void FinishedEventHandler (StorageType storage_type, string [] warnings);
+        public delegate void FinishedEventHandler (StorageType storage_type);
 
         public event ProgressChangedEventHandler ProgressChanged = delegate { };
         public delegate void ProgressChangedEventHandler (double percentage, double speed, string information);
 
 
-        public abstract bool Fetch ();
+        public abstract FetchResult Fetch ();
         public abstract void Stop ();
         public bool IsActive { get; protected set; }
         public double ProgressPercentage { get; private set; }
@@ -67,27 +89,10 @@ namespace Sparkles {
         public string RequiredFingerprint { get; protected set; }
         public readonly bool FetchPriorHistory;
         public string TargetFolder { get; protected set; }
-        public SparkleFetcherInfo OriginalFetcherInfo;
+        public FetcherInfo OriginalFetcherInfo;
 
 
-        protected List<string> warnings = new List<string> ();
-        protected List<string> errors   = new List<string> ();
-
-        public string [] Warnings {
-            get {
-                return warnings.ToArray ();
-            }
-        }
-
-        public string [] Errors {
-            get {
-                return errors.ToArray ();
-            }
-        }
-
-        
-
-        protected BaseFetcher (SparkleFetcherInfo info)
+        protected BaseFetcher (FetcherInfo info)
         {
             FetchedRepoStorageType = StorageType.Unknown;
 
@@ -95,10 +100,12 @@ namespace Sparkles {
                 new StorageTypeInfo (StorageType.Plain, "Plain Storage", "Nothing fancy;\nmaximum compatibility"));
 
             OriginalFetcherInfo = info;
+
             RequiredFingerprint = info.Fingerprint;
             FetchPriorHistory   = info.FetchPriorHistory;
-            string remote_path  = info.RemotePath.Trim ("/".ToCharArray ());
-            string address      = info.Address;
+
+            string remote_path  = info.Address.AbsolutePath.Trim ("/".ToCharArray ());
+            string address      = info.Address.ToString ();
 
             if (address.EndsWith ("/", StringComparison.InvariantCulture))
                 address = address.Substring (0, address.Length - 1);
@@ -130,30 +137,29 @@ namespace Sparkles {
                     Directory.Delete (TargetFolder, recursive: true);
             
             } catch (IOException) {
-                errors.Add ("\"" + TargetFolder + "\" is read-only.");
-                Failed ();
+                Failed (FetchResult.Unknown);
 
                 return;
             }
 
             thread = new Thread (() => {
-                if (Fetch ()) {
+                FetchResult result = Fetch ();
+
+                if (result == FetchResult.Success) {
                     Thread.Sleep (500);
                     Logger.LogInfo ("Fetcher", "Finished");
 
                     IsActive = false;
-                    Finished (FetchedRepoStorageType, Warnings);
+                    Finished (FetchedRepoStorageType);
 
                 } else {
                     Thread.Sleep (500);
 
-                    if (IsActive) {
-                        Logger.LogInfo ("Fetcher", "Failed");
-                        Failed ();
-                    
-                    } else {
-                        Logger.LogInfo ("Fetcher", "Failed: cancelled by user");
-                    }
+                    if (!IsActive)
+                        result = FetchResult.UserInterrupted;
+
+                    Failed (result);
+                    Logger.LogInfo ("Fetcher", string.Format ("Failed ({0})", result));
 
                     IsActive = false;
                 }

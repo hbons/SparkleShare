@@ -22,7 +22,7 @@ namespace SparkleShare {
 
     public class InvitePage : Page {
 
-        public InvitePage (PageType page_type, SetupController controller) : base (page_type, controller)
+        public InvitePage (PageType page_type, PageController controller) : base (page_type, controller)
         {
             Header = "You’ve received an invite!";
             Description = "Do you want to add this project to SparkleShare?";
@@ -32,7 +32,7 @@ namespace SparkleShare {
             Button cancel_button = new Button ("Cancel");
             Button add_button    = new Button ("Add");
 
-            cancel_button.Clicked += delegate { Controller.PageCancelled (); };
+            cancel_button.Clicked += delegate { Controller.CancelClicked (RequestedType); };
             add_button.Clicked += delegate { Controller.InvitePageCompleted (); };
 
             Buttons = new Button [] {cancel_button, add_button };

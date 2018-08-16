@@ -31,7 +31,7 @@ namespace SparkleShare {
             icon_theme.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
 
             foreach (string search_path in IconTheme.Default.SearchPath)
-               icon_theme.AppendSearchPath (search_path);	
+               icon_theme.AppendSearchPath (search_path);
 
             try {
                 return icon_theme.LoadIcon (name, size, IconLookupFlags.GenericFallback);
@@ -51,6 +51,9 @@ namespace SparkleShare {
 
         public static Image GetImage (string name)
         {
+//          if (SparkleShare.UI.ScaleFactor > 1)
+//              name += string.Format ("@{0}x", SparkleShare.UI.ScaleFactor);
+
             string image_path = Path.Combine (UserInterface.AssetsPath, "pixmaps", name);
             return new Image (image_path);
         }

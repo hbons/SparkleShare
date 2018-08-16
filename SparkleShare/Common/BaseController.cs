@@ -83,10 +83,10 @@ namespace SparkleShare {
         public event Action ShowEventLogWindowEvent = delegate { };
 
         public event FolderFetchedEventHandler FolderFetched = delegate { };
-        public delegate void FolderFetchedEventHandler (string remote_url, string [] warnings);
+        public delegate void FolderFetchedEventHandler (string remote_url);
 
         public event FolderFetchErrorHandler FolderFetchError = delegate { };
-        public delegate void FolderFetchErrorHandler (string remote_url, string [] errors);
+        public delegate void FolderFetchErrorHandler (string remote_url, string error, string error_details);
 
         public event FolderFetchingHandler FolderFetching = delegate { };
         public delegate void FolderFetchingHandler (double percentage, double speed, string information);
@@ -270,7 +270,7 @@ namespace SparkleShare {
             }
 
             if (FirstRun) {
-                ShowSetupWindow (PageType.Setup);
+                ShowSetupWindow (PageType.User);
 
             } else {
                 new Thread (() => {
@@ -286,7 +286,7 @@ namespace SparkleShare {
 
         public void ShowSetupWindow (PageType page_type)
         {
-            ShowSetupWindowEvent (page_type);
+            ShowSetupWindowEvent (PageType.User);
         }
 
 
@@ -554,13 +554,13 @@ namespace SparkleShare {
         }
 
 
-        public void StartFetcher (SparkleFetcherInfo info)
+        public void StartFetcher (FetcherInfo info)
         {
-            string canonical_name = Path.GetFileName (info.RemotePath);
-            string backend        = info.Backend;
+            string canonical_name = Path.GetFileName (info.Address.AbsolutePath);
+            string backend = info.Backend;
 
             if (string.IsNullOrEmpty (backend))
-                backend = BaseFetcher.GetBackend (info.Address);
+                backend = BaseFetcher.GetBackend (info.Address.ToString ());
 
             info.TargetDirectory = Path.Combine (Config.TmpPath, canonical_name);
 
@@ -576,8 +576,8 @@ namespace SparkleShare {
                 Logger.LogInfo ("Controller",
                     "Failed to load '" + backend + "' backend for '" + canonical_name + "' " + e.Message);
 
-                FolderFetchError (Path.Combine (info.Address, info.RemotePath).Replace (@"\", "/"),
-                                  new string [] {"Failed to load \"" + backend + "\" backend for \"" + canonical_name + "\""});
+                FolderFetchError (info.Address.ToString ().Replace (@"\", "/"),
+                    "Could not find backend", "\"" + backend + "\" is missing.");
 
                 return;
             }
@@ -590,7 +590,7 @@ namespace SparkleShare {
         }
 
 
-        void FetcherFinishedDelegate (StorageType storage_type, string [] warnings)
+        void FetcherFinishedDelegate (StorageType storage_type)
         {
             if (storage_type == StorageType.Unknown) {
                 ShowSetupWindow (PageType.Storage);
@@ -606,10 +606,38 @@ namespace SparkleShare {
         }
 
 
-        void FetcherFailedDelegate ()
+        void FetcherFailedDelegate (FetchResult result)
         {
-            FolderFetchError (this.fetcher.RemoteUrl.ToString (), this.fetcher.Errors);
-            StopFetcher ();
+            string error = "Something went wrong";
+            string error_details = "Sorry, we're not quite sure what happened.";
+
+            if (result ==FetchResult.NoNetwork) {
+                error = "Could not connect to the internet";
+                error_details = "Please reconnect and try again.";
+            }
+
+            if (result == FetchResult.HostNotSupported) {
+                error = "Host not supported";
+                error_details = "The host wasn't set up right.";
+            }
+
+            if (result == FetchResult.HostChanged) {
+                error = "The host has changed its identity";
+                error_details = "Please contact its administrator.";
+            }
+
+            if (result == FetchResult.NotAuthenticated) {
+                error = "Could not authenticate";
+                error_details = "Please make sure the host knows your Public Key.";
+            }
+
+            if (result == FetchResult.UserInterrupted) {
+                error = "Cancelled.";
+                error_details = "";
+            }
+
+            FolderFetchError (this.fetcher.RemoteUrl.ToString (), error, error_details);
+            StopFetcher (); // TODO is this needed?
         }
 
 
@@ -688,7 +716,7 @@ namespace SparkleShare {
             RepositoriesLoaded = true;
 
             FolderListChanged ();
-            FolderFetched (this.fetcher.RemoteUrl.ToString (), this.fetcher.Warnings.ToArray ());
+            FolderFetched (this.fetcher.RemoteUrl.ToString ()); // TODO warning handling
 
             this.fetcher.Dispose ();
             this.fetcher = null;

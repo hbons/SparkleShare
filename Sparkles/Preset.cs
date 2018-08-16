@@ -32,6 +32,8 @@ namespace Sparkles {
 
         new public string Name { get { return GetValue ("info", "name"); } }
         public string Description { get { return GetValue ("info", "description"); } }
+        public string Host { get { return GetValue ("info", "host"); } }
+        public string KeyEntryHint { get { return GetValue ("key", "hint"); } }
         public string Backend { get { return GetValue ("info", "backend"); } }
         public string Fingerprint { get { return GetValue ("info", "fingerprint"); } }
         public string AnnouncementsUrl { get { return GetValue ("info", "announcements_url"); } }
@@ -40,7 +42,7 @@ namespace Sparkles {
         public string Path { get { return GetValue ("path", "value"); } }
         public string PathExample { get { return GetValue ("path", "example"); } }
 
-        public string ImagePath {
+        public string IconPath {
             get {
                 string image_file_name = GetValue ("info", "icon");
                 string image_path = IO.Path.Combine (preset_directory, image_file_name);
@@ -51,7 +53,19 @@ namespace Sparkles {
                 return IO.Path.Combine (PresetsPath, image_file_name);
             }
         }
-        
+
+        public string LogoPath {
+            get {
+                string image_file_name = GetValue ("info", "logo");
+                string image_path = IO.Path.Combine (preset_directory, image_file_name);
+
+                if (IO.File.Exists (image_path))
+                    return image_path;
+
+                return IO.Path.Combine (PresetsPath, image_file_name);
+            }
+        }
+
         public bool PathUsesLowerCase {
             get {
                 string uses_lower_case = GetValue ("path", "uses_lower_case");
@@ -110,14 +124,14 @@ namespace Sparkles {
         }
 
 
-        private string GetValue (string a, string b)
+        string GetValue (string a, string b)
         {
-            XmlNode node = SelectSingleNode ("/sparkleshare/preset/" + a + "/" + b + "/text()");
+            XmlNode node = SelectSingleNode ("/sparkleshare/preset/" + a + "/" + b);
 
-            if (node != null && !string.IsNullOrEmpty (node.Value))
-                return node.Value;
-            else
+            if (node == null)
                 return null;
+
+            return node.InnerXml;
         }
     }
 }

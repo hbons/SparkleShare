@@ -73,14 +73,10 @@
     <Compile Include="ListenerFactory.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="InstallationInfo.Directory.cs" />
-    <Compile Include="Command.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SSHCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SSHFetcher.cs" />
-    <Compile Include="SSHAuthenticationInfo.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="SSH\SSHCommand.cs" />
+    <Compile Include="SSH\SSHFetcher.cs" />
+    <Compile Include="SSH\SSHAuthenticationInfo.cs" />
     <Compile Include="TcpListener.cs" />
     <Compile Include="User.cs" />
     <Compile Include="InstallationInfo.cs" />

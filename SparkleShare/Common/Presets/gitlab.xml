@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <preset>
-    <info>
-        <name>GitLab</name>
-        <description>Open Source alternative to GitHub</description>
-        <icon>gitlab.png</icon>
-        <backend>Git</backend>
-        <fingerprint>44:e4:05:bc:f4:e1:1a:b5:b8:46:e5:8b:a0:bf:6d:ab:d2:3d:cc:9e:36:7c:ae:17:cb:0c:91:b5:b3:b3:fc:44</fingerprint>
-    </info>
-    <address>
-      <value>ssh://git@gitlab.com/</value>
-      <example/>
-    </address>
-    <path>
-      <value/>
-      <example>/username/project</example>
-    </path>
-  </preset>
+    <preset>
+        <info>
+            <name>GitLab</name>
+            <description>Open Source alternative to GitHub</description>
+            <icon>gitlab.png</icon>
+            <logo>gitlab-logo.png</logo>
+            <backend>Git</backend>
+            <host>gitlab.com</host>
+            <fingerprint>44:e4:05:bc:f4:e1:1a:b5:b8:46:e5:8b:a0:bf:6d:ab:d2:3d:cc:9e:36:7c:ae:17:cb:0c:91:b5:b3:b3:fc:44</fingerprint>
+        </info>
+        <address>
+            <value>ssh://git@gitlab.com/</value>
+            <example/>
+        </address>
+        <path>
+            <value/>
+            <example>/username/project</example>
+        </path>
+        <key>
+            <hint>Go to <a href="https://gitlab.com/profile/keys">gitlab.com/profile/keys</a> and add this SSH key:</hint>
+        </key>
+    </preset>
 </sparkleshare>
-

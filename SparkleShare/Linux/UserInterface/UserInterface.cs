@@ -165,5 +165,43 @@ namespace SparkleShare
             SecondaryTextColor = UserInterfaceHelpers.ColorToHex (text_color);
             SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (text_color_selected);
         }
+
+
+        // The bindings don't support Gtk.Widget.ScaleFactor yet
+        public int ScaleFactor {
+            get {
+                if (scale_factor > 0)
+                    return scale_factor;
+
+                var gsettings = new Command ("gsettings", "get org.gnome.desktop.interface scaling-factor");
+                string output = gsettings.StartAndReadStandardOutput ();
+
+                // Output: "uint32 1"
+                try {
+                    scale_factor = Int32.Parse (output.Substring (7));
+
+                } catch (Exception e) {
+                    scale_factor = 1;
+                    Logger.LogInfo ("UI", "Could not determine screen scale factor: ", e);
+                }
+
+                return scale_factor;
+            }
+        }
+
+        int scale_factor;
+
+
+    }
+
+    public class DescriptionLabel : Label
+    {
+        public DescriptionLabel (string text) : base ()
+        {
+            Sensitive = false;
+            Xalign = 0;
+
+            Markup = string.Format ("<span size='small'>{0}</span>", text);
+        }
     }
 }

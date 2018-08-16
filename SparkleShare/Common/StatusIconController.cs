@@ -46,14 +46,14 @@ namespace SparkleShare {
 
         public string StatusMessage {
             get {
-                string status_message = "Waiting to sync";
-                
-                if (!repo.LastSync.Equals (DateTime.MinValue))
+                string status_message = "Ready to sync";
+
+                if (repo.LastSync > DateTime.MinValue)
                     status_message = string.Format ("✓ Synced – Last change {0}", repo.LastSync.ToPrettyDate ());
 
                 if (repo.Status == SyncStatus.SyncUp)
                     status_message = "Sending… " + (int) repo.ProgressPercentage + "%";
-            
+
                 if (repo.Status == SyncStatus.SyncDown)
                     status_message = "Receiving… " + (int) repo.ProgressPercentage + "%";
 
@@ -136,7 +136,7 @@ namespace SparkleShare {
         public delegate void UpdateQuitItemEventHandler (bool quit_item_enabled);
 
         public IconState CurrentState = IconState.Idle;
-        public string StateText = "Welcome to SparkleShare!";
+        public string StateText = "Welcome to SparkleShare";
 
         public ProjectInfo [] Projects = new ProjectInfo [0];
 
@@ -147,11 +147,6 @@ namespace SparkleShare {
             }
         }
 
-        public bool LinkCodeItemEnabled {
-            get {
-                return !string.IsNullOrEmpty (SparkleShare.Controller.UserAuthenticationInfo.PublicKey);
-            }
-        }
 
         public bool QuitItemEnabled {
             get {
@@ -307,13 +302,9 @@ namespace SparkleShare {
 
         public void AddHostedProjectClicked ()
         {
-            new Thread (() => SparkleShare.Controller.ShowSetupWindow (PageType.Add)).Start ();
+            new Thread (() => SparkleShare.Controller.ShowSetupWindow (PageType.Host)).Start ();
         }
 
-        public void CopyToClipboardClicked ()
-        {
-            SparkleShare.Controller.CopyToClipboard (SparkleShare.Controller.UserAuthenticationInfo.PublicKey);
-        }
 
         public void AboutClicked ()
         {

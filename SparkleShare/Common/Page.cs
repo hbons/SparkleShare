@@ -21,7 +21,7 @@ namespace SparkleShare {
 
     public abstract class Page : IDisposable {
 
-        protected SetupController Controller;
+        protected PageController Controller;
         protected PageType? RequestedType;
 
         public string Header;
@@ -31,7 +31,7 @@ namespace SparkleShare {
         public object [] Buttons;
 
 
-        public Page (PageType? page_type, SetupController controller)
+        public Page (PageType? page_type, PageController controller)
         {
             RequestedType = page_type;
             Controller = controller;
@@ -39,6 +39,6 @@ namespace SparkleShare {
 
 
         public abstract object Render ();
-        public virtual void Dispose () {}
+        public virtual void Dispose () { }
     }
 }

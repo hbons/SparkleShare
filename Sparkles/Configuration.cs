@@ -72,7 +72,7 @@ namespace Sparkles {
             FilePath = Path.Combine (config_path, config_file_name);
             DirectoryPath = config_path;
 
-			BinPath = Path.Combine (config_path, "bin");
+            BinPath = Path.Combine (config_path, "bin");
 
             if (!Directory.Exists (BinPath))
                 Directory.CreateDirectory (BinPath);
@@ -328,7 +328,7 @@ namespace Sparkles {
             }
 
             Save ();
-            Logger.LogInfo ("Config", "Updated option " + name + ":" + content);
+            Logger.LogInfo ("Config", string.Format ("Set {0} {1}:{2}", FilePath, name, content));
         }
 
 
@@ -352,7 +352,6 @@ namespace Sparkles {
         void Save ()
         {
             Save (FilePath);
-            Logger.LogInfo ("Config", "Wrote to '" + FilePath + "'");
         }
     }
 }

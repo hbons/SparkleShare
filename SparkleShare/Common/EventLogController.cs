@@ -73,8 +73,8 @@ namespace SparkleShare {
                     string html = HTML;
                     delay.Stop ();
 
-					if (!string.IsNullOrEmpty (html))
-                    	UpdateContentEvent (html);
+                if (!string.IsNullOrEmpty (html))
+                    UpdateContentEvent (html);
 
                     UpdateSizeInfoEvent (Size, HistorySize);
 

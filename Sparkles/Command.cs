@@ -37,14 +37,18 @@ namespace Sparkles {
 
             StartInfo.FileName = path;
             StartInfo.Arguments = args;
-
             StartInfo.WorkingDirectory = Path.GetTempPath ();
+
             StartInfo.CreateNoWindow = true;
-            StartInfo.RedirectStandardOutput = true;
-            StartInfo.RedirectStandardError = true;
             StartInfo.UseShellExecute = false;
 
+            StartInfo.RedirectStandardOutput = true;
+            StartInfo.RedirectStandardError = true;
+
             EnableRaisingEvents = true;
+
+            // Force set the language because we do a lot of string parsing
+            SetEnvironmentVariable ("LANG", "en_US");
         }
 
 
@@ -103,8 +107,7 @@ namespace Sparkles {
             return output.TrimEnd ();
         }
 
-
-        public void SetEnvironmentVariable (string variable, string content)
+       public void SetEnvironmentVariable (string variable, string content)
         {
             if (StartInfo.EnvironmentVariables.ContainsKey (variable))
                 StartInfo.EnvironmentVariables [variable] = content;

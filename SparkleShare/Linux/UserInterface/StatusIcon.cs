@@ -216,33 +216,8 @@ namespace SparkleShare {
             this.recent_events_item = new MenuItem ("Recent Changes…");
             this.recent_events_item.Sensitive = Controller.RecentEventsItemEnabled;
 
-            if (!use_appindicator)
-                (folder_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-
-            (folder_item.Submenu as Menu).Add (this.recent_events_item);
-
-
             this.quit_item    = new MenuItem ("Quit") { Sensitive = Controller.QuitItemEnabled };
             MenuItem add_item = new MenuItem ("Sync Remote Project…");
-
-            MenuItem link_code_item = new MenuItem ("Computer ID");
-
-            if (Controller.LinkCodeItemEnabled) {
-                link_code_item.Submenu = new Menu ();
-                
-                string link_code = SparkleShare.Controller.UserAuthenticationInfo.PublicKey.Substring (0, 20) + "...";
-                MenuItem code_item = new MenuItem (link_code) { Sensitive = false };
-                
-                MenuItem copy_item = new MenuItem ("Copy to Clipboard");
-                copy_item.Activated += delegate { Controller.CopyToClipboardClicked (); };
-                
-                (link_code_item.Submenu as Menu).Add (code_item);
-
-                if (!use_appindicator)
-                    (link_code_item.Submenu as Menu).Add (new SeparatorMenuItem ());
-
-                (link_code_item.Submenu as Menu).Add (copy_item);
-            }
 
             MenuItem about_item = new MenuItem ("About SparkleShare");
             
@@ -252,9 +227,9 @@ namespace SparkleShare {
             this.quit_item.Activated          += delegate { Controller.QuitClicked (); };
 
             this.menu.Add (new SeparatorMenuItem ());
+            this.menu.Add (this.recent_events_item);
             this.menu.Add (add_item);
-            this.menu.Add (link_code_item);
-            this.menu.Add (new SeparatorMenuItem ());            
+            this.menu.Add (new SeparatorMenuItem ());
             this.menu.Add (about_item);
             this.menu.Add (new SeparatorMenuItem ());            
             this.menu.Add (this.quit_item);
@@ -266,7 +241,7 @@ namespace SparkleShare {
                 #endif
             }
         }
-		
+
 
         // Makes the menu visible
         void ShowMenu (object o, EventArgs args)

@@ -98,8 +98,6 @@ namespace Sparkles.Git {
             SetEnvironmentVariable ("GIT_CONFIG_NOSYSTEM", "1");
             SetEnvironmentVariable ("PREFIX", "");
             SetEnvironmentVariable ("HOME", "");
-
-            SetEnvironmentVariable ("LANG", "en_US");
         }
 
 

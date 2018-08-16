@@ -25,20 +25,24 @@ namespace SparkleShare {
         Button continue_button;
 
 
-        public CryptoSetupPage (PageType page_type, SetupController controller) : base (page_type, controller)
+        public CryptoSetupPage (PageType page_type, PageController controller) : base (page_type, controller)
         {
             if (RequestedType == PageType.CryptoSetup) {
-                Header = string.Format ("Encryption password for ‘{0}’", Controller.SyncingFolder);
+                Header = string.Format ("Encryption password for ‘{0}’", Controller.FetchAddress.AbsolutePath);
                 Description = "Please a provide a strong password that you don’t use elsewhere.";
 
-                Controller.UpdateCryptoSetupContinueButtonEvent += UpdateCryptoSetupContinueButtonEventHandler;
-
             } else {
-                Header = string.Format ("‘{0}’ contains encrypted files", Controller.SyncingFolder);
+                Header = string.Format ("‘{0}’ contains encrypted files", Controller.FetchAddress.AbsolutePath);
                 Description = "Please enter the password to see their contents.";
-
-                Controller.UpdateCryptoPasswordContinueButtonEvent += UpdateCryptoPasswordContinueButtonEventHandler;
             }
+
+            Controller.PageCanContinueEvent += CryptoPageCanContinueEventHandler;
+        }
+
+
+        public override void Dispose ()
+        {
+            Controller.PageCanContinueEvent -= CryptoPageCanContinueEventHandler;
         }
 
 
@@ -79,15 +83,10 @@ namespace SparkleShare {
 
             // Buttons
             Button cancel_button = new Button ("Cancel");
-            cancel_button.Clicked += delegate { Controller.CryptoPageCancelled (); };
+            cancel_button.Clicked += delegate { Controller.CancelClicked (RequestedType); };
 
             continue_button = new Button ("Continue") { Sensitive = false };
-            continue_button.Clicked +=  delegate {
-                if (RequestedType == PageType.CryptoSetup)
-                    Controller.CryptoSetupPageCompleted (password_entry.Text);
-                else
-                    Controller.CryptoPasswordPageCompleted (password_entry.Text);
-            };
+            continue_button.Clicked +=  delegate { Controller.CryptoPageCompleted (password_entry.Text); };
 
             Buttons = new Button [] { cancel_button, continue_button };
 
@@ -113,11 +112,10 @@ namespace SparkleShare {
         }
 
 
-
         VBox RenderWarning ()
         {
             var image = new Image (
-                UserInterfaceHelpers.GetIcon ("dialog-information", 24));
+                UserInterfaceHelpers.GetIcon ("dialog-information-symbolic", 24));
 
             Label label = new Label () {
                 Xalign = 0,
@@ -128,36 +126,27 @@ namespace SparkleShare {
 
             // Layout
             HBox layout = new HBox (false, 0);
-            layout.PackStart (image, false, false, 15);
+            layout.PackStart (image, false, false, 16);
             layout.PackStart (label, true, true, 0);
 
             VBox wrapper = new VBox (false, 0);
-            wrapper.PackStart (layout, false, false, 15);
+            wrapper.PackStart (layout, false, false, 16);
 
             return wrapper;
         }
 
-        void UpdateCryptoSetupContinueButtonEventHandler (bool button_enabled) {
-            Application.Invoke (delegate { continue_button.Sensitive = button_enabled; });
-        }
 
-
-        void UpdateCryptoPasswordContinueButtonEventHandler (bool button_enabled) {
-            Application.Invoke (delegate { continue_button.Sensitive = button_enabled; });
-        }
-
-
-        public override void Dispose ()
+        void CryptoPageCanContinueEventHandler (PageType page_type, bool can_continue)
         {
-            Controller.UpdateCryptoSetupContinueButtonEvent -= UpdateCryptoSetupContinueButtonEventHandler;
-            Controller.UpdateCryptoPasswordContinueButtonEvent -= UpdateCryptoPasswordContinueButtonEventHandler;
+            if (page_type == RequestedType)
+                Application.Invoke (delegate { continue_button.Sensitive = can_continue; });
         }
     }
 
 
     public class CryptoPasswordPage : CryptoSetupPage {
 
-        public CryptoPasswordPage (PageType page_type, SetupController controller) : base (page_type, controller)
+        public CryptoPasswordPage (PageType page_type, PageController controller) : base (page_type, controller)
         {
         }
     }

@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <preset>
-    <info>
-        <name>GitHub</name>
-        <description>The biggest collection of Open Source projects</description>
-        <icon>github.png</icon>
-        <backend>Git</backend>
-        <storage_type>LargeFiles</storage_type>
-        <fingerprint>9d:38:5b:83:a9:17:52:92:56:1a:5e:c4:d4:81:8e:0a:ca:51:a2:64:f1:74:20:11:2e:f8:8a:c3:a1:39:49:8f</fingerprint>
-    </info>
-    <address>
-      <value>ssh://git@github.com/</value>
-      <example/>
-    </address>
-    <path>
-      <value/>
-      <example>/username/project</example>
-    </path>
-  </preset>
+    <preset>
+        <info>
+            <name>GitHub</name>
+            <description>The biggest collection of Open Source projects</description>
+            <icon>github.png</icon>
+            <logo>github-logo.png</logo>
+            <backend>Git</backend>
+            <host>github.com</host>
+            <fingerprint>9d:38:5b:83:a9:17:52:92:56:1a:5e:c4:d4:81:8e:0a:ca:51:a2:64:f1:74:20:11:2e:f8:8a:c3:a1:39:49:8f</fingerprint>
+            <storage_type>LargeFiles</storage_type>
+        </info>
+        <address>
+            <value>ssh://git@github.com/</value>
+            <example/>
+        </address>
+        <path>
+            <value/>
+            <example>/username/project</example>
+        </path>
+        <key>
+            <hint>Go to <a href="https://github.com/settings/keys">github.com/settings/keys</a> and add this SSH key:</hint>
+        </key>
+    </preset>
 </sparkleshare>

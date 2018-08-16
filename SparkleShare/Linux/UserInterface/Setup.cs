@@ -24,7 +24,7 @@ namespace SparkleShare {
 
     public class Setup : SetupWindow {
 
-        public SetupController Controller = new SetupController ();
+        public PageController Controller = new PageController ();
         Page active_page;
 
 
@@ -48,17 +48,18 @@ namespace SparkleShare {
                 });
             };
 
-            Controller.ChangePageEvent += (PageType type, string [] warnings) => {
+            Controller.ChangePageEvent += (PageType type) => {
                 Application.Invoke (delegate {
                     Reset ();
-                    ShowPage (type, warnings);
+                    ShowPage (type);
                     ShowAll ();
+                    Present ();
                 });
             };
         }
 
 
-        public void ShowPage (PageType page_type, string [] warnings)
+        void ShowPage (PageType page_type)
         {
             System.Type t = System.Type.GetType ("SparkleShare." + page_type + "Page", throwOnError: true);
             Page page = (Page) Activator.CreateInstance (t, new object [] { page_type, Controller });
@@ -66,11 +67,8 @@ namespace SparkleShare {
             Header = page.Header;
             Description = page.Description;
 
-            Add ((Widget) page.Render ());
-            AddOption ((Widget) page.OptionArea);
-
-            foreach (Button button in page.Buttons)
-                AddButton (button);
+            Add (page.Render ());
+            AddButtons (page.Buttons);
                     
             active_page = page;
         }

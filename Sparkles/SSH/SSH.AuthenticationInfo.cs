@@ -22,6 +22,11 @@ using IO = System.IO;
 
 namespace Sparkles {
 
+    public abstract class AuthenticationInfo
+    {
+    }
+
+
     public class SSHAuthenticationInfo : AuthenticationInfo {
 
         public static SSHAuthenticationInfo DefaultAuthenticationInfo;
@@ -82,7 +87,7 @@ namespace Sparkles {
         }
 
 
-        bool CreateKeyPair ()
+        void CreateKeyPair ()
         {
             string key_file_name = DateTime.Now.ToString ("yyyy-MM-dd_HH\\hmm") + ".key";
             string computer_name = Dns.GetHostName ();
@@ -108,11 +113,11 @@ namespace Sparkles {
                 Logger.LogInfo ("Auth", "Created key pair: " + key_file_name);
                 ImportKeys ();
 
-                return true;
+                return;
             }
 
             Logger.LogInfo ("Auth", "Could not create key pair");
-            return false;
+            return;
         }
 
 

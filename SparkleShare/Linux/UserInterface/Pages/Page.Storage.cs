@@ -24,9 +24,9 @@ namespace SparkleShare {
 
     public class StoragePage : Page {
 
-        public StoragePage (PageType page_type, SetupController controller) : base (page_type, controller)
+        public StoragePage (PageType page_type, PageController controller) : base (page_type, controller)
         {
-            Header = string.Format ("Storage type for ‘{0}’", Controller.SyncingFolder);
+            Header = string.Format ("Storage type for ‘{0}’", Controller.FetchAddress.AbsolutePath);
             Description = "What type of storage would you like to use?";
         }
 
@@ -53,7 +53,7 @@ namespace SparkleShare {
 
             // Buttons
             Button cancel_button = new Button ("Cancel");
-            cancel_button.Clicked += delegate { Controller.SyncingCancelled (); };
+            cancel_button.Clicked += delegate { Controller.CancelClicked (RequestedType); };
 
             Button continue_button = new Button ("Continue");
             continue_button.Clicked += delegate {

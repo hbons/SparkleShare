@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sparkleshare>
-  <preset>
-    <info>
-        <name>Own server</name>
-        <description>Everything under my control</description>
-        <icon>own-server.png</icon>
-        <backend>Git</backend>
-    </info>
-    <address>
-      <value/>
-      <example>ssh://[user@]hostname[:port]</example>
-    </address>
-    <path>
-      <value/>
-      <example>/path/to/project</example>
-    </path>
-  </preset>
+    <preset>
+        <info>
+            <name>Own server</name>
+            <description>Everything under my control</description>
+            <key_entry_hint>Ask the person administrating the server to add this SSH key:</key_entry_hint>
+            <icon>own-server.png</icon>
+            <backend>Git</backend>
+        </info>
+        <address>
+            <value/>
+            <example>ssh://[user@]hostname[:port]</example>
+        </address>
+        <path>
+            <value/>
+            <example>/path/to/project</example>
+        </path>
+    </preset>
 </sparkleshare>
-

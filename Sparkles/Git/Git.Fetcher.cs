@@ -39,7 +39,7 @@ namespace Sparkles.Git {
         }
 
 
-        public GitFetcher (SparkleFetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info)
+        public GitFetcher (FetcherInfo fetcher_info, SSHAuthenticationInfo auth_info) : base (fetcher_info, auth_info)
         {
             this.auth_info = auth_info;
             var uri_builder = new UriBuilder (RemoteUrl);
@@ -72,15 +72,17 @@ namespace Sparkles.Git {
         }
 
 
-        public override bool Fetch ()
+        public override FetchResult Fetch ()
         {
-            if (!base.Fetch ())
-                return false;
+            FetchResult result = base.Fetch ();
+
+            if (result != FetchResult.Success)
+                return result;
 
             StorageType? storage_type = DetermineStorageType ();
 
             if (storage_type == null)
-                return false;
+                return FetchResult.NoNetwork; // TODO: or HostNotSupported
 
             FetchedRepoStorageType = (StorageType) storage_type;
 
@@ -111,6 +113,7 @@ namespace Sparkles.Git {
             while (!output_stream.EndOfStream) {
                 string line = output_stream.ReadLine ();
 
+                // TODO: Make ParseProgress use FetchResult
                 ErrorStatus error = GitCommand.ParseProgress (line, out percentage, out speed, out information);
 
                 if (error != ErrorStatus.None) {
@@ -118,7 +121,7 @@ namespace Sparkles.Git {
                     git_clone.Kill ();
                     git_clone.Dispose ();
 
-                    return false;
+                    return FetchResult.Unknown; // TODO
                 }
 
                 OnProgressChanged (percentage, speed, information);
@@ -127,13 +130,14 @@ namespace Sparkles.Git {
             git_clone.WaitForExit ();
 
             if (git_clone.ExitCode != 0)
-                return false;
+                return FetchResult.Unknown; // TODO
 
+            // Smooth out progression
             Thread.Sleep (500);
             OnProgressChanged (100, 0, "");
             Thread.Sleep (500);
 
-            return true;
+            return FetchResult.Success;
         }
 
 
