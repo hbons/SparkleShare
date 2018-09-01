@@ -29,6 +29,7 @@ _ReSharper.*
 *.wxs
 *.dotCover
 SparkleShare/Windows/build/
+.vs/
 
 # NuGet Packages
 *.nupkg
