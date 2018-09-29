@@ -20,6 +20,7 @@ flatpak install flathub org.sparkleshare.SparkleShare
 
 Now you can run SparkleShare from the apps menu.
 
+**Note:** by default SparkleShare uses an AppIndicator status icon on Linux. If you use GNOME on a distribution other than Ubuntu, please install the [AppIndicator extension](https://extensions.gnome.org/extension/615/appindicator-support/). If you don't use GNOME, you can start SparkleShare with `--status-icon=gtk`.
 
 
 ## Install on macOS
@@ -36,8 +37,6 @@ Under the hood SparkleShare uses the version control system [Git](https://git-sc
 `SparkleShare` is Free and Open Source software and licensed under the [GNU GPLv3 or later](legal/License_for_SparkleShare.txt). You are welcome to change and redistribute it under certain conditions. Its library `Sparkles` is licensed under the [GNU LGPLv3 or later](legal/License_for_Sparkles.txt).
 
 Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [macOS](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md).
-
-**Note:** by default SparkleShare uses an AppIndicator status icon on Linux. If you use GNOME on a distribution other than Ubuntu, please install the [AppIndicator extension](https://extensions.gnome.org/extension/615/appindicator-support/). If you don't use GNOME, you can start SparkleShare with `--status-icon=gtk`.
 
 
 [![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
