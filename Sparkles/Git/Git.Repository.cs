@@ -434,7 +434,7 @@ namespace Sparkles.Git {
             git = new GitCommand (LocalPath, "config core.ignorecase true");
             git.StartAndWaitForExit ();
 
-            git = new GitCommand (LocalPath, "merge FETCH_HEAD");
+            git = new GitCommand (LocalPath, "merge --no-edit FETCH_HEAD");
             git.StartInfo.RedirectStandardOutput = false;
 
             string error_output = git.StartAndReadStandardError ();
