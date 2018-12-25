@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
     <name>SparkleShare</name>
     <summary>Magic self hosted Git file sync</summary>
     <developer_name>Hylke Bons</developer_name>
@@ -64,13 +64,13 @@
         </screenshot>
     </screenshots>
 
-    <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
-    <launchable id="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
+    <id>org.sparkleshare.SparkleShare</id>
+    <launchable type="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
     <provides>
         <binary>sparkleshare</binary>
     </provides>
     
-    <metadata_licence>CC0-1.0</metadata_licence>
+    <metadata_license>CC0-1.0</metadata_license>
     <update_contact>hi_AT_planetpeanut.uk</update_contact>
 
     <content_rating type="oars-1.0">
