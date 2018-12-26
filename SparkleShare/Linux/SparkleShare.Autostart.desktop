@@ -5,4 +5,4 @@ Exec=sh -c "type -P sparkleshare &>/dev/null && sparkleshare || flatpak run org.
 Icon=org.sparkleshare.SparkleShare
 Terminal=false
 X-GNOME-Autostart-enabled=true
-
+X-AppStream-Ignore=true
