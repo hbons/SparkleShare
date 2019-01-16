@@ -34,7 +34,7 @@ Under the hood SparkleShare uses the version control system [Git](https://git-sc
 
 
 ## Build from source
-`SparkleShare` is Free and Open Source software and licensed under the [GNU GPLv3 or later](legal/License_for_SparkleShare.txt). You are welcome to change and redistribute it under certain conditions. Its library `Sparkles` is licensed under the [GNU LGPLv3 or later](legal/License_for_Sparkles.txt).
+`SparkleShare` is Free and Open Source software and licensed under the [GNU GPLv3 or later](LICENSE.md). You are welcome to change and redistribute it under certain conditions. Its library `Sparkles` is licensed under the [GNU LGPLv3 or later](LICENSE_Sparkles.md).
 
 Here are instructions to build SparkleShare on [Linux distributions](SparkleShare/Linux/README.md), [macOS](SparkleShare/Mac/README.md), and [Windows](SparkleShare/Windows/README.md).
 
