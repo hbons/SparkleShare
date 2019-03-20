@@ -27,3 +27,4 @@ namespace Sparkles {
         public const string Directory = "@ABS_INSTALL_DIR@";
     }
 }
+

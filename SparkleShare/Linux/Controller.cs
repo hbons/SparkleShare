@@ -47,13 +47,13 @@ namespace SparkleShare {
 
         public override void SetFolderIcon ()
         {
-            var gvfs_set_attribute = new Command ("gvfs-set-attribute", "\"" + Configuration.DefaultConfiguration.FoldersPath + "\" " +
+            var gio_set = new Command ("gio", "set \"" + Configuration.DefaultConfiguration.FoldersPath + "\" " +
                 "metadata::custom-icon-name org.sparkleshare.SparkleShare");
 
             string XDG_DATA_HOME = Path.Combine (Config.HomePath, ".local", "share");
-            gvfs_set_attribute.StartInfo.EnvironmentVariables ["XDG_DATA_HOME"] = XDG_DATA_HOME;
+            gio_set.StartInfo.EnvironmentVariables ["XDG_DATA_HOME"] = XDG_DATA_HOME;
 
-            gvfs_set_attribute.StartAndWaitForExit ();
+            gio_set.StartAndWaitForExit ();
         }
 
 

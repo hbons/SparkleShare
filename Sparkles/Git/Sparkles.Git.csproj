@@ -74,11 +74,11 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="GitFetcher.cs" />
-    <Compile Include="GitCommand.cs">
+    <Compile Include="Git.Fetcher.cs" />
+    <Compile Include="Git.Command.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GitRepository.cs" />
+    <Compile Include="Git.Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sparkles.csproj">

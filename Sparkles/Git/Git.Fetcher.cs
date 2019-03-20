@@ -336,10 +336,10 @@ namespace Sparkles.Git {
         {
             string [] settings = {
                 "core.autocrlf input",
-                "core.quotepath false", // Don't quote "unusual" characters in path names
+                "core.quotepath false", // For commands to output Unicode characters "as is". e.g. '"h\303\251"' becomes 'hé'.
+                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.ignorecase false", // Be case sensitive explicitly to work on Mac
                 "core.filemode false", // Ignore permission changes
-                "core.precomposeunicode true", // Use the same Unicode form on all filesystems
                 "core.safecrlf false",
                 "core.excludesfile \"\"",
                 "core.packedGitLimit 128m", // Some memory limiting options
@@ -414,7 +414,7 @@ namespace Sparkles.Git {
 
         void InstallGitLFS ()
         {
-			var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
+            var git_config_required = new GitCommand (TargetFolder, "config filter.lfs.required true");
 
             string GIT_SSH_COMMAND = GitCommand.FormatGitSSHCommand (auth_info);
             string smudge_command;
@@ -427,7 +427,7 @@ namespace Sparkles.Git {
                 clean_command = Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/") + " clean %f";
 
             } else {
-				smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
+                smudge_command = "env GIT_SSH_COMMAND='" + GIT_SSH_COMMAND + "' git-lfs smudge %f";
                 clean_command = "git-lfs clean %f";
             }
 

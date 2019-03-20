@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
     <name>SparkleShare</name>
     <summary>Magic self hosted Git file sync</summary>
     <developer_name>Hylke Bons</developer_name>
     <project_license>GPL-3.0+</project_license>
-    <url type="homepage">http://www.sparkleshare.org/</url>
+    
+    <url type="homepage">https://www.sparkleshare.org/</url>
     <url type="bugtracker">https://www.github.com/hbons/SparkleShare/issues</url>
+    <url type="donation">https://www.patreon.com/SparkleShare</url>
     
     <description>
         <p>SparkleShare is a file sharing and collaboration app. It works just like Dropbox, and you can run it on your own server.</p>
         <p>SparkleShare is based on the popular version control system Git. It even supports the popular extension Git LFS to deal well with large files. So if you are already using Git repositories in your company, SparkleShare will integrate seamlessly.</p>
-        <p>Note: on some Linux distributions you'll need the TopIcons extension for GNOME Shell to show the SparkleShare status icon.</p>
+        <p>Note: if you're using GNOME Shell as your desktop environment on a distribution other than Ubuntu, install the AppIndicator Support extension to show the SparkleShare status icon. If for whatever reason you need the legacy status icon, start SparkleShare with --status-icon=gtk.</p>
     </description>
 
     <releases>
+        <release version="3.28.0" date="2018-07-14" urgency="medium">
+            <description>
+                <p>Fixes and improvements:</p>
+                <ul>
+                    <li>Use appindicator as the default status icon and supported by the flatpak</li>
+                    <li>Fix recent changes window showing broken entries with newer versions of Git</li>
+                </ul>
+           </description>
+        </release>
         <release version="2.0.1" date="2017-12-04" urgency="low">
             <description>
                 <p>Fixes and improvements:</p>
@@ -41,20 +52,30 @@
     <screenshots>
         <screenshot type="default">
             <caption>Sync projects to your computer</caption>
-            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.png</image>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-1.jpg</image>
+        </screenshot>
+        <screenshot>
+            <caption>Projects added to your SparkleShare folder sync automatically</caption>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.jpg</image>
         </screenshot>
         <screenshot>
             <caption>View your team's file history</caption>
-            <image type="source" width="1338" height="754">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-2.png</image>
+            <image type="source" width="1200" height="675">https://raw.githubusercontent.com/hbons/SparkleShare/master/SparkleShare/Linux/Images/gnome-software-screenshot-3.jpg</image>
         </screenshot>
     </screenshots>
 
-    <id type="desktop">org.sparkleshare.SparkleShare.desktop</id>
-    <launchable id="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
+    <id>org.sparkleshare.SparkleShare</id>
+    <launchable type="desktop-id">org.sparkleshare.SparkleShare.desktop</launchable>
     <provides>
         <binary>sparkleshare</binary>
     </provides>
     
-    <metadata_licence>CC0-1.0</metadata_licence>
+    <metadata_license>CC0-1.0</metadata_license>
     <update_contact>hi_AT_planetpeanut.uk</update_contact>
+
+    <content_rating type="oars-1.0">
+      <content_attribute id="social-chat">moderate</content_attribute>
+      <content_attribute id="social-info">mild</content_attribute>
+      <content_attribute id="social-contacts">intense</content_attribute>
+    </content_rating>
 </component>

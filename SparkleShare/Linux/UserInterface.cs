@@ -35,9 +35,10 @@ namespace SparkleShare
         public About About;
         public Note Note;
 
-        public readonly string SecondaryTextColor;
-        public readonly string SecondaryTextColorSelected;
+        public string SecondaryTextColor;
+        public string SecondaryTextColorSelected;
 
+        public static readonly string APP_ID = "org.sparkleshare.SparkleShare";
         Application application;
 
 
@@ -46,31 +47,20 @@ namespace SparkleShare
             string gtk_version = string.Format ("{0}.{1}.{2}", Global.MajorVersion, Global.MinorVersion, Global.MicroVersion);
             Logger.LogInfo ("Environment", "GTK+ " + gtk_version);
 
-            application = new Application ("org.sparkleshare.SparkleShare", GLib.ApplicationFlags.None);
-
-            application.Register (null);
+            application = new Application (APP_ID, GLib.ApplicationFlags.None);
             application.Activated += ApplicationActivatedDelegate;
 
-            if (IconTheme.Default != null)
-                IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
+            if (!application.IsRemote)
+                return;
 
-            var label = new Label ();
-            Gdk.Color color = UserInterfaceHelpers.RGBAToColor (label.StyleContext.GetColor (StateFlags.Insensitive));
-            SecondaryTextColor = UserInterfaceHelpers.ColorToHex (color);
-
-            var tree_view = new TreeView ();
-
-            color = UserInterfaceHelpers.MixColors (
-                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetColor (StateFlags.Selected)),
-                UserInterfaceHelpers.RGBAToColor (tree_view.StyleContext.GetBackgroundColor (StateFlags.Selected)),
-                0.39);
-
-            SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (color);
+            application.Register (null);
         }
 
 
         public void Run (string [] args)
         {
+            ParseArgs (args);
+
             MethodInfo [] methods = typeof (GLib.Application).GetMethods (BindingFlags.Instance | BindingFlags.Public);
             ParameterInfo [] run_parameters = new ParameterInfo [0];
             MethodInfo run_method = methods [0];
@@ -93,8 +83,33 @@ namespace SparkleShare
                 run_method.Invoke ((application as GLib.Application), new object [] { 0, null });
 
             } else {
-                run_method.Invoke ((application as GLib.Application), new object [] { "org.sparkleshare.SparkleShare", new string [0] });
+                run_method.Invoke ((application as GLib.Application), new object [] { APP_ID, new string [0] });
             }
+        }
+
+
+        void ParseArgs (string [] args)
+        {
+            if (args.Length > 0)
+                Logger.LogInfo ("Environment", "Arguments: " + string.Join (" ", args));
+
+            if (Array.IndexOf (args, "--status-icon=gtk") > -1)
+                StatusIcon.use_appindicator = false;
+
+            #if HAVE_APP_INDICATOR
+            if (Array.IndexOf (args, "--status-icon=appindicator") > -1)
+                StatusIcon.use_appindicator = true;
+            #else
+            if (StatusIcon.use_appindicator) {
+                Console.WriteLine ("AppIndicator not installed.");
+                Environment.Exit (-1);
+            }
+            #endif
+
+            if (StatusIcon.use_appindicator)
+                Logger.LogInfo ("Environment", "Status Icon: AppIndicator");
+            else
+                Logger.LogInfo ("Environment", "Status Icon: GtkStatusIcon");
         }
 
 
@@ -116,6 +131,9 @@ namespace SparkleShare
                 return;
             }
 
+            if (IconTheme.Default != null)
+                IconTheme.Default.AppendSearchPath (Path.Combine (UserInterface.AssetsPath, "icons"));
+
             Setup      = new Setup ();
             EventLog   = new EventLog ();
             About      = new About ();
@@ -128,8 +146,24 @@ namespace SparkleShare
             About.Application    = application;
             Note.Application     = application;
 
+            DetectTextColors ();
+
             SparkleShare.Controller.UIHasLoaded ();
+        }
+
+
+        void DetectTextColors ()
+        {
+            Gdk.Color text_color = UserInterfaceHelpers.RGBAToColor (new Label ().StyleContext.GetColor (StateFlags.Insensitive));
+            var tree_view_style = new TreeView ().StyleContext;
+
+            Gdk.Color text_color_selected = UserInterfaceHelpers.MixColors (
+                UserInterfaceHelpers.RGBAToColor (tree_view_style.GetColor (StateFlags.Selected)),
+                UserInterfaceHelpers.RGBAToColor (tree_view_style.GetBackgroundColor (StateFlags.Selected)),
+                0.2);
+
+            SecondaryTextColor = UserInterfaceHelpers.ColorToHex (text_color);
+            SecondaryTextColorSelected = UserInterfaceHelpers.ColorToHex (text_color_selected);
         }
     }
 }
-

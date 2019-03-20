@@ -32,22 +32,19 @@ namespace SparkleShare {
 
         public SetupWindow () : base ("SparkleShare Setup")
         {
-            SetWmclass ("SparkleShare", "SparkleShare");
-
             IconName       = "org.sparkleshare.SparkleShare";
             Resizable      = false;
             WindowPosition = WindowPosition.CenterAlways;
             Deletable      = false;
             TypeHint       = Gdk.WindowTypeHint.Dialog;
 
-
-            SetSizeRequest (400, 400);
+            SetSizeRequest (720, 540);
             DeleteEvent += delegate (object sender, DeleteEventArgs args) { args.RetVal = true; };
 
             VBox layout_vertical = new VBox (false, 16);
             layout_vertical.BorderWidth = 16;
 
-            this.content_area    = new EventBox ();
+            this.content_area = new EventBox ();
             this.option_area = new EventBox ();
 
             this.buttons = CreateButtonBox ();

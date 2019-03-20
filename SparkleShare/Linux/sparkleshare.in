@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $UID -eq 0 ]]; then
-  echo "Please don't run SparkleShare as root. Things would go utterly wrong."
+  echo "SparkleShare can not be run as root. Things would go utterly wrong."
   exit 1
 fi
 
@@ -12,10 +12,18 @@ case $1 in
     curl --insecure --output ~/SparkleShare/.$invite.xml $open
     mono "@ABS_INSTALL_DIR@/SparkleShare.exe"
     ;;
-  help|--help|version|--version)
-    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" help
+    version|--version)
+      echo @VERSION@
+    ;;
+    help|--help)
+      echo "Usage:"
+      echo "  sparkleshare [OPTION]"
+      echo
+      echo "Options:"
+      echo "  --open sparkleshare://URL         Open invite file at URL"
+      echo "  --status-icon=[appindicator|gtk]  Use a specific status icon implementation"
     ;;
   *)
-    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $2
+    mono "@ABS_INSTALL_DIR@/SparkleShare.exe" $@
     ;;
 esac

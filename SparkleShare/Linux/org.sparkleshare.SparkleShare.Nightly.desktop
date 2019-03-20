@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=SparkleShare
+Name=SparkleShare (Nightly)
 Exec=sparkleshare
 Icon=org.sparkleshare.SparkleShare
 Terminal=false

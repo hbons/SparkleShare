@@ -152,22 +152,22 @@ namespace SparkleShare {
 
                 // Padding column
                 tree_view.AppendColumn ("Padding", new Gtk.CellRendererText (), "text", 0);
-                tree_view.Columns [0].Cells [0].Xpad = 4;
+                tree_view.Columns [0].Cells [0].Xpad = 8;
 
                 // Icon column
                 tree_view.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 1);
-                tree_view.Columns [1].Cells [0].Xpad = 4;
+                tree_view.Columns [1].Cells [0].Xpad = 6;
 
                 // Service column
                 TreeViewColumn service_column = new TreeViewColumn () { Title = "Service" };
-                CellRendererText service_cell = new CellRendererText () { Ypad = 8 };
+                CellRendererText service_cell = new CellRendererText () { Ypad = 12 };
                 service_column.PackStart (service_cell, true);
                 service_column.SetCellDataFunc (service_cell, new TreeCellDataFunc (RenderServiceColumn));
 
                 foreach (Preset preset in Controller.Presets) {
                     store.AppendValues ("", new Gdk.Pixbuf (preset.ImagePath),
-                        "<span size=\"small\"><b>" + preset.Name + "</b>\n" +
-                            "<span fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + preset.Description + "</span>" +
+                        "<span><b>" + preset.Name + "</b>\n" +
+                        "<span size=\"small\" fgcolor=\"" + SparkleShare.UI.SecondaryTextColor + "\">" + preset.Description + "</span>" +
                         "</span>", preset);
                 }
 

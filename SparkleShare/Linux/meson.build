@@ -28,10 +28,18 @@ configure_file(
 
 # .desktop and .appdata files
 apps_dir = join_paths(get_option('prefix'), 'share', 'applications')
-install_data(sources: 'org.sparkleshare.SparkleShare.desktop', install_dir: apps_dir)
 install_data(sources: 'org.sparkleshare.SparkleShare.Invites.desktop', install_dir: apps_dir)
 install_data(sources: 'SparkleShare.Autostart.desktop', install_dir: apps_dir)
-install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths(get_option('prefix'), 'share', 'appdata'))
+install_data(sources: 'org.sparkleshare.SparkleShare.appdata.xml', install_dir: join_paths(get_option('prefix'), 'share', 'metainfo'))
+
+if get_option('nightly')
+    install_data(sources: 'org.sparkleshare.SparkleShare.Nightly.desktop',
+        install_dir: apps_dir,
+        rename: 'org.sparkleshare.SparkleShare.desktop')
+else
+    install_data(sources: 'org.sparkleshare.SparkleShare.desktop',
+        install_dir: apps_dir)
+endif
 
 
 # Build SparkleShare
@@ -46,7 +54,7 @@ appindicator = dependency('appindicator3-sharp-0.1', required: get_option('ubunt
 args = '-r:Mono.Posix'
 
 if appindicator.found()
-    args = [args, '-define:HAVE_APP_INDICATOR']
+   args = [args, '-define:HAVE_APP_INDICATOR']
 endif
 
 sparkleshare = executable('SparkleShare',
@@ -60,3 +68,4 @@ sparkleshare = executable('SparkleShare',
 
 subdir('Images')
 subdir('Images/icons')
+

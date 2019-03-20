@@ -81,6 +81,8 @@ namespace Sparkles.Git {
 
             git_config = new GitCommand (LocalPath, "config core.sshCommand " + GitCommand.FormatGitSSHCommand (auth_info));
             git_config.StartAndWaitForExit();
+
+            PrepareGitLFS ();
         }
 
 
@@ -98,8 +100,12 @@ namespace Sparkles.Git {
             get {
                 string file_path = Path.Combine (LocalPath, ".git", "info", "size");
 
+                if (!File.Exists (file_path))
+                    File.WriteAllText (file_path, "0");
+
+                string size = File.ReadAllText (file_path);
+
                 try {
-                    string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
                 } catch (Exception e) {
@@ -114,8 +120,12 @@ namespace Sparkles.Git {
             get {
                 string file_path = Path.Combine (LocalPath, ".git", "info", "history_size");
 
+                if (!File.Exists (file_path))
+                    File.WriteAllText (file_path, "0");
+
+                string size = File.ReadAllText (file_path);
+
                 try {
-                    string size = File.ReadAllText (file_path);
                     return double.Parse (size);
 
                 } catch (Exception e) {
@@ -197,7 +207,7 @@ namespace Sparkles.Git {
                 return false;
             }
 
-            string message = base.status_message.Replace ("\"", "\\\"");
+            string message = base.status_message;
 
             if (string.IsNullOrEmpty (message))
                 message = FormatCommitMessage ();
@@ -205,25 +215,7 @@ namespace Sparkles.Git {
             if (message != null)
                 Commit (message);
 
-            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
-            string pre_push_hook_content;
-
-            // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
-            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
-
-            } else {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    "git-lfs pre-push \"$@\"";
-            }
-
-            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
-            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
+            PrepareGitLFS ();
 
             var git_push = new GitCommand (LocalPath, string.Format ("push --all --progress origin", RemoteUrl), auth_info);
             git_push.StartInfo.RedirectStandardError = true;
@@ -371,17 +363,17 @@ namespace Sparkles.Git {
         // Commits the made changes
         void Commit (string message)
         {
-            GitCommand git;
+            GitCommand git_config;
 
             string user_name  = base.local_config.User.Name;
             string user_email = base.local_config.User.Email;
 
             if (!this.user_is_set) {
-                git = new GitCommand (LocalPath, "config user.name \"" + user_name + "\"");
-                git.StartAndWaitForExit ();
+                git_config = new GitCommand (LocalPath, "config user.name \"" + user_name + "\"");
+                git_config.StartAndWaitForExit ();
 
-                git = new GitCommand (LocalPath, "config user.email \"" + user_email + "\"");
-                git.StartAndWaitForExit ();
+                git_config = new GitCommand (LocalPath, "config user.email \"" + user_email + "\"");
+                git_config.StartAndWaitForExit ();
 
                 this.user_is_set = true;
             }
@@ -394,11 +386,26 @@ namespace Sparkles.Git {
                 user_email = user_email.AESEncrypt (password);
             }
 
-            git = new GitCommand (LocalPath,
-                string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
-                    message, user_name, user_email));
+            GitCommand git_commit;
+            string message_file_path = Path.Combine (LocalPath, ".git", "info", "commit_message");
 
-            git.StartAndReadStandardOutput ();
+            try {
+                File.WriteAllText (message_file_path, message);
+
+                // Commit from message stored in temporary file to avoid special character conflicts on the command line
+                git_commit = new GitCommand (LocalPath, string.Format ("commit --all --file=\"{0}\" --author=\"{1} <{2}>\"",
+		    message_file_path, user_name, user_email));
+
+            } catch (IOException e) {
+                Logger.LogInfo ("Git", Name + " | Could not create commit message file: " + message_file_path, e);
+
+                // If committing with a temporary file fails, use a simple static commit message
+                git_commit = new GitCommand (LocalPath, string.Format ("commit --all --message=\"{0}\" --author=\"{1} <{2}>\"",
+	            "Changes by SparkleShare", user_name, user_email));
+            }
+
+            git_commit.StartAndReadStandardOutput ();
+            File.Delete (message_file_path);
         }
 
 
@@ -427,7 +434,7 @@ namespace Sparkles.Git {
             git = new GitCommand (LocalPath, "config core.ignorecase true");
             git.StartAndWaitForExit ();
 
-            git = new GitCommand (LocalPath, "merge FETCH_HEAD");
+            git = new GitCommand (LocalPath, "merge --no-edit FETCH_HEAD");
             git.StartInfo.RedirectStandardOutput = false;
 
             string error_output = git.StartAndReadStandardError ();
@@ -486,15 +493,14 @@ namespace Sparkles.Git {
             // ??    unmerged, new files       -> Stage the new files
 
             var git_status = new GitCommand (LocalPath, "status --porcelain");
-            string output         = git_status.StartAndReadStandardOutput ();
+            string output = git_status.StartAndReadStandardOutput ();
 
             string [] lines = output.Split ("\n".ToCharArray ());
             bool trigger_conflict_event = false;
 
             foreach (string line in lines) {
                 string conflicting_file_path = line.Substring (3);
-                conflicting_file_path        = EnsureSpecialChars (conflicting_file_path);
-                conflicting_file_path        = conflicting_file_path.Trim ("\"".ToCharArray ());
+                conflicting_file_path = conflicting_file_path.Trim ("\"".ToCharArray ());
 
                 // Remove possible rename indicators
                 string [] separators = {" -> \"", " -> "};
@@ -794,8 +800,7 @@ namespace Sparkles.Git {
                         change_set.User.Name.AESDecrypt (password),
                         change_set.User.Email.AESDecrypt (password));
 
-                } catch (Exception e) {
-                    Console.WriteLine (e.StackTrace);
+                } catch (Exception) {
                     change_set.User = new User (match.Groups ["name"].Value, match.Groups ["email"].Value);
                 }
             }
@@ -876,56 +881,37 @@ namespace Sparkles.Git {
                 change.IsFolder = true;
             }
 
-            try {
-                change.Path = EnsureSpecialChars (change.Path);
-
-                if (change.Type == ChangeType.Moved)
-                    change.MovedToPath = EnsureSpecialChars (change.MovedToPath);
-
-            } catch (Exception e) {
-                Logger.LogInfo ("Local", string.Format ("Error parsing line due to special character: '{0}'", line), e);
-                return null;
-            }
-
             return change;
         }
 
 
-        string EnsureSpecialChars (string path)
+        // The pre-push hook may have been changed by Git LFS, overwrite it to use our own configuration
+        void PrepareGitLFS ()
         {
-            // The path is quoted if it contains special characters
-            if (path.StartsWith ("\""))
-                path = ResolveSpecialChars (path.Substring (1, path.Length - 2));
+            string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
+            string pre_push_hook_content;
 
-            return path;
-        }
+            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
+                pre_push_hook_content =
+                    "#!/bin/sh" + Environment.NewLine +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
 
-
-        string ResolveSpecialChars (string s)
-        {
-            StringBuilder builder = new StringBuilder (s.Length);
-            List<byte> codes      = new List<byte> ();
-
-            for (int i = 0; i < s.Length; i++) {
-                while (s [i] == '\\' &&
-                    s.Length - i > 3 &&
-                    char.IsNumber (s [i + 1]) &&
-                    char.IsNumber (s [i + 2]) &&
-                    char.IsNumber (s [i + 3])) {
-
-                    codes.Add (Convert.ToByte (s.Substring (i + 1, 3), 8));
-                    i += 4;
-                }
-
-                if (codes.Count > 0) {
-                    builder.Append (Encoding.UTF8.GetString (codes.ToArray ()));
-                    codes.Clear ();
-                }
-
-                builder.Append (s [i]);
+            } else {
+                pre_push_hook_content =
+                    "#!/bin/sh" + Environment.NewLine +
+                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
+                    "git-lfs pre-push \"$@\"";
             }
 
-            return builder.ToString ();
+            if (InstallationInfo.OperatingSystem != OS.Windows) {
+                // TODO: Use proper API
+                var chmod = new Command ("chmod", "700 " + pre_push_hook_path);
+                chmod.StartAndWaitForExit ();
+            }
+
+            Directory.CreateDirectory (Path.GetDirectoryName (pre_push_hook_path));
+            File.WriteAllText (pre_push_hook_path, pre_push_hook_content);
         }
 
 
@@ -989,7 +975,7 @@ namespace Sparkles.Git {
 
             while (!git_status.StandardOutput.EndOfStream) {
                 string line = git_status.StandardOutput.ReadLine ();
-                line        = line.Trim ();
+                line = line.Trim ();
 
                 if (line.EndsWith (".empty") || line.EndsWith (".empty\""))
                     line = line.Replace (".empty", "");
@@ -1002,13 +988,13 @@ namespace Sparkles.Git {
 
                     change = new Change () {
                         Type = ChangeType.Moved,
-                        Path = EnsureSpecialChars (path),
-                        MovedToPath = EnsureSpecialChars (moved_to_path)
+                        Path = path,
+                        MovedToPath = moved_to_path
                     };
 
                 } else {
                     string path = line.Substring (2).Trim ("\" ".ToCharArray ());
-                    change = new Change () { Path = EnsureSpecialChars (path) };
+                    change = new Change () { Path = path };
                     change.Type = ChangeType.Added;
 
                     if (line.StartsWith ("M")) {
@@ -1036,8 +1022,8 @@ namespace Sparkles.Git {
 
             foreach (Change change in ParseStatus ()) {
                 if (change.Type == ChangeType.Moved) {
-                    message +=  "< ‘" + EnsureSpecialChars (change.Path) + "’\n";
-                    message +=  "> ‘" + EnsureSpecialChars (change.MovedToPath) + "’\n";
+                    message +=  "< ‘" + change.Path + "’\n";
+                    message +=  "> ‘" + change.MovedToPath + "’\n";
 
                 } else {
                     switch (change.Type) {
