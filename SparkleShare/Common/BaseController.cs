@@ -154,6 +154,18 @@ namespace SparkleShare {
         }
 
 
+        public string AvatarsProvider {
+            get {
+                string avatars_provider_string = Config.GetConfigOption ("avatars_provider");
+
+                if (fetch_avatars_option == null)
+                    return "gravatar";
+
+                return avatars_provider_string;
+            }
+        }
+
+
         // Path where the plugins are kept
         public abstract string PresetsPath { get; }
 
@@ -451,8 +463,15 @@ namespace SparkleShare {
             };
 
             repo.NewChangeSet += delegate (ChangeSet change_set) {
-                if (AvatarsEnabled)
-                    change_set.User.AvatarFilePath = Avatars.GetAvatar (change_set.User.Email, 48, Config.DirectoryPath);
+                if (AvatarsEnabled) {
+                    if (AvatarsProvider == "libravatar")
+                        provider = AvatarsProvider;
+                    else
+                        provider = "gravatar";
+
+                    change_set.User.AvatarFilePath = Avatars.GetAvatar (change_set.User.Email, 48, Config.DirectoryPath, provider);
+
+                }
 
                 NotificationRaised (change_set);
             };

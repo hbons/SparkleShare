@@ -32,10 +32,13 @@ namespace SparkleShare
         static List<string> skipped_avatars = new List<string> ();
 
 
-        public static string GetAvatar (string email, int size, string target_path)
+        public static string GetAvatar (string email, int size, string target_path, string provider)
         {
             #if __MonoCS__
-            ServicePointManager.ServerCertificateValidationCallback = GetAvatarValidationCallBack;
+                if (provider == "libravatar")
+                    ServicePointManager.ServerCertificateValidationCallback = GetlibRavatarValidationCallBack;
+                else
+                    ServicePointManager.ServerCertificateValidationCallback = GetGravatarValidationCallBack;
             #endif
 
             email = email.ToLower ();
@@ -68,7 +71,11 @@ namespace SparkleShare
             }
 
             var client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+
+            if (provider == "libravatar")
+                string url =  "https://seccdn.libravatar.org/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+            else
+                string url =  "https://secure.gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
@@ -107,7 +114,7 @@ namespace SparkleShare
         }
 
 
-        private static bool GetAvatarValidationCallBack (Object sender,
+        private static bool GetGravatarValidationCallBack (Object sender,
             X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
@@ -121,6 +128,26 @@ namespace SparkleShare
 
             if (!certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
                 Logger.LogInfo ("Avatars", "Invalid certificate for https://www.gravatar.com/");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool GetlibRavatarValidationCallBack (Object sender,
+            X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
+
+            // On some systems (mostly Linux) we can't assume the needed certificates are
+            // available, so we have to check the certificate's SHA-1 fingerprint manually.
+            //
+            // SHA1 fingerprinter obtained from https://www.libravatar.org/ on Feb 14 2020
+            // Set to expire on Apr 02 2020
+            string libravatar_cert_fingerprint = "CF22357CE83BA551D8F877AEFB89EF3668620AE6";
+
+            if (!certificate2.Thumbprint.Equals (libravatar_cert_fingerprint)) {
+                Logger.LogInfo ("Avatars", "Invalid certificate for https://www.libravatar.org/");
                 return false;
             }
 
