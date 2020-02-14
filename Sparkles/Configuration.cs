@@ -2,8 +2,8 @@
 //   Copyright (C) 2010  Hylke Bons <hi@planetpeanut.uk>
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU Lesser General Public License as 
-//   published by the Free Software Foundation, either version 3 of the 
+//   it under the terms of the GNU Lesser General Public License as
+//   published by the Free Software Foundation, either version 3 of the
 //   License, or (at your option) any later version.
 //
 //   This program is distributed in the hope that it will be useful,
@@ -32,10 +32,10 @@ namespace Sparkles {
                 app_data_path = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
 
             string config_path = Path.Combine (app_data_path, "org.sparkleshare.SparkleShare");
-            
+
             return new Configuration (config_path, "projects.xml");
         });
-        
+
         public static Configuration DefaultConfiguration { get { return ConfigLazy.Value; } }
         public static bool DebugMode = true;
 
@@ -43,6 +43,7 @@ namespace Sparkles {
         public readonly string FilePath;
         public readonly string TmpPath;
         public readonly string BinPath;
+        public string AvatarProvider;
 
         public readonly string LogFilePath;
 
@@ -51,7 +52,7 @@ namespace Sparkles {
             get {
                 if (InstallationInfo.OperatingSystem == OS.Windows)
                     return Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
-                
+
                 return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
             }
         }
@@ -59,9 +60,9 @@ namespace Sparkles {
 
         public string FoldersPath {
             get {
-                if (GetConfigOption ("folders_path") != null)                      
+                if (GetConfigOption ("folders_path") != null)
                     return GetConfigOption ("folders_path");
-                
+
                 return Path.Combine (HomePath, "SparkleShare");
             }
         }
@@ -336,15 +337,15 @@ namespace Sparkles {
         {
             return SelectSingleNode (string.Format ("/sparkleshare/folder[name=\"{0}\"]", name));
         }
-        
-        
+
+
         string FolderValueByKey (string name, string key)
         {
             XmlNode folder = FolderByName(name);
-            
+
             if ((folder != null) && (folder [key] != null))
                 return folder [key].InnerText;
-            
+
             return null;
         }
 

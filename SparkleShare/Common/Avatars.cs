@@ -71,11 +71,12 @@ namespace SparkleShare
             }
 
             var client = new WebClient ();
+            string url = "";
 
             if (provider == "libravatar")
-                string url =  "https://seccdn.libravatar.org/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+                url =  "https://seccdn.libravatar.org/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
             else
-                string url =  "https://secure.gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+                url =  "https://secure.gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
