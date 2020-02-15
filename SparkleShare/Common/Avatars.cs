@@ -32,10 +32,11 @@ namespace SparkleShare
         static List<string> skipped_avatars = new List<string> ();
 
 
-        public static string GetAvatar (string email, int size, string target_path)
+        public static string GetAvatar (string email, int size, string target_path, string provider)
         {
             #if __MonoCS__
-            ServicePointManager.ServerCertificateValidationCallback = GetAvatarValidationCallBack;
+                if (provider == "gravatar")
+                    ServicePointManager.ServerCertificateValidationCallback = GetGravatarValidationCallBack;
             #endif
 
             email = email.ToLower ();
@@ -68,7 +69,12 @@ namespace SparkleShare
             }
 
             var client = new WebClient ();
-            string url =  "https://gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+            string url = "";
+
+            if (provider == "libravatar")
+                url =  "https://seccdn.libravatar.org/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
+            else
+                url =  "https://secure.gravatar.com/avatar/" + email.MD5 () + ".png?s=" + size + "&d=404";
 
             try {
                 byte [] buffer = client.DownloadData (url);
@@ -107,7 +113,7 @@ namespace SparkleShare
         }
 
 
-        private static bool GetAvatarValidationCallBack (Object sender,
+        private static bool GetGravatarValidationCallBack (Object sender,
             X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             X509Certificate2 certificate2 = new X509Certificate2 (certificate.GetRawCertData ());
@@ -115,9 +121,9 @@ namespace SparkleShare
             // On some systems (mostly Linux) we can't assume the needed certificates are
             // available, so we have to check the certificate's SHA-1 fingerprint manually.
             //
-            // SHA1 fingerprinter obtained from https://www.gravatar.com/ on Oct 16 2015
-            // Set to expire on Oct 14 2018
-            string gravatar_cert_fingerprint = "1264B3F00814C6077D3853238771EE67FB6321C9";
+            // SHA1 fingerprinter obtained from https://www.gravatar.com/ on Feb 14 2020
+            // Set to expire on Sep 05 2020
+            string gravatar_cert_fingerprint = "3011C8954A672A01557E804AFF2F3D006D9BBD7C";
 
             if (!certificate2.Thumbprint.Equals (gravatar_cert_fingerprint)) {
                 Logger.LogInfo ("Avatars", "Invalid certificate for https://www.gravatar.com/");

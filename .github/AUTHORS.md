@@ -20,6 +20,7 @@ Code:
 	Luis Cordova <cordoval@gmail.com>
 	Łukasz Jernaś <deejay1@srem.org>
 	Markus Stoll <post@mstoll.de>
+    Malte Kiefer <malte.kiefer@mailgermania.de>
 	Michael Monreal <michael.monreal@gmail.com>
 	Nick Richards <nick@nickr.org>
 	Oleg Khlystov <pktfag@gmail.com>
