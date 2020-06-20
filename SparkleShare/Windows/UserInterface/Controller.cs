@@ -56,7 +56,7 @@ namespace SparkleShare {
 
             SSHCommand.SSHPath = Path.Combine (msysgit_path, "usr", "bin");
             SSHFetcher.SSHKeyScan = "ssh-keyscan.exe";
-            GitCommand.GitPath = Path.Combine (msysgit_path, "bin", "git.exe");
+            GitCommand.GitPath = Path.Combine (msysgit_path, "cmd", "git.exe");
 
             base.Initialize ();
         }
