@@ -62,7 +62,8 @@ namespace Sparkles {
                 base.Start ();
 
             } catch (Exception e) {
-                Logger.LogInfo ("Cmd", "Couldn't execute command: " + e.Message);
+                Logger.LogInfo ("Cmd", "Couldn't execute command: " 
+                    +StartInfo.FileName+","+ e.Message);
                 Environment.Exit (-1);
             }
         }
