@@ -18,6 +18,7 @@
 using System;
 using System.Net;
 using System.Threading;
+using System.Net.Security;
 
 using Sparkles;
 
@@ -61,10 +62,7 @@ namespace SparkleShare {
             UpdateLabelEvent ("Checking for updates…");
             Thread.Sleep (500);
 
-            ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
 
             var web_client = new WebClient ();
             var uri = new Uri ("https://www.sparkleshare.org/version");
@@ -83,5 +81,5 @@ namespace SparkleShare {
                 UpdateLabelEvent ("Couldn’t check for updates\t");
             }
         }
-    }
+	}
 }
