@@ -178,7 +178,7 @@ namespace Sparkles.Git {
                 string remote_revision = "" + output.Substring (0, 40);
 
                 if (!remote_revision.Equals (current_revision)) {
-                    git = new GitCommand (LocalPath, "merge-base " + remote_revision + " master");
+                    git = new GitCommand (LocalPath, "merge-base " + remote_revision + " " + this.branch);
                     git.StartAndWaitForExit ();
 
                     if (git.ExitCode != 0) {
