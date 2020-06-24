@@ -7,10 +7,11 @@ You can choose to build SparkleShare from source or to run the Windows installer
 Install [VisualStudioCommunity](https://visualstudio.microsoft.com/de/vs/community/)
 or install version 4.0 of the [.NET Framework](http://www.microsoft.com/download/en/details.aspx?id=17851) if you haven't already.
 
-To install OpenSSH open a cmd.exe as administration and execute the followind code.
+To install OpenSSH open a cmd.exe as administration and execute the following code.
 
 ```
 powershell -command "Add-WindowsCapability -Online -Name OpenSSH.Client"
+powershell -command "Add-WindowsCapability -Online -Name OpenSSH.Server"
 ```
 
 Download [Git](https://github.com/desktop/dugite-native/releases/download/v2.16.2/dugite-native-v2.16.2-win32-119.tar.gz) and copy the contents to `C:\path\to\SparkleShare-sources\bin\msysgit\` (create the "bin"-folder in the SparkleShare source directory).
