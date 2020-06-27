@@ -61,6 +61,8 @@ namespace SparkleShare {
             UpdateLabelEvent ("Checking for updates…");
             Thread.Sleep (500);
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             var web_client = new WebClient ();
             var uri = new Uri ("https://www.sparkleshare.org/version");
 
@@ -78,5 +80,5 @@ namespace SparkleShare {
                 UpdateLabelEvent ("Couldn’t check for updates\t");
             }
         }
-    }
+	}
 }
