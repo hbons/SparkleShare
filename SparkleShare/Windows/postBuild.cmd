@@ -5,8 +5,8 @@ IF [%1]==[]  (SET OUTDIR="%~dp0\..\..\bin\msysgit") ELSE (SET OUTDIR=%~1)
 IF EXIST %OUTDIR%\cmd GOTO skipgitdownload
 REM download helper tool
 ECHO installing git
-CALL :downloadandverify https://github.com/senthilrajasek/tartool/releases/download/1.0.0/TarTool.zip tartool.zip 5ed0d78cb4d83dd0e124015a30ea69f8e5101c62c8c29a9f448f208147b59c04
-powershell -command "Expand-Archive -Force -Path tartool.zip -DestinationPath %~dp0/tools"
+CALL :downloadandverify https://github.com/senthilrajasek/tartool/releases/download/1.0.0/TarTool.zip %~dp0\tartool.zip 5ed0d78cb4d83dd0e124015a30ea69f8e5101c62c8c29a9f448f208147b59c04
+powershell -command "Expand-Archive -Force -Path %~dp0\tartool.zip -DestinationPath %~dp0/tools"
 
 REM download git
 FOR /F "usebackq tokens=1" %%i IN ("%~dp0\git.download") DO SET url=%%i
