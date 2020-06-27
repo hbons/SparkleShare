@@ -211,23 +211,23 @@
       <Link>Images\user-icon-default.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-added-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-added.png">
       <Link>Images\document-added-12.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-deleted-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-deleted.png">
       <Link>Images\document-deleted-12.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-edited-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-edited.png">
       <Link>Images\document-edited-12.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\document-moved-12.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\12x12\status\document-moved.png">
       <Link>Images\document-moved-12.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\process-working-22.png">
+    <EmbeddedResource Include="..\Linux\Images\icons\hicolor\22x22\status\process-working.png">
       <Link>Images\process-working-22.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -334,4 +334,7 @@
       <Name>Sparkles.Git</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>$(ProjectDir)\postBuild.cmd $(TargetDir)\msysgit</PostBuildEvent>
+  </PropertyGroup>
 </Project>
