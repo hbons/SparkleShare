@@ -54,11 +54,12 @@ namespace SparkleShare {
 
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
-            SSHCommand.SSHPath = Path.Combine (msysgit_path, "usr", "bin");
-            SSHFetcher.SSHKeyScan = Path.Combine (msysgit_path, "usr", "bin", "ssh-keyscan.exe");
-            GitCommand.GitPath = Path.Combine (msysgit_path, "bin", "git.exe");
-
+            SSHCommand.SSHPath = Path.Combine(Environment.SystemDirectory, "OpenSSH");
+            SSHFetcher.SSHKeyScan = Path.Combine(SSHCommand.SSHPath, "ssh-keyscan.exe");
+            GitCommand.GitPath = Path.Combine (msysgit_path, "cmd", "git.exe");
             base.Initialize ();
+            File.Copy(Path.Combine(msysgit_path, "mingw64", "libexec", "git-core", "git-lfs.exe"), Path.Combine(Config.BinPath, "git-lfs.exe"), true);
+
         }
 
 
@@ -129,7 +130,7 @@ namespace SparkleShare {
             Shortcut shortcut = new Shortcut ();
             shortcut.Create (shortcut_path, shortcut_target);
         }
-        
+
 
         public override void InstallProtocolHandler ()
         {
@@ -184,14 +185,14 @@ namespace SparkleShare {
         {
             try {
                 Clipboard.SetData (DataFormats.Text, text);
-            
+
             } catch (COMException e) {
                 Logger.LogInfo ("Controller", "Copy to clipboard failed", e);
             }
         }
 
 
-        public override void Quit ()
+        public override void PlatformQuit ()
         {
             base.Quit ();
         }
