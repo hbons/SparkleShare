@@ -194,7 +194,7 @@ namespace SparkleShare {
 
         public override void PlatformQuit ()
         {
-            base.Quit ();
+            System.Environment.Exit(0);
         }
     }
 }
