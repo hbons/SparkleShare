@@ -93,11 +93,19 @@ namespace SparkleShare
             if (args.Length > 0)
                 Logger.LogInfo ("Environment", "Arguments: " + string.Join (" ", args));
 
+            if (Array.IndexOf (args, "--status-icon=gtk") > -1)
+                StatusIcon.use_appindicator = false;
+
+            #if HAVE_APP_INDICATOR
             if (Array.IndexOf (args, "--status-icon=appindicator") > -1)
                 StatusIcon.use_appindicator = true;
-
-            if (Array.IndexOf (args, "--status-icon=gtk") > -1 || !StatusIcon.use_appindicator)
+            #else
+            if (StatusIcon.use_appindicator) {
+                Console.WriteLine ("AppIndicator not installed.");
                 StatusIcon.use_appindicator = false;
+                Logger.LogInfo ("Environment", "Use fallback GtkStatusIcon");
+            }
+            #endif              
 
             if (StatusIcon.use_appindicator)
                 Logger.LogInfo ("Environment", "Status Icon: AppIndicator");
