@@ -1,3 +1,15 @@
+3.29.0 (Fri 23 Oct, 2020):
+
+    - Added support for LibRAavatar
+    - Updated Gravatar cert fingerprint
+    - Removed planio from supported presets
+
+    Linux:
+    - Added fallback for tray/status icon
+
+    Mac:
+    - Bump minimum macOS version to 10.9
+
 3.28.0 (Sat 14 Jul, 2018):
 
     Fixed a bunch of crashes and lots of under-the-hood improvements.
