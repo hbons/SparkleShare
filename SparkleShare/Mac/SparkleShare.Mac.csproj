@@ -281,12 +281,6 @@
     <BundleResource Include="..\Common\Presets\own-server%402x.png">
       <Link>Presets\own-server%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Common\Presets\planio.png">
-      <Link>Presets\planio.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\planio%402x.png">
-      <Link>Presets\planio%402x.png</Link>
-    </BundleResource>
     <BundleResource Include="..\Common\Presets\bitbucket.xml">
       <Link>Presets\bitbucket.xml</Link>
     </BundleResource>
@@ -298,9 +292,6 @@
     </BundleResource>
     <BundleResource Include="..\Common\Presets\own-server.xml">
       <Link>Presets\own-server.xml</Link>
-    </BundleResource>
-    <BundleResource Include="..\Common\Presets\planio.xml">
-      <Link>Presets\planio.xml</Link>
     </BundleResource>
     <BundleResource Include="..\Common\HTML\day-entry.html">
       <Link>HTML\day-entry.html</Link>
