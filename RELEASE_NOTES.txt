@@ -1,3 +1,6 @@
+3.36.0
+
+
 3.28.0 (Sat 14 Jul, 2018):
 
     Fixed a bunch of crashes and lots of under-the-hood improvements.
