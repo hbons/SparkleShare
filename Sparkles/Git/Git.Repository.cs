@@ -435,6 +435,7 @@ namespace Sparkles.Git {
             git.StartAndWaitForExit ();
 
             git = new GitCommand (LocalPath, "merge --no-edit FETCH_HEAD");
+            git.StartInfo.StandardOutputEncoding = null;
             git.StartInfo.RedirectStandardOutput = false;
 
             string error_output = git.StartAndReadStandardError ();
@@ -616,6 +617,7 @@ namespace Sparkles.Git {
             var git = new GitCommand (LocalPath,
                 "commit --message=\"Conflict resolution\" --author=\"SparkleShare <info@sparkleshare.org>\"");
 
+            git.StartInfo.StandardOutputEncoding = null;
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
 
