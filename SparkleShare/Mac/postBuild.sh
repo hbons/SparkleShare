@@ -11,4 +11,3 @@ export PATH=/usr/local/bin:/opt/local/bin:/Library/Frameworks/Mono.framework/Ver
 ${projectFolder}/checkGit.sh
 tar -x -f ${projectFolder}/git.tar.gz --directory ${bundle}/Contents/Resources
 cp -R SparkleShareInviteOpener.app ${bundle}/Contents/Resources
-cp config ${bundle}/Contents/MonoBundle
