@@ -27,7 +27,7 @@ namespace SparkleShare {
 
     public class EventLog : NSWindow {
 
-        public EventLogController Controller = new EventLogController ();
+        public EventLogController Controller = new EventLogController (false);
         public float TitlebarHeight;
 
         WebView web_view;

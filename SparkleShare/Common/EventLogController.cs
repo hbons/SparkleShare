@@ -53,7 +53,7 @@ namespace SparkleShare {
         private string selected_folder;
         private RevisionInfo restore_revision_info;
         private bool history_view_active;
-
+        private bool fix_utf_encoding;
 
         public bool WindowIsOpen { get; private set; }
 
@@ -144,8 +144,14 @@ namespace SparkleShare {
         }
 
 
-        public EventLogController ()
+        public EventLogController () : this (true)
         {
+        }
+
+        public EventLogController (bool fix_utf_encoding)
+        {
+            this.fix_utf_encoding = fix_utf_encoding;
+
             SparkleShare.Controller.ShowEventLogWindowEvent += delegate {
                 if (!WindowIsOpen) {
                     ContentLoadingEvent ();
@@ -257,8 +263,11 @@ namespace SparkleShare {
                 string folder    = href.Replace ("history://", "").Split ("/".ToCharArray ()) [0];
                 string file_path = href.Replace ("history://" + folder + "/", "");
 
-                byte [] file_path_bytes = Encoding.Default.GetBytes (file_path);
-                file_path               = Encoding.UTF8.GetString (file_path_bytes);
+                if(fix_utf_encoding)
+                {
+                    byte [] file_path_bytes = Encoding.Default.GetBytes (file_path);
+                    file_path = Encoding.UTF8.GetString (file_path_bytes);
+                }
 
                 file_path = Uri.UnescapeDataString (file_path);
 
@@ -536,10 +545,13 @@ namespace SparkleShare {
 
         private string FormatBreadCrumbs (string path_root, string path)
         {
-            byte [] path_root_bytes = Encoding.Default.GetBytes (path_root);
-            byte [] path_bytes      = Encoding.Default.GetBytes (path);
-            path_root               = Encoding.UTF8.GetString (path_root_bytes);
-            path                    = Encoding.UTF8.GetString (path_bytes);
+            if(fix_utf_encoding)
+            {
+                byte [] path_root_bytes = Encoding.Default.GetBytes (path_root);
+                byte [] path_bytes = Encoding.Default.GetBytes (path);
+                path_root = Encoding.UTF8.GetString (path_root_bytes);
+                path = Encoding.UTF8.GetString (path_bytes);
+            }
 
             path_root                = path_root.Replace ("/", Path.DirectorySeparatorChar.ToString ());
             path                     = path.Replace ("/", Path.DirectorySeparatorChar.ToString ());

@@ -99,7 +99,8 @@ namespace Sparkles.Git {
             SetEnvironmentVariable ("PREFIX", "");
             SetEnvironmentVariable ("HOME", "");
 
-            SetEnvironmentVariable ("LANG", "en_US");
+            SetEnvironmentVariable ("LANG", "en_US.UTF8");
+            SetEnvironmentVariable ("LC_ALL", "en_US.UTF8");
         }
 
 
