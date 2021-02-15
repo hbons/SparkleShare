@@ -149,6 +149,10 @@ namespace SparkleShare {
             if (handler != null) {
                 List<string> filtered_paths = new List<string> ();
                 foreach (var path in paths) {
+                    if (path.EndsWith(".git")
+                        || path.Contains ("/.git/"))
+                        continue;
+
                     if (path.Length > BasePath.Length) {
                         var t = path.Substring (BasePath.Length);
                         t = t.Trim ("/".ToCharArray ());
