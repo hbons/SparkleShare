@@ -11,6 +11,8 @@ function abspath()
   esac
 }
 
+export projectFolder=$(dirname $0)
+export projectFolder=$(abspath ${projectFolder})
 
 LINE=$(cat ${projectFolder}/git.download)
 TMP=()
@@ -19,23 +21,22 @@ for val in $LINE ; do
         TMP+=("$val")
 done
 
-export projectFolder=$(dirname $0)
-export projectFolder=$(abspath ${projectFolder})
 export gitDownload="${TMP[0]}"
+export gitName=${gitDownload##*/}
 export gitSHA256="${TMP[1]}"
+
 
 set -e
 
 
-if [ ! -f ${projectFolder}/git.tar.gz ]
+if [[ ! -f ${projectFolder}/${gitName} ]];
 then
-  curl --silent --location ${gitDownload} > git.tar.gz
-  test -e git.tar.gz || { echo "Failed to download git"; exit 1; }
+  curl --silent --location ${gitDownload} > ${gitName}
+  test -e ${gitName} || { echo "Failed to download git"; exit 1; }
 
-  printf "${gitSHA256}  git.tar.gz" | shasum --check --algorithm 256
+  printf "${gitSHA256}  ${gitName}" | shasum --check --algorithm 256
 
-  mkdir git/
-  tar xzf git.tar.gz --directory git/
-  tar czf git.tar.gz git/
-  rm -rf git/
 fi
+
+rm git.tar.gz
+ln -s $gitName git.tar.gz
