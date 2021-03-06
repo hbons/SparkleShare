@@ -1,6 +1,6 @@
 # Install app icons in system theme
 theme_dir = join_paths(get_option('prefix'), 'share', 'icons', 'hicolor')
-icon_sizes = ['16', '24', '48', '256', '512']
+icon_sizes = ['scalable']
 
 app_icon_name = 'org.sparkleshare.SparkleShare'
 source_icon_name = app_icon_name
@@ -13,9 +13,9 @@ foreach size : icon_sizes
     icon_dir = join_paths(size + 'x' + size, 'apps')
 
     install_data(
-        sources: join_paths('hicolor', icon_dir, source_icon_name + '.png'),
+        sources: join_paths('hicolor', icon_dir, source_icon_name + '.svg'),
         install_dir: join_paths(theme_dir, icon_dir),
-        rename: app_icon_name + '.png')
+        rename: app_icon_name + '.svg')
 endforeach
 
 install_data(
