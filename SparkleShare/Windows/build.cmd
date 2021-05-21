@@ -8,7 +8,7 @@ set wixBinDir=%WIX%\bin
 if not exist ..\..\bin mkdir ..\..\bin
 copy Images\sparkleshare-app.ico ..\..\bin\
 
-%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" "%~dp0\SparkleShare.sln"
+%msbuild% /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" "%~dp0\..\..\SparkleShare.sln"
 
 if "%1"=="installer" (
 	if exist "%wixBinDir%" (
