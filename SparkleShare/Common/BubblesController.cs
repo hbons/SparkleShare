@@ -21,13 +21,20 @@ using Sparkles;
 namespace SparkleShare {
 
     public class BubblesController {
+        private bool fix_utf_encoding;
 
         public event ShowBubbleEventHandler ShowBubbleEvent = delegate { };
         public delegate void ShowBubbleEventHandler (string title, string subtext, string image_path);
 
 
-        public BubblesController ()
+        public BubblesController () : this(true)
         {
+        }
+
+        public BubblesController (bool fix_utf_encoding)
+        {
+            this.fix_utf_encoding = fix_utf_encoding;
+
             SparkleShare.Controller.AlertNotificationRaised += delegate (string title, string message) {
                 ShowBubble (title, message, null);
             };
@@ -40,10 +47,13 @@ namespace SparkleShare {
 
         public void ShowBubble (string title, string subtext, string image_path)
         {
-            byte [] title_bytes   = Encoding.Default.GetBytes (title);
-            byte [] subtext_bytes = Encoding.Default.GetBytes (subtext);
-            title                 = Encoding.UTF8.GetString (title_bytes);
-            subtext               = Encoding.UTF8.GetString (subtext_bytes);
+            if(fix_utf_encoding)
+            {
+                byte [] title_bytes = Encoding.Default.GetBytes (title);
+                byte [] subtext_bytes = Encoding.Default.GetBytes (subtext);
+                title = Encoding.UTF8.GetString (title_bytes);
+                subtext = Encoding.UTF8.GetString (subtext_bytes);
+            }
 
             ShowBubbleEvent (title, subtext, image_path);
         }

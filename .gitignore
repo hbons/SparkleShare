@@ -18,8 +18,8 @@ obj/
 git-*
 Sparkles/InstallationInfo.Directory.cs
 SparkleShare/Linux/sparkleshare
-SparkleShare/Mac/git/*
 SparkleShare/Mac/git*
+SparkleShare/Mac/*.tar.gz
 /sparkleshare-*
 desktop.ini
 _ReSharper.*

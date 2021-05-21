@@ -41,6 +41,7 @@ namespace Sparkles {
             StartInfo.WorkingDirectory = Path.GetTempPath ();
             StartInfo.CreateNoWindow = true;
             StartInfo.RedirectStandardOutput = true;
+            StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
             StartInfo.RedirectStandardError = true;
             StartInfo.UseShellExecute = false;
 

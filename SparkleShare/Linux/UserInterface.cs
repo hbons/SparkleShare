@@ -101,7 +101,10 @@ namespace SparkleShare
                 StatusIcon.use_appindicator = true;
             #else
             if (StatusIcon.use_appindicator) {
-                Console.WriteLine ("AppIndicator not installed.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine ("error: AppIndicator not found. Install AppIndicator or run with --status-icon=gtk");
+                Console.ResetColor ();
+
                 Environment.Exit (-1);
             }
             #endif
