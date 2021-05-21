@@ -1,23 +1,19 @@
 ECHO ON
 REM if no target directory is passed use default on
-IF [%1]==[]  (SET OUTDIR="%~dp0\..\..\bin\msysgit") ELSE (SET OUTDIR=%~1)
+IF [%1]==[]  (SET OUTDIR="%~dp0..\..\bin\msysgit") ELSE (SET OUTDIR=%~1)
 
 IF EXIST %OUTDIR%\cmd GOTO skipgitdownload
-REM download helper tool
 ECHO installing git
-CALL :downloadandverify https://github.com/senthilrajasek/tartool/releases/download/1.0.0/TarTool.zip %~dp0\tartool.zip 5ed0d78cb4d83dd0e124015a30ea69f8e5101c62c8c29a9f448f208147b59c04
-powershell -command "Expand-Archive -Force -Path %~dp0\tartool.zip -DestinationPath %~dp0/tools"
-
 REM download git
 FOR /F "usebackq tokens=1" %%i IN ("%~dp0\git.download") DO SET url=%%i
 FOR /F "usebackq tokens=2" %%i IN ("%~dp0\git.download") DO SET md5hash=%%i
 CALL :downloadandverify %url% %~dp0\git.tar.gz %md5hash%
-%~dp0\tools\tartool %~dp0\git.tar.gz %OUTDIR%
-
-DEL /s /q %~dp0\tartool.zip
-DEL /s /q %~dp0\git.tar.gz
-DEL /s /q %~dp0\tools
-RMDIR %~dp0\tools
+XCOPY  %~dp0\git.tar.gz %OUTDIR%\  /Y /i
+CD %OUTDIR%
+TAR -xf git.tar.gz
+DEL /s /q git.tar.gz
+CD %~dp0
+PAUSE
 
 :skipgitdownload
 
