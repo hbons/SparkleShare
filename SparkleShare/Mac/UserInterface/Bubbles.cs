@@ -22,7 +22,7 @@ namespace SparkleShare {
     
     public class Bubbles : NSObject {
 
-        public BubblesController Controller = new BubblesController ();
+        public BubblesController Controller = new BubblesController (false);
 
 
         public Bubbles ()

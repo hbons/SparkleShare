@@ -125,15 +125,6 @@
     <None Include="..\Common\Presets\own-server%402x.png">
       <Link>Presets\own-server%402x.png</Link>
     </None>
-    <None Include="..\Common\Presets\planio.png">
-      <Link>Presets\planio.png</Link>
-    </None>
-    <None Include="..\Common\Presets\planio.xml">
-      <Link>Presets\planio.xml</Link>
-    </None>
-    <None Include="..\Common\Presets\planio%402x.png">
-      <Link>Presets\planio%402x.png</Link>
-    </None>
     <None Include="org.sparkleshare.SparkleShare.appdata.xml" />
     <None Include="org.sparkleshare.SparkleShare.desktop" />
     <None Include="org.sparkleshare.SparkleShare.Invites.desktop" />

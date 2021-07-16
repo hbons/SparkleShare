@@ -435,6 +435,7 @@ namespace Sparkles.Git {
             git.StartAndWaitForExit ();
 
             git = new GitCommand (LocalPath, "merge --no-edit FETCH_HEAD");
+            git.StartInfo.StandardOutputEncoding = null;
             git.StartInfo.RedirectStandardOutput = false;
 
             string error_output = git.StartAndReadStandardError ();
@@ -616,6 +617,7 @@ namespace Sparkles.Git {
             var git = new GitCommand (LocalPath,
                 "commit --message=\"Conflict resolution\" --author=\"SparkleShare <info@sparkleshare.org>\"");
 
+            git.StartInfo.StandardOutputEncoding = null;
             git.StartInfo.RedirectStandardOutput = false;
             git.StartAndWaitForExit ();
 
@@ -934,7 +936,12 @@ namespace Sparkles.Git {
                         string HEAD_file_path = Path.Combine (child_path, "HEAD");
 
                         if (File.Exists (HEAD_file_path)) {
-                            File.Move (HEAD_file_path, HEAD_file_path + ".backup");
+                            string HEAD_file_path_backup = Path.Combine (child_path, "HEAD.backup");
+                            if (File.Exists (HEAD_file_path_backup)) {
+                                File.Delete (HEAD_file_path_backup);
+                            }
+
+                            File.Move (HEAD_file_path, HEAD_file_path_backup);
                             Logger.LogInfo ("Git", Name + " | Renamed " + HEAD_file_path);
                         }
 

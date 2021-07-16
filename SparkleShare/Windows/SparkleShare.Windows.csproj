@@ -265,10 +265,6 @@
       <Link>Presets\bitbucket.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Common\Presets\planio.png">
-      <Link>Presets\planio.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -283,10 +279,6 @@
     </None>
     <None Include="..\Common\Presets\own-server.xml">
       <Link>Presets\own-server.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Common\Presets\planio.xml">
-      <Link>Presets\planio.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

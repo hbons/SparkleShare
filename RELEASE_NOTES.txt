@@ -1,3 +1,12 @@
+3.38.0 (Sun 29 Nov, 2020):
+
+    - Added support for LibRAavatar
+    - Updated Gravatar cert fingerprint
+    - Removed planio from supported presets
+    - Support default branches that are not named 'master'
+    - Added support for nightly Flatpak builds
+
+
 3.28.0 (Sat 14 Jul, 2018):
 
     Fixed a bunch of crashes and lots of under-the-hood improvements.
