@@ -54,9 +54,9 @@ namespace SparkleShare {
 
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
-            SSHCommand.SSHPath = Path.Combine(Environment.SystemDirectory, "OpenSSH");
-            SSHFetcher.SSHKeyScan = Path.Combine(SSHCommand.SSHPath, "ssh-keyscan.exe");
-            GitCommand.GitPath = Path.Combine (msysgit_path, "cmd", "git.exe");
+            SSHFetcher.SSHKeyScan = Path.Combine(Environment.SystemDirectory, "OpenSSH", "ssh-keyscan.exe");
+            SSHCommand.SSHPath = Path.Combine(msysgit_path, "usr","bin");
+            GitCommand.GitPath = Path.Combine (msysgit_path, "cmd", "git");
             GitFetcher.OpenSSLPath = Path.Combine(executable_path, "openssl");
             base.Initialize ();
             try
