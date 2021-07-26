@@ -1,4 +1,5 @@
 ECHO ON
+setlocal enableDelayedExpansion
 REM if no target directory is passed use default on
 IF [%1]==[]  (SET OUTDIR="%~dp0..\..\bin\msysgit") ELSE (SET OUTDIR=%~1)
 
@@ -39,6 +40,7 @@ REM powershell -command "Add-Type -AssemblyName PresentationCore,PresentationFra
 :skipInstallOpenSSH
 SET ERRORLEVEL=
 ECHO ready
+endlocal
 EXIT /B 0
 
 
@@ -48,11 +50,21 @@ REM second parameter local filename
 REM third parameter md5string
 
 curl -L %~1 -o %~2
-for /f "usebackq" %%i in (`%~dp0\sha256.cmd %~2`) do set sha256=%%i
-if "%sha256%" == "%~3" (echo) else (goto :sha256error)
+set "SHA256="
+for /f "skip=1 tokens=* delims=" %%# in ('certutil -hashfile %~2 SHA256') do (
+	if not defined SHA256 (
+		for %%Z in (%%#) do set "SHA256=!SHA256!%%Z"
+	)
+)
+if "%SHA256%" == "%~3" (
+echo
+) else (
+del %~2
+goto :sha256error
+)
 goto:eof
 
 :sha256error
 ECHO sha256 sum of download wrong
 SET ERRORLEVEL=2
-goto skipopenSSH
+goto skipInstallOpenSSH
