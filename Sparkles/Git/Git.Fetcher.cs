@@ -25,7 +25,15 @@ namespace Sparkles.Git {
 
         GitCommand git_clone;
         SSHAuthenticationInfo auth_info;
+        public static string OpenSSLPath = "";
 
+        public static string OpenSSLCommandPath
+        {
+            get
+            {
+                return Path.Combine(OpenSSLPath, "openssl").Replace("\\", "/");
+            }
+        }
         string password_salt = Path.GetRandomFileName ().SHA256 ().Substring (0, 16);
 
 
@@ -237,10 +245,10 @@ namespace Sparkles.Git {
             var git_config_required = new GitCommand (TargetFolder, "config filter.encryption.required true");
 
             var git_config_smudge = new GitCommand (TargetFolder, "config filter.encryption.smudge " +
-                string.Format ("\"openssl enc -d -aes-256-cbc -base64 -S {0} -pass file:{1} -md sha256\"", password_salt, password_file));
+                string.Format ("\"{0} enc -d -aes-256-cbc -base64 -S {1} -pass file:{2} -md sha256\"", OpenSSLCommandPath, password_salt, password_file));
 
             var git_config_clean = new GitCommand (TargetFolder, "config filter.encryption.clean " +
-                string.Format ("\"openssl enc -e -aes-256-cbc -base64 -S {0} -pass file:{1} -md sha256\"", password_salt, password_file));
+                string.Format ("\"{0} enc -e -aes-256-cbc -base64 -S {1} -pass file:{2} -md sha256\"", OpenSSLCommandPath, password_salt, password_file));
 
             git_config_required.StartAndWaitForExit ();
             git_config_smudge.StartAndWaitForExit ();
@@ -272,7 +280,7 @@ namespace Sparkles.Git {
             string args = string.Format ("enc -d -aes-256-cbc -base64 -S {0} -pass pass:{1} -in \"{2}\" -md sha256",
                 password_salt, password.SHA256 (password_salt), password_check_file_path);
 
-            var process = new Command ("openssl", args);
+            var process = new Command (OpenSSLCommandPath, args);
 
             process.StartInfo.WorkingDirectory = TargetFolder;
             process.StartAndWaitForExit ();
