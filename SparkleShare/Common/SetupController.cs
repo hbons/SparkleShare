@@ -533,7 +533,7 @@ namespace SparkleShare {
 
         public void ShowFilesClicked ()
         {
-            string folder_name = Path.GetFileName (PreviousPath);
+            string folder_name = Path.GetFileNameWithoutExtension (PreviousPath);
             folder_name = folder_name.ReplaceUnderscoreWithSpace ();
 
             SparkleShare.Controller.OpenSparkleShareFolder (folder_name);
