@@ -19,7 +19,6 @@ The build command ends with 2 errors. But that´s all right.
 
 
 ### Creating a Windows installer
--- broken at the moment --
 To create an installer package, install [WiX 3.7](http://wix.codeplex.com/releases/view/99514), restart Windows and run:
 
 ```
