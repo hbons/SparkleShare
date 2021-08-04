@@ -19,7 +19,7 @@ The build command ends with 2 errors. But that´s all right.
 
 
 ### Creating a Windows installer
-To create an installer package, install [WiX 3.7](http://wix.codeplex.com/releases/view/99514), restart Windows and run:
+To create an installer package, install [WiX 3.11.2](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm), restart Windows and run:
 
 ```
 cd C:\path\to\SparkleShare-sources\SparkleShare\Windows\
