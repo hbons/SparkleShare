@@ -42,6 +42,24 @@
       </Directory>
     </Directory>
 
+
+    <CustomAction Id="BatchCmd"
+                  Property="BatchRun"
+                  Value='"[WindowsFolder]system32\dism.exe" /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0 /CapabilityName:OpenSSH.Client~~~~0.0.1.0'
+                  Execute='immediate'
+                  Return='check'>
+    </CustomAction>
+	<CustomAction Id="BatchRun" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
+<!--
+<InstallUISequence>
+    <Custom Action='BatchRun' Before='ProgressDlg' />
+</InstallUISequence>
+-->
+<InstallExecuteSequence>
+  <Custom Action="BatchCmd" Before="BatchRun">NOT Installed</Custom>
+  <Custom Action="BatchRun" Before="InstallFiles">NOT Installed</Custom>
+</InstallExecuteSequence>
+
     <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='SparkleShare' Level='1' AllowAdvertise='no'>
       <ComponentRef Id="SparkleShare.exe" />
       <ComponentRef Id="Libraries" />
