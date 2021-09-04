@@ -2,6 +2,7 @@
 # 
 # Translators:
 #   <ophir.setter+transifex@gmail.com>, 2011.
+# Binyamin Pekar <binyamin.pekar@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
