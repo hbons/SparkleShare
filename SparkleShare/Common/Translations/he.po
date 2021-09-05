@@ -346,17 +346,17 @@ msgstr "שיתוף קבצים עם אחרים"
 msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
-msgstr ""
+msgstr "כל הקבצים שנוספו לתיקיות הפרויקט שלך מסונכרנים עם המארח באופן אוטומטי, כמו גם עם משתפי הפעולה שלך."
 
 #: ../SparkleShare/SparkleSetup.cs:520
 msgid "The status icon is here to help"
-msgstr ""
+msgstr "סמל הסטטוס כאן כדי לעזור"
 
 #: ../SparkleShare/SparkleSetup.cs:521
 msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
-msgstr ""
+msgstr "הוא מציג את מצב תהליך הסנכרון, ומכיל קישורים לפרויקטים וליומן האירועים שלך."
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
@@ -372,13 +372,13 @@ msgstr "לחץ כאן כשאתה רואה אותו ברשת, והפרויקט י
 msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
-msgstr ""
+msgstr "...או בחר <b>'הוסף פרויקט מתארח...'</b> מתפריט סמל הסטטוס כדי להוסיף אחד"
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Add Hosted Project…"
-msgstr ""
+msgstr "הוסף פרויקט מתארח..."
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
