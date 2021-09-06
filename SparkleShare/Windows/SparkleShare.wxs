@@ -21,8 +21,9 @@
               <File Id='Sparkles.dll' Name='Sparkles.dll' Source='!(wix.root)\bin\Sparkles.dll' DiskId='1' />
               <File Id='sparkleshare_app.ico' Name='sparkleshare.ico' Source='!(wix.root)\SparkleShare\Windows\Images\sparkleshare-app.ico' DiskId='1' />
             </Component>
-            <Directory Id='MSYSGIT_DIR' Name='msysgit'>
-            </Directory>
+            <Directory Id='MSYSGIT_DIR' Name='msysgit'></Directory>
+            <Directory Id='PRESETS_DIR' Name='Presets'></Directory>
+            <Directory Id='IMAGES_DIR' Name='Images'></Directory>
         </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder">
@@ -42,7 +43,7 @@
       </Directory>
     </Directory>
 
-
+<!--
     <CustomAction Id="BatchCmd"
                   Property="BatchRun"
                   Value='"[WindowsFolder]system32\dism.exe" /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0 /CapabilityName:OpenSSH.Client~~~~0.0.1.0'
@@ -50,25 +51,23 @@
                   Return='check'>
     </CustomAction>
 	<CustomAction Id="BatchRun" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
-<!--
-<InstallUISequence>
-    <Custom Action='BatchRun' Before='ProgressDlg' />
-</InstallUISequence>
--->
 <InstallExecuteSequence>
   <Custom Action="BatchCmd" Before="BatchRun">NOT Installed</Custom>
   <Custom Action="BatchRun" Before="InstallFiles">NOT Installed</Custom>
 </InstallExecuteSequence>
-
+</InstallUISequence>
+-->
     <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='SparkleShare' Level='1' AllowAdvertise='no'>
       <ComponentRef Id="SparkleShare.exe" />
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="SparkleShareProtocolHandler" />
       <ComponentGroupRef Id='msysGitComponentGroup' />
+      <ComponentGroupRef Id='PresetsComponentGroup' />
+      <ComponentGroupRef Id='ImagesComponentGroup' />
     </Feature>
 
-	<WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+	  <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
 
     <UI>
       <UIRef Id="WixUI_InstallDir" />
@@ -78,10 +77,9 @@
     <util:CloseApplication Id="CloseApplication" Target="SparkleShare.exe" RebootPrompt="no" ElevatedCloseMessage="yes" CloseMessage="yes" />
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
-
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch SparkleShare" />
     <Property Id="WixShellExecTarget" Value="[#SparkleShare.exe]" />
-    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
   </Product>
 </Wix>
