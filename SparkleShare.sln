@@ -47,7 +47,6 @@ Global
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
-		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
 		{5714D3CA-88A6-4330-A29D-4CA90D1D193C}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -55,7 +54,6 @@ Global
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.ReleaseDist|Any CPU.ActiveCfg = Release|Any CPU
-		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.ReleaseDist|Any CPU.Build.0 = Release|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.ReleaseMac|Any CPU.ActiveCfg = ReleaseMac|Any CPU
 		{728483AA-E34B-4441-BF2C-C8BC2901E4E0}.DebugMac|Any CPU.ActiveCfg = DebugMac|Any CPU
 		{8FCDF699-E2C3-4CB3-AF98-44198972AFC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,18 +70,28 @@ Global
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
-		$1.DirectoryNamespaceAssociation = None
-		$1.ResourceNamePolicy = FileFormatDefault
 		$0.TextStylePolicy = $2
-		$2.FileWidth = 120
-		$2.inheritsSet = VisualStudio
-		$2.inheritsScope = text/plain
 		$2.scope = text/plain
+		$2.TabsToSpaces = True
 		$0.CSharpFormattingPolicy = $3
-		$3.inheritsSet = Mono
-		$3.inheritsScope = text/x-csharp
 		$3.scope = text/x-csharp
+		$3.IndentSwitchSection = False
+		$3.NewLinesForBracesInProperties = False
+		$3.NewLinesForBracesInAccessors = False
+		$3.NewLinesForBracesInAnonymousMethods = False
+		$3.NewLinesForBracesInControlBlocks = False
+		$3.NewLinesForBracesInAnonymousTypes = False
+		$3.NewLinesForBracesInObjectCollectionArrayInitializers = False
+		$3.NewLinesForBracesInLambdaExpressionBody = False
+		$3.NewLineForElse = False
+		$3.NewLineForCatch = False
+		$3.NewLineForFinally = False
+		$3.NewLineForMembersInObjectInit = False
+		$3.NewLineForMembersInAnonymousTypes = False
+		$3.NewLineForClausesInQuery = False
+		$3.SpacingAfterMethodDeclarationName = True
+		$3.SpaceAfterMethodCallName = True
+		$3.SpaceBeforeOpenSquareBracket = True
 		version = 
 	EndGlobalSection
 EndGlobal
-

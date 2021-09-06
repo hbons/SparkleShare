@@ -1,4 +1,5 @@
-#!/bin/sh                                                                                                                                          
+#!/bin/sh
+set -x
 function abspath()
 {
   case "${1}" in
@@ -37,6 +38,10 @@ then
   printf "${gitSHA256}  ${gitName}" | shasum --check --algorithm 256
 
 fi
-
-rm git.tar.gz
-ln -s $gitName git.tar.gz
+if [[ -f ${projectFolder}/git.tar.gz ]];
+then
+    rm ${projectFolder}/git.tar.gz
+fi
+echo $gitName
+echo ${projectFolder}/git.tar.gz
+ln -s $gitName ${projectFolder}/git.tar.gz
