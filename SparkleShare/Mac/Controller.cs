@@ -51,6 +51,16 @@ namespace SparkleShare {
                 Path.Combine (GitCommand.ExecPath, "git-lfs"),
                 Path.Combine (Config.BinPath, "git-lfs"),
                 overwite);
+            
+            NSWorkspace.Notifications.ObserveDidWake((object sender, NSNotificationEventArgs e) => {
+                Console.Write ("Detected wake from sleep, checking for updates\n");
+                if (SparkleShare.Controller.RepositoriesLoaded) {
+                    foreach (var repo in SparkleShare.Controller.Repositories) {
+                        repo.SyncDown();
+                        repo.SyncUp();
+                    }
+                }
+            });
         }
 
 
