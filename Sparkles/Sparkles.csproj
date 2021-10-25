@@ -76,6 +76,9 @@
     <Compile Include="Command.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="OpenSSLCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SSHCommand.cs">
       <SubType>Component</SubType>
     </Compile>
