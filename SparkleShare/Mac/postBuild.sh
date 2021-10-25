@@ -12,4 +12,4 @@ ${projectFolder}/checkGit.sh
 rm -rf ${bundle}/Contents/Resources/git
 mkdir ${bundle}/Contents/Resources/git
 tar -x -f ${projectFolder}/git.tar.gz --directory ${bundle}/Contents/Resources/git
-cp -R SparkleShareInviteOpener.app ${bundle}/Contents/Resources
+cp -R ${projectFolder}/SparkleShareInviteOpener.app ${bundle}/Contents/Resources

@@ -1,4 +1,4 @@
-#!/bin/sh                                                                                                                                          
+#!/bin/sh
 function abspath()
 {
   case "${1}" in
@@ -31,12 +31,12 @@ set -e
 
 if [[ ! -f ${projectFolder}/${gitName} ]];
 then
-  curl --silent --location ${gitDownload} > ${gitName}
+  curl --silent --location ${gitDownload} > ${projectFolder}/${gitName}
   test -e ${gitName} || { echo "Failed to download git"; exit 1; }
 
   printf "${gitSHA256}  ${gitName}" | shasum --check --algorithm 256
 
 fi
 
-rm git.tar.gz
-ln -s $gitName git.tar.gz
+rm -f git.tar.gz
+ln -s ${projectFolder}/$gitName git.tar.gz
