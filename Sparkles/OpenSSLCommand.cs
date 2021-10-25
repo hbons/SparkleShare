@@ -40,14 +40,15 @@ namespace Sparkles
         public OpenSSLCommand(string args) : base(OpenSSLCommandPath, args)
         {
         }
-        public static string OpenSSLVersion 
+        public static string OpenSSLVersion
         {
             get
             {
                 var openssl_version = new Command(OpenSSLCommandPath, "version", false);
 
-                string version = openssl_version.StartAndReadStandardOutput();
-                return version.Replace("OpenSSL ", "").Split(' ')[0];
+                string[] version = openssl_version.StartAndReadStandardOutput().Split(' ');
+
+                return version[0]+" "+version[1];
             }
         }
     }
