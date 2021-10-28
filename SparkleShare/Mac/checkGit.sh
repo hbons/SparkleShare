@@ -32,11 +32,11 @@ set -e
 if [[ ! -f ${projectFolder}/${gitName} ]];
 then
   curl --silent --location ${gitDownload} > ${projectFolder}/${gitName}
-  test -e ${gitName} || { echo "Failed to download git"; exit 1; }
+  test -e ${projectFolder}/${gitName} || { echo "Failed to download git"; exit 1; }
 
-  printf "${gitSHA256}  ${gitName}" | shasum --check --algorithm 256
+  printf "${gitSHA256}  ${projectFolder}/${gitName}" | shasum --check --algorithm 256
 
 fi
 
-rm -f git.tar.gz
-ln -s ${projectFolder}/$gitName git.tar.gz
+rm -f ${projectFolder}/git.tar.gz
+ln -s ${projectFolder}/$gitName ${projectFolder}/git.tar.gz
