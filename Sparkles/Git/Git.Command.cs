@@ -27,11 +27,12 @@ namespace Sparkles.Git {
 
 
         static string git_path;
-
+        static string git_lfs_path;
+        
         public static string GitPath {
             get {
                 if (git_path == null)
-                    git_path = LocateCommand ("git");
+                    git_path = LocateCommand ("git").Replace("\\", "/");
 
                 return git_path;
             }
@@ -41,7 +42,19 @@ namespace Sparkles.Git {
             }
         }
 
+        public static string GitLfsPath {
+            get {
+                if (git_lfs_path == null)
+                    git_lfs_path = LocateCommand ("git-lfs").Replace("\\","/");
 
+                return git_lfs_path;
+            }
+
+            set {
+                git_lfs_path = value;
+            }
+        }
+        
         public static string GitVersion {
             get {
                 if (GitPath == null)
