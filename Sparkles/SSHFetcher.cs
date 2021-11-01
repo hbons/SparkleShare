@@ -23,9 +23,6 @@ namespace Sparkles {
     
     public abstract class SSHFetcher : BaseFetcher {
 
-        public static string SSHKeyScan = "ssh-keyscan";
-
-
         protected SSHFetcher (SparkleFetcherInfo info) : base (info)
         {
         }
@@ -68,7 +65,7 @@ namespace Sparkles {
         string FetchHostKey ()
         {
             Logger.LogInfo ("Auth", string.Format ("Fetching host key for {0}", RemoteUrl.Host));
-            var ssh_keyscan = new Command (SSHKeyScan, string.Format ("-t rsa -p 22 {0}", RemoteUrl.Host));
+            var ssh_keyscan = new SSHCommand (SSHCommand.SSHKeyScanCommandPath, string.Format ("-t rsa -p 22 {0}", RemoteUrl.Host));
 
             if (RemoteUrl.Port > 0)
                 ssh_keyscan.StartInfo.Arguments = string.Format ("-t rsa -p {0} {1}", RemoteUrl.Port, RemoteUrl.Host);

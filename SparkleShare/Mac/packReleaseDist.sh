@@ -10,7 +10,9 @@ export MONO_PATH=`readlink /Library/Frameworks/Mono.framework/Versions/Current`
 export PKG_CONFIG_PATH=/usr/lib/pkgconfig:${MONO_PATH}/lib/pkgconfig
 export PATH=/usr/local/bin:/opt/local/bin:/Library/Frameworks/Mono.framework/Versions/Current/bin:/usr/bin:/bin
 
+mkdir -p cd ${bundle}/Contents/MonoBundle/
 cd ${bundle}/Contents/MonoBundle/
+assemblyPath=$(dirname $(dirname $(dirname $(pwd))))
 
 # merge all Assemblies into one Mac binary
 mkbundle \
@@ -20,5 +22,5 @@ mkbundle \
 	 --library libxammac.dylib \
 	 --library libmono-native-compat.0.dylib \
 	 -o ../MacOS/SparkleShare \
-	 SparkleShare.exe Sparkles.dll Sparkles.Git.dll
+	 ${assemblyPath}/SparkleShare.exe ${assemblyPath}/Sparkles.dll ${assemblyPath}/Sparkles.Git.dll
 rm *.dll *.exe

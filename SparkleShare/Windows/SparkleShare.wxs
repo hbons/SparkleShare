@@ -19,9 +19,8 @@
             <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='Sparkles.Git.dll' Name='Sparkles.Git.dll' Source='!(wix.root)\bin\Sparkles.Git.dll' DiskId='1' />
               <File Id='Sparkles.dll' Name='Sparkles.dll' Source='!(wix.root)\bin\Sparkles.dll' DiskId='1' />
-              <File Id='sparkleshare_app.ico' Name='sparkleshare.ico' Source='!(wix.root)\SparkleShare\Windows\Images\sparkleshare-app.ico' DiskId='1' />
             </Component>
-            <Directory Id='MSYSGIT_DIR' Name='msysgit'></Directory>
+            <Directory Id='GITSCM_DIR' Name='git_scm'></Directory>
             <Directory Id='PRESETS_DIR' Name='Presets'></Directory>
             <Directory Id='IMAGES_DIR' Name='Images'></Directory>
         </Directory>
@@ -62,7 +61,7 @@
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="SparkleShareProtocolHandler" />
-      <ComponentGroupRef Id='msysGitComponentGroup' />
+      <ComponentGroupRef Id='gitScmComponentGroup' />
       <ComponentGroupRef Id='PresetsComponentGroup' />
       <ComponentGroupRef Id='ImagesComponentGroup' />
     </Feature>

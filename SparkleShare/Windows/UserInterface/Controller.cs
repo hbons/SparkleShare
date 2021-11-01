@@ -47,27 +47,14 @@ namespace SparkleShare {
 
         public override void Initialize ()
         {
-            // Add msysgit to path, as we cannot asume it is added to the path
-            // Asume it is installed in @"<exec dir>\msysgit\bin"
-            string executable_path = Path.GetDirectoryName (Forms.Application.ExecutablePath);
-            string msysgit_path    = Path.Combine (executable_path, "msysgit");
-
+            string[] search_path = new string[] {   Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"git_scm","mingw64", "bin"),
+                                                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"git_scm","mingw32", "bin"),
+                                                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"git_scm","usr","bin"),
+                                                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"git_scm","cmd")};
+            Command.SetSearchPath(search_path);
             Environment.SetEnvironmentVariable ("HOME", Environment.GetFolderPath (Environment.SpecialFolder.UserProfile));
 
-            SSHCommand.SSHPath = Path.Combine(msysgit_path, "usr","bin");
-            SSHFetcher.SSHKeyScan = Path.Combine(msysgit_path, "usr", "bin", "ssh-keyscan.exe");
-            GitCommand.GitPath = Path.Combine (msysgit_path, "cmd", "git");
-            GitFetcher.OpenSSLPath = Path.Combine(msysgit_path, "usr", "bin", "ssl.exe");
             base.Initialize ();
-            try
-            {
-                File.Copy(Path.Combine(msysgit_path, "mingw64", "libexec", "git-core", "git-lfs.exe"), Path.Combine(Config.BinPath, "git-lfs.exe"), true);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
         }
 
 
@@ -98,28 +85,31 @@ namespace SparkleShare {
             string app_path = Path.GetDirectoryName (Forms.Application.ExecutablePath);
             string icon_file_path = Path.Combine (app_path, "Images", "sparkleshare-folder.ico");
 
-            if (!File.Exists (icon_file_path))
+            if (File.Exists (icon_file_path))
             {
                 string ini_file_path = Path.Combine (FoldersPath, "desktop.ini");
-                string n = Environment.NewLine;
-
-                string ini_file = "[.ShellClassInfo]" + n +
-                    "IconFile=" + icon_file_path + n +
-                    "IconIndex=0" + n +
-                    "InfoTip=SparkleShare";
-
-                try
+                if (!File.Exists(ini_file_path))
                 {
-                    File.Create (ini_file_path).Close ();
-                    File.WriteAllText (ini_file_path, ini_file);
+                    string n = Environment.NewLine;
 
-                    File.SetAttributes (ini_file_path,
-                        File.GetAttributes (ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+                    string ini_file = "[.ShellClassInfo]" + n +
+                        "IconFile=" + icon_file_path + n +
+                        "IconIndex=0" + n +
+                        "InfoTip=SparkleShare";
 
-                }
-                catch (IOException e)
-                {
-                    Logger.LogInfo ("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                    try
+                    {
+                        File.Create(ini_file_path).Close();
+                        File.WriteAllText(ini_file_path, ini_file);
+
+                        File.SetAttributes(ini_file_path,
+                            File.GetAttributes(ini_file_path) | FileAttributes.Hidden | FileAttributes.System);
+
+                    }
+                    catch (IOException e)
+                    {
+                        Logger.LogInfo("Config", "Failed setting icon for '" + FoldersPath + "': " + e.Message);
+                    }
                 }
             }
         }

@@ -1,75 +1,28 @@
 language: csharp
-cache:
-  directories:
-    - upload
-jobs:
-  # for debugging enable next two lines to allow an os to fail without quitting pipeline
-  # allow_failures:
-  #   language: csharp
 
+matrix:
   include:
-    - stage: "Compile for Mac"
-      os: osx
-      before_install:
-        - mkdir -p ./upload
-        - wget https://dl.xamarin.com/XamarinforMac/Mac/xamarin.mac-3.0.0.393.pkg
-        - sudo installer -pkg xamarin.mac*.pkg -target /
-      script:
-        - msbuild /p:Configuration=ReleaseDist SparkleShare.sln
-      before_deploy:
-        - zip -r ./SparkleShare/Mac/bin/ReleaseDist/SparkleShare.zip ./SparkleShare/Mac/bin/ReleaseDist/SparkleShare.app
-        - cp ./SparkleShare/Mac/bin/ReleaseDist/SparkleShare.zip ./upload/SparkleShare-macos-nightly.zip
-      deploy: &deploy_base
-        provider: releases
-        api_key: ${GITHUB_TOKEN}
-        file: ./upload/SparkleShare-macos-nightly.zip
-        skip_cleanup: true
-        draft: true
-        name: Nightly CI Build
-        on:
-          branch:
-            - master
-          tags: false
-
-    - stage: "Compile for Linux"
-      os: linux
+    - os: linux
       services:
         - docker
-      before_install:
-        - mkdir -p ./upload
-        - docker pull ubuntu:latest
-      script:
-        - docker build --file scripts/ci/Dockerfile --tag sparkleshare:nightly .
-      before_deploy:
-        - export DEPLOY_FILE=`docker run --name container sparkleshare:nightly find / -name sparkleshare*.tar.gz`
-      # unfortunately no sparkleshare*.tar.gz will be created by the above commands, so no upload for linux
-      # if fixed the tar.gz issue uncomment the following 6 lines to enable upload
-      #  - cp ${DEPLOY_FILE} ./upload/SparkleShare-linux-nightly.tar.gz
-      # deploy for linux is disabled, because to docker run
-      # deploy:
-      #     <<: *deploy_base
-      #     draft: true
-      #     file: ./upload/SparkleShare-linux-nightly.tar.gz
+    - os: osx
+      sudo: required
 
-    - stage: "Compile for Windows"
-      os: windows
-      mono: none
-      before_install:
-        - mkdir -p ./upload
-        # - choco install netfx-4.5.2-devpack
-        # - choco install windows-sdk-8.0
-        - powershell Install-WindowsFeature Net-Framework-Core
-        - choco install -y wixtoolset --version=3.11.2
-        - choco install tartool
-        - choco install unzip
-      script:
-        - ./SparkleShare/Windows/build.cmd installer
-      before_deploy:
-        - mv ./SparkleShare/Windows/SparkleShare.msi  ./upload/SparkleShare-windows-nightly.msi
-      deploy:
-          <<: *deploy_base
-          draft: true
-          file: ./upload/SparkleShare-windows-nightly.msi
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull ubuntu:latest ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then wget https://dl.xamarin.com/XamarinforMac/Mac/xamarin.mac-3.0.0.393.pkg ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then sudo installer -pkg xamarin.mac*.pkg -target / ; fi
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build --file scripts/ci/Dockerfile --tag sparkleshare:nightly . ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then msbuild /p:Configuration=ReleaseMac SparkleShare.sln ; fi
+
+before_deploy:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DEPLOY_FILE=`docker run --name container sparkleshare:nightly find / -name sparkleshare*.tar.gz` ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker cp container:${DEPLOY_FILE} ./ ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mv sparkleshare*.tar.gz sparkleshare-linux-nightly-${TRAVIS_COMMIT}.tar.gz ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then mv SparkleShare/Mac/bin/ReleaseMac/SparkleShare.app . ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then zip --recurse-paths sparkleshare-mac-nightly-${TRAVIS_COMMIT}.zip SparkleShare.app ; fi
 
 notifications:
   webhooks:
@@ -78,3 +31,4 @@ notifications:
     on_success: change
     on_failure: always
     on_start: never
+
