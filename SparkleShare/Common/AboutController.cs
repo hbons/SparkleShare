@@ -61,13 +61,15 @@ namespace SparkleShare {
             UpdateLabelEvent ("Checking for updates…");
             Thread.Sleep (500);
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             var web_client = new WebClient ();
             var uri = new Uri ("https://www.sparkleshare.org/version");
 
             try {
                 string latest_version = web_client.DownloadString (uri);
                 latest_version = latest_version.Trim ();
-            
+
                 if (new Version (latest_version) > new Version (RunningVersion))
                     UpdateLabelEvent ("An update (version " + latest_version + ") is available!");
                 else
