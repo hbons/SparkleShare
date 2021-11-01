@@ -69,7 +69,7 @@ namespace SparkleShare {
             try {
                 string latest_version = web_client.DownloadString (uri);
                 latest_version = latest_version.Trim ();
-
+            
                 if (new Version (latest_version) > new Version (RunningVersion))
                     UpdateLabelEvent ("An update (version " + latest_version + ") is available!");
                 else
