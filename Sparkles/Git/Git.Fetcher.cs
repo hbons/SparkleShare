@@ -176,7 +176,8 @@ namespace Sparkles.Git {
                 File.WriteAllText (identifier_path, identifier);
                 File.SetAttributes (identifier_path, FileAttributes.Hidden);
 
-
+                // The repo is freshly cloned and no config user.name is set yet, so temporary use SparkleShare
+                // to avoid error 'TELL ME WHO YOU ARE', later on this will be handled in Commit of Git.Repository
                 var git_config = new GitCommand(TargetFolder, "config user.name \"SparkleShare\"");
                 git_config.StartAndWaitForExit();
                 git_config = new GitCommand(TargetFolder, "config user.email \"info@sparkleshare.org\"");
