@@ -67,25 +67,35 @@ namespace Sparkles {
             get {
                 if (OperatingSystem == OS.macOS) {
                     var uname = new Command ("sw_vers", "-productVersion", write_output: false);
-                    string output = uname.StartAndReadStandardOutput ();
-                    string version = output;
+                    string version = uname.StartAndReadStandardOutput ();
 
-                    // Parse the version number between the periods (e.g. "10.12.1" -> 12)
-                    output = output.Substring (output.IndexOf (".") + 1);
-                    if (output.LastIndexOf (".") != -1) {
-                        output = output.Substring (0, output.LastIndexOf ("."));
-                    }
+                    // 
+                    string[] version_elements= version.Split('.');
+
                     string release = "Unreleased Version";
 
-                    switch (int.Parse (output)) {
-                    case 7: release = "Lion"; break;
-                    case 8: release = "Mountain Lion"; break;
-                    case 9: release = "Mavericks"; break;
-                    case 10: release = "Yosemite"; break;
-                    case 11: release = "El Capitan"; break;
-                    case 12: release = "Sierra"; break;
-                    case 13: release = "High Sierra"; break;
-                    case 14: release = "Mojave"; break;
+                    if ((version_elements.Length) >= 2) {
+                        switch (int.Parse (version_elements [0])) {
+                        case 10:
+                            // Parse the version number between the periods (e.g. "10.12.1" -> 12)
+                            switch (int.Parse (version_elements [0])) {
+                            case 7: release = "Lion"; break;
+                            case 8: release = "Mountain Lion"; break;
+                            case 9: release = "Mavericks"; break;
+                            case 10: release = "Yosemite"; break;
+                            case 11: release = "El Capitan"; break;
+                            case 12: release = "Sierra"; break;
+                            case 13: release = "High Sierra"; break;
+                            case 14: release = "Mojave"; break;
+                            case 15: release = "Catalina"; break;
+                            }
+                            break;
+
+                        case 11:
+                            release = "BigSur"; break;
+                        case 12:
+                            release = "Monterey"; break;
+                        }
                     }
 
                     return string.Format ("{0} ({1})", version, release);
