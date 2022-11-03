@@ -79,7 +79,7 @@ namespace Sparkles.Git {
             git_config = new GitCommand (LocalPath, "config remote.origin.url \"" + RemoteUrl + "\"");
             git_config.StartAndWaitForExit ();
 
-            git_config = new GitCommand (LocalPath, "config core.sshCommand " + GitCommand.FormatGitSSHCommand (auth_info));
+            git_config = new GitCommand (LocalPath, "config core.sshCommand \"" + GitCommand.FormatGitSSHCommand (auth_info).Replace("\"", "\\\"") + "\"");
             git_config.StartAndWaitForExit();
 
             PrepareGitLFS ();
