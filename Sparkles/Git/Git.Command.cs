@@ -57,9 +57,6 @@ namespace Sparkles.Git {
         
         public static string GitVersion {
             get {
-                if (GitPath == null)
-                    GitPath = LocateCommand ("git");
-
                 var git_version = new Command (GitPath, "--version", false);
 
                 if (ExecPath != null)
@@ -73,10 +70,7 @@ namespace Sparkles.Git {
 
         public static string GitLFSVersion {
             get {
-                if (GitPath == null)
-                    GitPath = LocateCommand ("git");
-
-                var git_lfs_version = new Command (GitPath, "lfs version", false);
+                var git_lfs_version = new Command (GitLfsPath, "version", false);
 
                 if (ExecPath != null)
                     git_lfs_version.SetEnvironmentVariable ("GIT_EXEC_PATH", ExecPath);
