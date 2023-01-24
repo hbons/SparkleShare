@@ -95,6 +95,8 @@ namespace Sparkles {
                             release = "BigSur"; break;
                         case 12:
                             release = "Monterey"; break;
+                        case 13:
+                            release = "Ventura"; break;
                         }
                     }
 
