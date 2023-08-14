@@ -7,7 +7,7 @@
         <icon>github.png</icon>
         <backend>Git</backend>
         <storage_type>LargeFiles</storage_type>
-        <fingerprint>9d:38:5b:83:a9:17:52:92:56:1a:5e:c4:d4:81:8e:0a:ca:51:a2:64:f1:74:20:11:2e:f8:8a:c3:a1:39:49:8f</fingerprint>
+        <fingerprint>92:a3:7f:bd:5e:21:a5:3a:95:c7:16:e1:14:4f:44:2f:58:2b:94:d0:fa:fc:67:3e:b6:71:7a:4e:b5:1a:88:a7</fingerprint>
     </info>
     <address>
       <value>ssh://git@github.com/</value>
