@@ -22,7 +22,8 @@ sparkles_src = ['AuthenticationInfo.cs',
     'SSHFetcher.cs',
     'TcpListener.cs',
     'User.cs',
-    'Watcher.cs']
+    'Watcher.cs',
+    'OpenSSLCommand.cs']
 
 
 sparkles = library('Sparkles',

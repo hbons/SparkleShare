@@ -224,6 +224,7 @@ namespace SparkleShare {
             Logger.LogInfo ("Environment", "SparkleShare " + version);
             Logger.LogInfo ("Environment", "Git LFS " + Sparkles.Git.GitCommand.GitLFSVersion);
             Logger.LogInfo ("Environment", "Git " + Sparkles.Git.GitCommand.GitVersion);
+            Logger.LogInfo ("Environment", Sparkles.OpenSSLCommand.OpenSSLVersion);
             Logger.LogInfo ("Environment", InstallationInfo.OperatingSystem + " " + InstallationInfo.OperatingSystemVersion);
 
             UserAuthenticationInfo = new SSHAuthenticationInfo ();
