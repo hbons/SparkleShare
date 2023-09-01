@@ -219,10 +219,12 @@ namespace SparkleShare
             browserGrid.Children.Add(sizingControlHeight);
             browserGrid.Children.Add(sizingControlWidth);
 
-            webbrowser.SetBinding(HeightProperty, new Binding("ActualHeightProperty") { ElementName = sizingControlHeight.Name });
-            webbrowser.SetBinding(WidthProperty, new Binding("ActualWidthProperty") { ElementName = sizingControlWidth.Name });
+            webbrowser.SetBinding(HeightProperty, new Binding("ActualHeightProperty").ElementName = sizingControlHeight.Name );
+            webbrowser.SetBinding(WidthProperty, new Binding("ActualWidthProperty").ElementName = sizingControlWidth.Name );
 
             grid_Base.Children.Add(border);
+            grid_Base.Children.Add(browserGrid);
+            Content = grid_Base;
         }
 
         private void OnClosing(object sender, CancelEventArgs cancel_event_args)

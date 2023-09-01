@@ -22,7 +22,8 @@ sparkles_src = ['AuthenticationInfo.cs',
     'SSHFetcher.cs',
     'TcpListener.cs',
     'User.cs',
-    'Watcher.cs']
+    'Watcher.cs',
+    'OpenSSLCommand.cs']
 
 
 sparkles = library('Sparkles',
@@ -30,4 +31,3 @@ sparkles = library('Sparkles',
     cs_args: '-r:System.Xml.Linq',
     install: true,
     install_dir: install_dir)
-
