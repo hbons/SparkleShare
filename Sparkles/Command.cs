@@ -18,13 +18,25 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Sparkles {
 
     public class Command : Process {
 
         bool write_output;
+        static string[] extended_search_path;
 
+        public static void SetSearchPath(string[] pathes)
+        {
+            extended_search_path = pathes;
+        }
+
+        public static void SetSearchPath(string path)
+        {
+            SetSearchPath(new string[] { path});
+        }
 
         public Command (string path, string args) : this (path, args, write_output: true)
         {
@@ -116,17 +128,22 @@ namespace Sparkles {
 
         protected static string LocateCommand (string name)
         {
-            string [] possible_command_paths = {
-                Environment.GetFolderPath (Environment.SpecialFolder.Personal) + "/bin/" + name,
-                InstallationInfo.Directory + "/bin/" + name,
-                "/usr/local/bin/" + name,
-                "/usr/bin/" + name,
-                "/opt/local/bin/" + name
+            string[] possible_command_paths = {
+                Path.Combine(Environment.GetFolderPath (Environment.SpecialFolder.Personal), "bin"),
+                Path.Combine(InstallationInfo.Directory, "bin"),
+                "/usr/local/bin/",
+                "/usr/bin/",
+                "/opt/local/bin/"
             };
 
-            foreach (string path in possible_command_paths) {
-                if (File.Exists (path))
-                    return path;
+            List<string> command_paths = new List<string>();            
+            command_paths.AddRange(extended_search_path);
+            command_paths.AddRange(possible_command_paths);
+
+            foreach (string path in command_paths) {
+                if (File.Exists(Path.Combine (path, name))) {
+                    return Path.Combine (path, name);
+                }
             }
 
             return name;
