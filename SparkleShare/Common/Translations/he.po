@@ -2,13 +2,14 @@
 # 
 # Translators:
 #   <ophir.setter+transifex@gmail.com>, 2011.
+# Binyamin Pekar <binyamin.pekar@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: SparkleShare\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-30 15:50+0100\n"
-"PO-Revision-Date: 2011-11-01 20:06+0000\n"
-"Last-Translator: ophir <ophir.setter+transifex@gmail.com>\n"
+"PO-Revision-Date: 2021-09-04 22:58+0000\n"
+"Last-Translator: Binyamin Pekar <binyamin.pekar@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,51 +18,51 @@ msgstr ""
 
 #: ../data/plugins/bitbucket.xml.in.h:1 ../data/plugins/github.xml.in.h:1
 msgid "/username/project"
-msgstr ""
+msgstr "/username/project"
 
 #: ../data/plugins/bitbucket.xml.in.h:2
 msgid "Bitbucket"
-msgstr ""
+msgstr "Bitbucket"
 
 #: ../data/plugins/bitbucket.xml.in.h:3
 msgid "Free code hosting for Git and Mercurial"
-msgstr ""
+msgstr "אירוח קוד בחינם עבור Git ו-Mercurial "
 
 #: ../data/plugins/github.xml.in.h:2
 msgid "Free public Git repositories with collaborator management"
-msgstr ""
+msgstr "מאגרי Git ציבוריים בחינם עם ניהול משתפי פעולה"
 
 #: ../data/plugins/github.xml.in.h:3
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: ../data/plugins/gitorious.xml.in.h:1
 msgid "/project/repository"
-msgstr ""
+msgstr "/project/repository"
 
 #: ../data/plugins/gitorious.xml.in.h:2
 msgid "Gitorious"
-msgstr "גיטוריוס"
+msgstr "Gitorious"
 
 #: ../data/plugins/gitorious.xml.in.h:3
 msgid "Open source infrastructure for hosting open source projects"
-msgstr ""
+msgstr "תשתית קוד פתוח לאירוח פרויקטים של קוד פתוח"
 
 #: ../data/plugins/gnome.xml.in.h:1
 msgid "/project"
-msgstr ""
+msgstr "/project"
 
 #: ../data/plugins/gnome.xml.in.h:2
 msgid "A free and easy interface for your computer"
-msgstr ""
+msgstr "ממשק חופשי וקל למחשב שלך"
 
 #: ../data/plugins/gnome.xml.in.h:3
 msgid "The GNOME Project"
-msgstr "פרוייקט גנום"
+msgstr "פרוייקט GNOME"
 
 #: ../data/plugins/own-server.xml.in.h:1
 msgid "/path/to/project"
-msgstr ""
+msgstr "/path/to/project"
 
 #: ../data/plugins/own-server.xml.in.h:2
 msgid "Everything under my control"
@@ -69,7 +70,7 @@ msgstr "הכל תחת שליטתי"
 
 #: ../data/plugins/own-server.xml.in.h:3
 msgid "On my own server"
-msgstr "שרת משלי"
+msgstr "בשרת משלי"
 
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:70
 #: ../SparkleShare/Mac/SparkleStatusIcon.cs:88
@@ -97,11 +98,11 @@ msgstr "לא הכל מסונכרן"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:113
 msgid "Copy Web Link"
-msgstr "העתק לינק"
+msgstr "העתק קישור"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:114
 msgid "Copy the web address of this file to the clipboard"
-msgstr "העתק את כתובת האינטרנט של קובץ זה ללוח העריכה (clipboard)"
+msgstr "העתק את כתובת האינטרנט של קובץ זה ללוח ההעתקה (clipboard)"
 
 #: ../SparkleShare/Nautilus/sparkleshare-nautilus-extension.py.in:147
 msgid "Get Earlier Version"
@@ -125,7 +126,7 @@ msgstr "הראה את מלל העזרה"
 
 #: ../SparkleShare/Program.cs:84
 msgid "SparkleShare, a collaboration and sharing tool."
-msgstr ""
+msgstr "SparkleShare, כלי לשיתוף פעולה ונתונים"
 
 #: ../SparkleShare/Program.cs:85
 msgid "Copyright (C) 2010 Hylke Bons"
@@ -145,11 +146,11 @@ msgstr "תחת תנאים מסויימים. אנא קראו את רשיון GNU 
 
 #: ../SparkleShare/Program.cs:92
 msgid "SparkleShare automatically syncs Git repositories in "
-msgstr ""
+msgstr "SparkleShare מסנכרן אוטומטית את מאגרי Git ב"
 
 #: ../SparkleShare/Program.cs:93
 msgid "the ~/SparkleShare folder with their remote origins."
-msgstr ""
+msgstr "התיקייה ~/SparkleShare עם ה- remote origins שלהם."
 
 #: ../SparkleShare/Program.cs:95
 msgid "Usage: sparkleshare [start|stop|restart] [OPTION]..."
@@ -187,11 +188,11 @@ msgstr "בודק עדכונים..."
 
 #: ../SparkleShare/SparkleControllerBase.cs:493
 msgid "dddd, MMMM d, yyyy"
-msgstr ""
+msgstr "dddd, MMMM d, yyyy"
 
 #: ../SparkleShare/SparkleControllerBase.cs:499
 msgid "dddd, MMMM d"
-msgstr ""
+msgstr "dddd, MMMM d"
 
 #: ../SparkleShare/SparkleControllerBase.cs:707
 #, csharp-format
@@ -217,12 +218,12 @@ msgstr "‘{0}’ נמחק"
 #, csharp-format
 msgid "and {0} more"
 msgid_plural "and {0} more"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ועוד {0}"
+msgstr[1] "ועוד {0}"
 
 #: ../SparkleShare/SparkleControllerBase.cs:735
 msgid "did something magical"
-msgstr ""
+msgstr "עשה משהו קסום"
 
 #: ../SparkleShare/SparkleEventLog.cs:58
 msgid "Recent Events"
@@ -254,15 +255,15 @@ msgstr "הבא"
 
 #: ../SparkleShare/SparkleSetup.cs:129
 msgid "Where's your project hosted?"
-msgstr ""
+msgstr "היכן מאוחסן הפרויקט שלך?"
 
 #: ../SparkleShare/SparkleSetup.cs:275
 msgid "Address"
-msgstr ""
+msgstr "כתובת"
 
 #: ../SparkleShare/SparkleSetup.cs:295
 msgid "Remote Path"
-msgstr ""
+msgstr "מיקום מרוחק"
 
 #. Cancel button
 #: ../SparkleShare/SparkleSetup.cs:309 ../SparkleShare/SparkleSetup.cs:345
@@ -281,7 +282,7 @@ msgstr "מוסיף פרויקט ‘{0}’…"
 
 #: ../SparkleShare/SparkleSetup.cs:336
 msgid "This may take a while."
-msgstr "זה עלול לקחת זמן מה"
+msgstr "זה עשוי לקחת זמן מה"
 
 #: ../SparkleShare/SparkleSetup.cs:337
 msgid "Are you sure it’s not coffee o'clock?"
@@ -326,7 +327,7 @@ msgstr "מה עכשיו?"
 msgid ""
 "SparkleShare creates a special folder in your personal folder that will keep"
 " track of your projects."
-msgstr ""
+msgstr "SparkleShare יוצר תיקייה מיוחדת בתיקייה האישית שלך שתעקוב אחר הפרויקטים שלך."
 
 #: ../SparkleShare/SparkleSetup.cs:481
 msgid "Skip Tutorial"
@@ -345,17 +346,17 @@ msgstr "שיתוף קבצים עם אחרים"
 msgid ""
 "All files added to your project folders are synced with the host "
 "automatically, as well as with your collaborators."
-msgstr ""
+msgstr "כל הקבצים שנוספו לתיקיות הפרויקט שלך מסונכרנים עם המארח באופן אוטומטי, כמו גם עם משתפי הפעולה שלך."
 
 #: ../SparkleShare/SparkleSetup.cs:520
 msgid "The status icon is here to help"
-msgstr ""
+msgstr "סמל הסטטוס כאן כדי לעזור"
 
 #: ../SparkleShare/SparkleSetup.cs:521
 msgid ""
 "It shows the syncing process status, and contains links to your projects and"
 " the event log."
-msgstr ""
+msgstr "הוא מציג את מצב תהליך הסנכרון, ומכיל קישורים לפרויקטים וליומן האירועים שלך."
 
 #: ../SparkleShare/SparkleSetup.cs:538
 msgid "Adding projects to SparkleShare"
@@ -371,13 +372,13 @@ msgstr "לחץ כאן כשאתה רואה אותו ברשת, והפרויקט י
 msgid ""
 "…or select <b>‘Add Hosted Project…’</b> from the status icon menu to add one"
 " by hand."
-msgstr ""
+msgstr "...או בחר <b>'הוסף פרויקט מתארח...'</b> מתפריט סמל הסטטוס כדי להוסיף אחד"
 
 #. Opens the wizard to add a new remote folder
 #: ../SparkleShare/SparkleSetup.cs:551
 #: ../SparkleShare/SparkleStatusIcon.cs:238
 msgid "Add Hosted Project…"
-msgstr ""
+msgstr "הוסף פרויקט מתארח..."
 
 #: ../SparkleShare/SparkleSetupWindow.cs:44
 msgid "SparkleShare Setup"
