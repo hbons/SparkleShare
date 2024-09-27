@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:xenial
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
@@ -22,7 +22,7 @@ RUN apt-get install -y \
   python3-pip \
   xsltproc
 
-RUN pip3 install meson
+RUN pip3 install meson==0.36.0
 
 RUN git clone https://github.com/hbons/notify-sharp && \
   cd notify-sharp/ && \

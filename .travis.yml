@@ -9,7 +9,7 @@ matrix:
       sudo: required
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull ubuntu:latest ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull ubuntu:xenial ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then wget https://dl.xamarin.com/XamarinforMac/Mac/xamarin.mac-3.0.0.393.pkg ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then sudo installer -pkg xamarin.mac*.pkg -target / ; fi
 
