@@ -21,11 +21,25 @@ namespace Sparkles {
 
     public class SSHCommand : Command
     {
-        public static string SSHPath = "";
+        public static string SSHPath = Path.GetDirectoryName(LocateCommand("ssh")).Replace("\\", "/");
 
         public static string SSHCommandPath {
             get {
-                return Path.Combine (SSHPath, "ssh").Replace ("\\", "/");
+                return LocateCommand("ssh").Replace ("\\", "/");
+            }
+        }
+        public static string SSHKeyScanCommandPath
+        {
+            get
+            {
+                return LocateCommand("ssh-keyscan").Replace("\\", "/");
+            }
+        }
+        public static string SSHKeyGenCommandPath
+        {
+            get
+            {
+                return LocateCommand("ssh-keygen").Replace("\\", "/");
             }
         }
 
@@ -36,8 +50,51 @@ namespace Sparkles {
 
 
         public SSHCommand (string command, string args, SSHAuthenticationInfo auth_info) :
-            base (Path.Combine (SSHPath, command), args)
+            base (command, args)
         {
         }
+        public static string SSHVersion
+        {
+            get
+            {
+                var ssh_version = new Command(SSHCommandPath, "-V", false);
+                string version = ssh_version.StartAndReadStandardError();   //the version is written to StandardError instead of StanderdOutput!
+                return version.Replace("SSH ", "").Split(',')[0];
+            }
+        }
+        public static string KeyscanVersion
+        {
+            get
+            {
+                var ssh_version = new Command(SSHKeyScanCommandPath, "",false);
+                ssh_version.StartAndWaitForExit(); // call to check if exists
+                return "found";
+            }
+        }
+        public static string KeygenVersion
+        {
+            get
+            {
+                // since keygen has no version output try to create testkey, if keygen is not found Comand will exit
+                string arguments =
+                "-t rsa " + // Crypto type
+                "-b 4096 " + // Key size
+                "-P \"\" " + // No password
+                "-C \"test\" " + // Key comment
+                "-f \"" + System.IO.Path.Combine(Configuration.DefaultConfiguration.DirectoryPath, "tmp", "testkey") + "\"";
+                var ssh_version = new Command(SSHKeyGenCommandPath, arguments,false);
+                ssh_version.StartAndWaitForExit(); // call to check if exists
+                if (File.Exists(System.IO.Path.Combine(Configuration.DefaultConfiguration.DirectoryPath, "tmp", "testkey")))
+                {
+                    File.Delete(System.IO.Path.Combine(Configuration.DefaultConfiguration.DirectoryPath, "tmp", "testkey"));
+                }
+                if (File.Exists(System.IO.Path.Combine(Configuration.DefaultConfiguration.DirectoryPath, "tmp", "testkey.pub")))
+                {
+                    File.Delete(System.IO.Path.Combine(Configuration.DefaultConfiguration.DirectoryPath, "tmp", "testkey.pub"));
+                }
+                return "found";
+            }
+        }
+
     }
 }

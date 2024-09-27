@@ -45,13 +45,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWindows|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>.\Windows\bin\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWindows|AnyCPU'">
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>.\Windows\bin\</OutputPath>
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -74,6 +74,9 @@
     <Compile Include="Logger.cs" />
     <Compile Include="InstallationInfo.Directory.cs" />
     <Compile Include="Command.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OpenSSLCommand.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SSHCommand.cs">
