@@ -100,7 +100,7 @@
     <Profiling>false</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
-    <LinkMode>None</LinkMode>
+    <LinkMode>Platform</LinkMode>
     <AOTMode>None</AOTMode>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -128,7 +128,7 @@
     <Profiling>false</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
-    <LinkMode>None</LinkMode>
+    <LinkMode>Platform</LinkMode>
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
     <AOTMode>None</AOTMode>
@@ -157,7 +157,7 @@
     <UseSGen>false</UseSGen>
     <UseRefCounting>false</UseRefCounting>
     <Profiling>false</Profiling>
-    <LinkMode>None</LinkMode>
+    <LinkMode>Platform</LinkMode>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <TlsProvider>Default</TlsProvider>
     <AOTMode>None</AOTMode>

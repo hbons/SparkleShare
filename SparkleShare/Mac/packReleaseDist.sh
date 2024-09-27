@@ -14,13 +14,15 @@ mkdir -p cd ${bundle}/Contents/MonoBundle/
 cd ${bundle}/Contents/MonoBundle/
 assemblyPath=$(dirname $(dirname $(dirname $(pwd))))
 
+echo ${projectFolder}
+pwd
+echo "x"
+echo ${assemblyPath}
 # merge all Assemblies into one Mac binary
 mkbundle \
 	 --simple \
 	 -v \
 	--config ./config \
-	 --library libxammac.dylib \
-	 --library libmono-native-compat.0.dylib \
 	 -o ../MacOS/SparkleShare \
 	 ${assemblyPath}/SparkleShare.exe ${assemblyPath}/Sparkles.dll ${assemblyPath}/Sparkles.Git.dll
 rm *.dll *.exe
