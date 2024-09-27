@@ -893,18 +893,11 @@ namespace Sparkles.Git {
             string pre_push_hook_path = Path.Combine (LocalPath, ".git", "hooks", "pre-push");
             string pre_push_hook_content;
 
-            if (InstallationInfo.OperatingSystem == OS.macOS || InstallationInfo.OperatingSystem == OS.Windows) {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    Path.Combine (Configuration.DefaultConfiguration.BinPath, "git-lfs").Replace ("\\", "/")  + " pre-push \"$@\"";
+            pre_push_hook_content =
+                "#!/bin/sh" + Environment.NewLine +
+                "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " + "'"+
+                GitCommand.GitLfsPath + "' pre-push \"$@\"";
 
-            } else {
-                pre_push_hook_content =
-                    "#!/bin/sh" + Environment.NewLine +
-                    "env GIT_SSH_COMMAND='" + GitCommand.FormatGitSSHCommand (auth_info) + "' " +
-                    "git-lfs pre-push \"$@\"";
-            }
 
             if (InstallationInfo.OperatingSystem != OS.Windows) {
                 // TODO: Use proper API
