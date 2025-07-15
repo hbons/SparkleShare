@@ -45,7 +45,7 @@ Here are instructions to build SparkleShare on [Linux distributions](SparkleShar
 
 ## Useful links
 - [sparkleshare.org](https://www.sparkleshare.org/)
-- [@SparkleShare](https://www.twitter.com/SparkleShare), [@hbons on Mastodon](https://mastodon.social/@hbons)
+- [@hbons on Mastodon](https://mastodon.social/@hbons)
 - Community chatroom on [Gitter](https://www.gitter.im/hbons/SparkleShare)
 - [Wiki](https://www.github.com/hbons/SparkleShare/wiki)
 
