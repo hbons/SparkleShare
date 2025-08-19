@@ -96,8 +96,8 @@ namespace Sparkles.Git {
 
             // Don't let Git try to read the config options in PREFIX/etc or ~
             SetEnvironmentVariable ("GIT_CONFIG_NOSYSTEM", "1");
-            SetEnvironmentVariable ("PREFIX", "");
-            SetEnvironmentVariable ("HOME", "");
+            // SetEnvironmentVariable ("PREFIX", "");
+            // SetEnvironmentVariable ("HOME", "");
 
             SetEnvironmentVariable ("LANG", "en_US.UTF8");
             SetEnvironmentVariable ("LC_ALL", "en_US.UTF8");
@@ -225,8 +225,8 @@ namespace Sparkles.Git {
                 "-i " + auth_info.PrivateKeyFilePath.Replace ("\\", "/").Replace (" ", "\\ ") + " " +
                 "-o UserKnownHostsFile=" + auth_info.KnownHostsFilePath.Replace ("\\", "/").Replace (" ", "\\ ") + " " +
                 "-o IdentitiesOnly=yes" + " " + // Don't fall back to other keys on the system
-                "-o PasswordAuthentication=no" + " " + // Don't hang on possible password prompts
-                "-F /dev/null"; // Ignore the system's SSH config file
+                "-o PasswordAuthentication=no" + " "; //+ // Don't hang on possible password prompts
+               // "-F /dev/null"; // Ignore the system's SSH config file
         }
     }
 }
