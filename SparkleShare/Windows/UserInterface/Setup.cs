@@ -17,6 +17,7 @@
 
 using Sparkles;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -549,6 +550,83 @@ namespace SparkleShare {
                         
                         break;
                     }    
+                        case PageType.StorageSetup:
+                            {
+                                Header = string.Format("Storage type for ‘{0}’", Controller.SyncingFolder);
+                                Description = "What type of storage would you like to use?";
+
+                                //GroupBox layout_vertical = new GroupBox();
+                                var layout_radio_buttons = new List<RadioButton>();
+                                int position = 100;
+                                foreach (StorageTypeInfo storage_type in SparkleShare.Controller.FetcherAvailableStorageTypes)
+                                {
+                                    TextBlock tb = new TextBlock();
+                                    tb.TextWrapping = TextWrapping.Wrap;
+                                    //tb.Margin = new Thickness(10);
+                                    //tb.Inlines.Add("An example on ");
+                                    tb.Inlines.Add(new Run(storage_type.Name) { FontWeight = FontWeights.Bold });
+                                    tb.Inlines.Add("\n");
+                                    tb.Inlines.Add(storage_type.Description);
+
+                                    RadioButton radio_button = new RadioButton()
+                                    {
+                                        Content = tb//storage_type.Name + "\n" + storage_type.Description
+                                    };
+                                    layout_radio_buttons.Add(radio_button);
+                                    ContentCanvas.Children.Add(radio_button);
+                                    Canvas.SetLeft(radio_button, 195);
+                                    Canvas.SetTop(radio_button, position);
+                                    position += 100;
+                                    //radio_button.Text = storage_type.Name + "\n" + storage_type.Description;
+                                    /*
+                                            (radio_button.Child as Label).Markup = string.Format(
+                                                "<b>{0}</b>\n<span fgcolor=\"{1}\">{2}</span>",
+                                                storage_type.Name, 0, storage_type.Description);
+
+                                            (radio_button.Child as Label).Xpad = 9;*/
+
+                                    //layout_radio_buttons.AddChild(radio_button);
+                                    //.PackStart(radio_button, false, false, 9);
+                                    /* radio_button.Group = (layout_radio_buttons.Children[0] as RadioButton).Group;*/
+                                };
+                                /*
+                                                    layout_vertical.PackStart(new Label(""), true, true, 0);
+                                                    layout_vertical.PackStart(layout_radio_buttons, false, false, 0);
+                                                    layout_vertical.PackStart(new Label(""), true, true, 0);
+                                                    Add(layout_vertical);*/
+
+                                Button cancel_button = new Button()
+                                {
+                                    Content = "Cancel"
+                                };
+
+                                Button continue_button = new Button()
+                                {
+                                    Content = "Continue"
+                                };
+                                continue_button.Click += delegate {
+                                    int checkbox_index = 0;
+                                    foreach (RadioButton radio_button in layout_radio_buttons)
+                                    {
+                                        if (radio_button.IsChecked==true)
+                                        {
+                                            StorageTypeInfo selected_storage_type = SparkleShare.Controller.FetcherAvailableStorageTypes[checkbox_index];
+                                            Controller.StoragePageCompleted(selected_storage_type.Type);
+                                            return;
+                                        }
+
+                                        checkbox_index++;
+                                    }
+                                };
+
+                                cancel_button.Click += delegate {
+                                    Controller.SyncingCancelled();
+                                };
+
+                                Buttons.Add(cancel_button);
+                                Buttons.Add(continue_button);
+                                break;
+                    }                    
 
                     case PageType.CryptoSetup: {
                         // TODO: Merge crypto pages

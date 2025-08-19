@@ -14,20 +14,15 @@
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
           <Directory Id='INSTALLDIR' Name='SparkleShare'>
             <Component Id='SparkleShare.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F10E1'>
-              <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.exe' KeyPath='yes' DiskId='1' />
-            </Component>
-            <Component Id='SparkleShareInviteOpener.exe' Guid='0DA582D5-4ABE-4251-9F62-E7DEA76F28E1'>
-              <File Id='SparkleShareInviteOpener.exe' Name='SparkleShareInviteOpener.exe' Source='!(wix.root)\bin\SparkleShareInviteOpener.exe' DiskId='1' />
+              <File Id='SparkleShare.exe' Name='SparkleShare.exe' Source='!(wix.root)\bin\SparkleShare.Windows.exe' KeyPath='yes' DiskId='1' />
             </Component>
             <Component Id='Libraries' Guid='0DA692D5-4DBE-4251-9F62-E7C1A76F10E1'>
               <File Id='Sparkles.Git.dll' Name='Sparkles.Git.dll' Source='!(wix.root)\bin\Sparkles.Git.dll' DiskId='1' />
               <File Id='Sparkles.dll' Name='Sparkles.dll' Source='!(wix.root)\bin\Sparkles.dll' DiskId='1' />
-              <File Id='sparkleshare_app.ico' Name='sparkleshare.ico' Source='!(wix.root)\SparkleShare\Windows\Images\sparkleshare-app.ico' DiskId='1' />
             </Component>
-            <Directory Id='MSYSGIT_DIR' Name='msysgit'>
-            </Directory>
-            <Directory Id='PLUGINS_DIR' Name='plugins'>
-            </Directory>
+            <Directory Id='GITSCM_DIR' Name='git_scm'></Directory>
+            <Directory Id='PRESETS_DIR' Name='Presets'></Directory>
+            <Directory Id='IMAGES_DIR' Name='Images'></Directory>
         </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder">
@@ -40,30 +35,38 @@
             <RegistryValue Root="HKCU" Key="Software\Microsoft\SparkleShare" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
           <Component Id="SparkleShareProtocolHandler" Guid="b83a4473-a26f-491a-bcd7-b999a8f6e551">
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Value="SparkleShare Invite Opener" Type="string" />
             <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Name="URL Protocol" Value="" Type="string" />
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare" Name="DefaultIcon" Value="[INSTALLDIR]SparkleShareInviteOpener,1" Type="string" />
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare\shell\open\command" Value='"[INSTALLDIR]SparkleShareInviteOpener" "https:%1"' Type="string" />
 
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Value="SparkleShare Invite Opener" Type="string" />
             <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Name="URL Protocol" Value="" Type="string" />
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe" Name="DefaultIcon" Value="[INSTALLDIR]SparkleShareInviteOpener,1" Type="string" />
-            <RegistryValue Root="HKCU" Key="Software\Classes\sparkleshare-unsafe\shell\open\command" Value='"[INSTALLDIR]SparkleShareInviteOpener" "http:%1"' Type="string" />
           </Component>
       </Directory>
     </Directory>
 
+<!--
+    <CustomAction Id="BatchCmd"
+                  Property="BatchRun"
+                  Value='"[WindowsFolder]system32\dism.exe" /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0 /CapabilityName:OpenSSH.Client~~~~0.0.1.0'
+                  Execute='immediate'
+                  Return='check'>
+    </CustomAction>
+	<CustomAction Id="BatchRun" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
+<InstallExecuteSequence>
+  <Custom Action="BatchCmd" Before="BatchRun">NOT Installed</Custom>
+  <Custom Action="BatchRun" Before="InstallFiles">NOT Installed</Custom>
+</InstallExecuteSequence>
+</InstallUISequence>
+-->
     <Feature Id='SparkleShareFeature' Title='SparkleShare' Description='SparkleShare' Level='1' AllowAdvertise='no'>
       <ComponentRef Id="SparkleShare.exe" />
-      <ComponentRef Id="SparkleShareInviteOpener.exe" />
       <ComponentRef Id="Libraries" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="SparkleShareProtocolHandler" />
-      <ComponentGroupRef Id='msysGitComponentGroup' />
-      <ComponentGroupRef Id='pluginsComponentGroup' />
+      <ComponentGroupRef Id='gitScmComponentGroup' />
+      <ComponentGroupRef Id='PresetsComponentGroup' />
+      <ComponentGroupRef Id='ImagesComponentGroup' />
     </Feature>
 
-	<WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+	  <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
 
     <UI>
       <UIRef Id="WixUI_InstallDir" />
@@ -73,10 +76,9 @@
     <util:CloseApplication Id="CloseApplication" Target="SparkleShare.exe" RebootPrompt="no" ElevatedCloseMessage="yes" CloseMessage="yes" />
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
-
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch SparkleShare" />
     <Property Id="WixShellExecTarget" Value="[#SparkleShare.exe]" />
+
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
-    
   </Product>
 </Wix>

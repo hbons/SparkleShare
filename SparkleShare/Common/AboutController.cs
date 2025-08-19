@@ -80,5 +80,5 @@ namespace SparkleShare {
                 UpdateLabelEvent ("Couldn’t check for updates\t");
             }
         }
-    }
+	}
 }

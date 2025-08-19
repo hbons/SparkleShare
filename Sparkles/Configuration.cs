@@ -42,7 +42,6 @@ namespace Sparkles {
         public readonly string DirectoryPath;
         public readonly string FilePath;
         public readonly string TmpPath;
-        public readonly string BinPath;
         public string AvatarProvider;
 
         public readonly string LogFilePath;
@@ -72,11 +71,6 @@ namespace Sparkles {
         {
             FilePath = Path.Combine (config_path, config_file_name);
             DirectoryPath = config_path;
-
-			BinPath = Path.Combine (config_path, "bin");
-
-            if (!Directory.Exists (BinPath))
-                Directory.CreateDirectory (BinPath);
 
             string logs_path = Path.Combine (config_path, "logs");
 
