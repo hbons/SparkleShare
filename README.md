@@ -41,7 +41,6 @@ Here are instructions to build SparkleShare on [Linux distributions](SparkleShar
 
 
 [![Build Status](https://travis-ci.org/hbons/SparkleShare.svg?branch=master)](https://travis-ci.org/hbons/SparkleShare)
-[![Join the chat at https://gitter.im/hbons/SparkleShare](https://badges.gitter.im/hbons/SparkleShare.svg)](https://gitter.im/hbons/SparkleShare?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Useful links
 - [sparkleshare.org](https://www.sparkleshare.org/)
