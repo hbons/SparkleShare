@@ -42,15 +42,7 @@ namespace SparkleShare {
         {
             NSApplication.Init ();
 
-            GitCommand.GitPath  = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core", "git");
-            GitCommand.ExecPath = Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core");
-
-            bool overwite = true;
-
-            File.Copy (
-                Path.Combine (GitCommand.ExecPath, "git-lfs"),
-                Path.Combine (Config.BinPath, "git-lfs"),
-                overwite);
+            Command.SetSearchPath(Path.Combine (NSBundle.MainBundle.ResourcePath, "git", "libexec", "git-core"));
             
             NSWorkspace.Notifications.ObserveDidWake((object sender, NSNotificationEventArgs e) => {
                 Console.Write ("Detected wake from sleep, checking for updates\n");
