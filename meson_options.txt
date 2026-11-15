@@ -1,3 +1,0 @@
-option('ubuntu', type: 'boolean', value: false)
-option('nightly', type: 'boolean', value: false)
-
