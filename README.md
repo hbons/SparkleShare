@@ -50,6 +50,7 @@ Here are instructions to build SparkleShare on [Linux distributions](SparkleShar
 
 ## Useful links
 - [sparkleshare.org](https://www.sparkleshare.org/)
+- [Wiki (archive)](https://github.com/hbons/sparkleshare-wiki-archive)
 - [@hbons on Mastodon](https://mastodon.social/@hbons)
 - [Matrix channel](https://matrix.to/#/#sparkleshare:matrix.org)
 
